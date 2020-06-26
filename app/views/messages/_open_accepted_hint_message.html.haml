@@ -1,0 +1,62 @@
+%table.tableForm{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+  - selling_commission = message.object
+  - selling_commission = selling_commission.object
+  %tbody
+    %tr
+      %td#stepBtnHeight.leftCol{:width => "80%"}
+        .formBox
+          .formHeader.clearfix
+            %h1
+              = t("hint_colleague.received_message")
+            - customer_type = selling_commission.commission_customer_type
+            .row.pt10
+              .col-xs-12
+                %label
+                  - if customer_type == 'PRIVATE_CUSTOMER' 
+                    = t('selling_commission.costomer_name')
+                  -else
+                    = t('selling_commission.company_name')
+                %span
+                  = ":"
+                %span
+                  = customer_type == 'PRIVATE_CUSTOMER' ? "#{selling_commission.try(:customer_name)}" : "#{selling_commission.try(:company_name)}"
+          .row
+            .col-xs-12.bold
+              .form-group
+                = t('hint_colleague.your_colleague')
+                %span.text-red
+                  = "#{message.sender_name}"
+                  %spanx.text-dark
+                    = t('hint_colleague.accept_request')
+          .row
+            .col-xs-12
+              .form-group.bold
+                = t('hint_colleague.max_has_done')  
+              .form-group
+                %ul.pl20
+                  %li.pb10
+                    = t('hint_colleague.max_has_add_you')
+                  %li.pb10
+                    = t('hint_colleague.max_has_open_user', :member => "#{message.sender_name}")
+                  %li.pb10
+                    = t('hint_colleague.max_has_add_agent', :member => "#{message.sender_name}")
+          .row
+            .col-xs-12
+              .form-group
+                = t('hint_colleague.check_the_status').html_safe
+            .col-xs-12
+              .hr.hr25
+          .row.row7
+            .col-xs-12
+              .form-group
+                = t('hint_colleague.link_to_customer').html_safe
+          .row.row7
+            .col-xs-12
+              .form-group
+                = link_to "#{edit_agent_office_commission_selling_path(selling_commission, :step => 1, :sub_step =>2)}", edit_agent_office_commission_selling_path(selling_commission, :step => 1, :sub_step =>2, :open_card => true)
+      %td.stepBtnGroup{:width => "20%"}
+        %button.stepBtn.backBtn{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+          %span
+            =t("form_action_button.close")
+          = image_tag "btn_discard_white.png"
+        

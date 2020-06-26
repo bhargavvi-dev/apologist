@@ -1,0 +1,53 @@
+.row
+  .col-xs-12.col-sm-6
+    #first_name.form-group
+      - if object.new_record?
+        = f.hidden_field :password, :value => @secure_pass
+        = f.hidden_field :password_confirmation, :value => @secure_pass
+        = f.hidden_field :role, :value => role
+        = f.hidden_field :creator_id, :value => current_user.id
+      = f.text_field :first_name, :class => "form-control",:placeholder => t("user.first_name")
+    #last_name.form-group
+      = f.text_field :last_name, :class => "form-control", :placeholder => t("user.last_name")
+    #email.form-group
+      = hidden_field_tag 'step', '1'
+      = f.text_field :email, :class => "form-control", :placeholder => t("user.remax_email")
+      - if object.errors[:email].any?
+        %span.text-error.text-message
+          = object.errors[:email].first
+    #personal_email.form-group
+      = f.text_field :personal_email, :class => "form-control", :placeholder => t("user.personal_email")
+  .col-xs-12.col-sm-6
+    #address.form-group
+      = f.text_field :address, :class => "form-control", :placeholder => t("user.address")
+    #post_number.form-group
+      = f.text_field :post_number, :class => "virtualKeyboard form-control", :placeholder => t("user.post_number")
+    #city.form-group
+      = f.text_field :city, :class => "form-control", :placeholder => t("user.city")
+    #phone_number.form-group
+      = f.text_field :phone_number, :class => "virtualKeyboard form-control", :placeholder => t("user.phone_number")
+  .col-xs-12
+    .form-group.row
+      = f.label t("general.date_of_birth"), :class => "normal pt15 col-xs-12 col-md-3"
+      .col-xs-12.col-md-9
+        %span.selectBox.dib.verTop
+          = f.date_select :birthdate, :start_year => 1900, :end_year => Time.now.year, :class => "form-control", :order => [:day, :month, :year]
+          = " - "
+          #social_security_number.dib.verTop
+            = f.text_field :ssn, :class => "form-control", :size => "4", :placeholder => t("user.social_security_number")                      
+  .col-xs-12
+    .form-group.row
+      = f.label t("general.gender"), :class => "normal col-xs-12 col-sm-3"
+      .col-xs-12.col-sm-9
+        %label.radioBox.radioInline
+          = f.radio_button :gender, 'M'
+          %span.lbl=t("user.male")
+        %label.radioBox.radioInline
+          = f.radio_button :gender, 'F'
+          %span.lbl=t("user.female")
+
+    .row
+      .col-xs-12.col-md-9.col-md-offset-3.pb5
+        %button.btn.btn-primary.btn-lg{"data-target" => "#remaxEmailModal", "data-toggle" => "modal", :type => "button", :id => 'remaxEmailbtn', :disabled => true}
+          %i.emailIcon 
+          =t("user.order_email")

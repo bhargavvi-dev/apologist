@@ -1,0 +1,19 @@
+- setting = @current_brand.setting(setting_key)
+- val = (local_assigns[:val].nil? ? setting.setting_value : val)
+- readonly = (local_assigns[:readonly].nil? ? false : readonly)
+- class_name = (readonly ? '' : 'virtualKeyboard')
+= f.fields_for :settings, setting do |ff|
+  = ff.hidden_field :updater_id, :value => current_user.id
+  - if setting.new_record?
+    = ff.hidden_field :brand_id, :value => @current_brand.id
+    = ff.hidden_field :setting_key, :value => setting_key
+  - if setting_key == "LEAD_DELIVERY_START_DAY"
+    = ff.select :setting_value, lead_delivery_start_day_options, {}, :class => "form-control"
+  - elsif setting_key == "LEAD_DELIVERY_END_DAY"
+    = ff.select :setting_value, lead_delivery_end_day_options, {}, :class => "form-control"
+  - elsif (["SEARCHING_SERVICES_VAT", "VISIT_ESTIMATE_SERVICES_VAT", "NEGOTIATIONS_OFFER_TRAFFIC_SERVICES_VAT", "MONITORING_CONTRACT_SERVICES_VAT", "BUYING_DOCUMENT_CHARGES_VAT", "BUYING_REPORT_VAT", "SEARCHING_SERVICES_PROPERTY_VAT", "VISIT_ESTIMATE_SERVICES_PROPERTY_VAT", "NEGOTIATIONS_OFFER_TRAFFIC_SERVICES_PROPERTY_VAT", "MONITORING_CONTRACT_SERVICES_PROPERTY_VAT", "BUYING_PROPERTY_DOCUMENT_CHARGES_VAT", "BUYING_PROPERTY_REPORT_VAT"].include? setting_key)
+    = ff.select :setting_value, vat_options, {}, :class => "form-control"
+  - elsif decimal_points == "text_field"
+    = ff.text_field :setting_value, :class => "form-control", :placeholder => placeholder_text
+  - else
+    = ff.text_field :setting_value, :class => "#{class_name} form-control", :value => show_formatted_number(val, decimal_points, false), :readonly => readonly

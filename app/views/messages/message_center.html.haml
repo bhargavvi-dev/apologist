@@ -1,0 +1,29 @@
+.container
+  .page-title
+    %h1
+      .title-logo
+        / = image_tag @current_brand.logo.url, :class => "mr15", :width => "160"
+      =t('message.message_center')
+  .col-xs-12.pb10
+    .form-group.formTitle
+      =t('message.choose_group_to_send_message')
+  .col-xs-12
+    .row.row-10
+      .col-xs-12.col-sm-4.col-md-4
+        %a.toolBox{:href => new_message_path(recipient_type: "staff")}
+          .toolImage
+            = image_tag "icon_agents.png"
+          .toolTitle
+            =t("message.send_message_to_staff").html_safe
+      .col-xs-12.col-sm-4.col-md-4
+        %a.toolBox{:href => new_message_path(recipient_type: "customer")}
+          .toolImage
+            = image_tag "icon_team.png"
+          .toolTitle
+            =t("message.send_message_to_customers").html_safe
+      .col-xs-12.col-sm-4.col-md-4
+        %a.toolBox{:href => new_message_path(recipient_type: "partner")}
+          .toolImage
+            = image_tag "icon_cooperation.png"
+          .toolTitle
+            =t("message.send_message_to_partners").html_safe

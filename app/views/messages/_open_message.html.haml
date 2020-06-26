@@ -1,0 +1,29 @@
+%table.tableForm{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+  %tbody
+    %tr
+      %td#stepBtnModalHeight.leftCol{:width => "85%"}
+        .formBox.minH300
+          .formHeader.clearfix
+            %h1
+              = "#{message.sender_name},  #{message.sent_at.to_datetime.to_s(:default_date)}"
+          .row
+            .col-xs-12.form-group.formTitle
+              = message.subject
+          .row
+            .col-xs-12.form-group
+              = simple_format message.body.html_safe
+              / %textarea.form-control{:rows => '8', :disabled => true}= message.body
+          - attachments = message.resources.with_type('DOCUMENT::ATTACHMENT')
+          - if attachments.any?
+            .form-group.formTitle
+              =t("message.attachments")
+            .row
+              - attachments.each do |attachment|
+                .col-xs-12
+                  .form-group
+                    = link_to attachment.media_file_name, attachment.media.url, :class => 'bold blue'
+      %td.stepBtnGroup{:width => "15%"}
+        %button.stepBtn.backBtn{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+          %span
+            =t("form_action_button.close")
+          = image_tag "remax_back_btn.png", :class => "mt15"  

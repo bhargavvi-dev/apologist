@@ -1,0 +1,24 @@
+.col-xs-12.col-sm-6.col-md-4
+  .rpCheckBox.customer{:id => "customer_#{recipient.id}"}
+    .rpPhoto
+      - profile_photo = recipient.resources['IMAGE::USER_PHOTO']
+      %div
+        - if profile_photo.present?
+          = image_tag profile_photo.media.url(:small)
+        - else
+          = image_tag "remax_customer_register_small.png"          
+    = check_box_tag 'receivers[]', recipient.id, (message.receiver_ids.to_s.split(",").include? recipient.id.to_s), :id => "responsible_person_check_#{recipient.id}", :class => "checkMark customer_message_check"
+    .rpContent{:href => "javascript:void(0);"}
+      .rpTitle
+        = set_proper_name(recipient.name, 20)
+      .rpDesc
+      - if message.receiver_ids.to_s.split(",").include? recipient.id.to_s
+        - select_class = "hide"
+        - unselect_class = ""
+      - else
+        - select_class = ""
+        - unselect_class = "hide"          
+      .rpBottom{:id => "customer_select_text_#{recipient.id}", :class => "#{select_class} customer_select_text"}
+        = t("recipient.press_here_to_select_person")
+      .rpBottom{:id => "customer_unselect_text_#{recipient.id}", :class => "#{unselect_class} customer_unselect_text"}
+        = t("recipient.press_here_to_unselect_person")

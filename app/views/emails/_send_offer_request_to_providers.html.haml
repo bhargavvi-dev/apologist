@@ -1,0 +1,75 @@
+= form_for(object, url: send_offer_request_emails_path , :html => {:class => "", :method => "POST"}, :remote => true) do |f|
+  = hidden_field_tag 'id', @event.id
+  %table.tableForm{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+    %tbody
+      %tr
+        %td#stepBtnModalHeight.leftCol{:width => "80%"}
+          .formBox
+            .formHeader.clearfix
+              %h1
+                = @event.send_offer_request ? t("open_house_event.message.offer_request_email") : t("open_house_event.message.send_order_to_provider")
+            .row
+              .col-xs-12
+                %label=t("referral_event.send_offer_request.recipient")
+              .col-xs-12.form-group
+                #input_partner_recipient
+                  - if @event.send_offer_request
+                    - if @event.service_provider_ids.present?
+                      - referral_service_providers = @current_brand.referral_service_providers.find(@event.service_provider_ids.split(','))
+                      - referral_service_providers.each do |service_provider|
+                        = text_field_tag "recipient_email[]", service_provider.email, :class => "form-control form-group offer_request_input_recipient_email", :id => "input_recipient_email"
+                  - else 
+                    - event_service_provider = @event.service_provider
+                    - if event_service_provider.present?
+                      = text_field_tag "recipient_email[]", event_service_provider.email, :class => "form-control form-group offer_request_input_recipient_email", :id => "input_service_provider_recipient_email"
+
+              .col-xs-12
+                .form-group
+                  %label
+                    %a.addLink{:href => "javascript:void(0);", :id => "add_recipient_for_partner"}
+                      %i.addIcon
+                      =t("referral_event.send_offer_request.add_recipient")
+              .col-xs-12
+                .form-group
+                  %label=t("referral_event.send_offer_request.subject")
+                  - if @event.send_offer_request and @event.service_provider_ids.present?
+                    - if @event.offer_due_date.present?
+                      = text_field_tag :subject, t("referral_event.send_offer_request.subject_name", event_date: @event.event_date.to_datetime.to_s(:default_date), offer_due_date: @event.offer_due_date.to_datetime.to_s(:default_date)), :class => "form-control", :id => "offer_providers_message_subject"
+                  - elsif !@event.send_offer_request and @event.service_provider.present?
+                    = text_field_tag :subject, t("referral_event.send_offer_request.service_provider_order_subject_name"), :class => "form-control", :id => "offer_service_provider_message_subject"
+
+              .col-xs-12
+                .form-group
+                  %label=t("referral_event.send_offer_request.message")
+                  - logo_url =  @current_brand.logo.present? ? absolute_url(@current_brand.logo.url, @current_brand) : ''
+                  - user = @event.user
+                  - if @event.send_offer_request and @event.service_provider_ids.present?
+                    - if @event.offer_due_date.present?
+                      - message = t("referral_event.send_offer_request.text_area_message", event_date: @event.event_date.to_datetime.to_s(:default_date), offer_due_date: @event.offer_due_date.to_datetime.to_s(:default_date), name: user.name, email: user.email, phone_number: user.phone_number, role: user.role.humanize, :footer_logo_url => logo_url).html_safe
+                  - elsif !@event.send_offer_request and @event.service_provider.present?
+                    - message = t("referral_event.send_offer_request.service_provider_text_area_message", event_date: @event.event_date.to_datetime.to_s(:default_date), name: user.name, email: user.email, phone_number: user.phone_number, role: user.role.humanize, :footer_logo_url => logo_url).html_safe
+                  - if message.present?
+                    = hidden_field_tag 'old_message', message
+                    = text_area_tag :message, message, :rows => 16, :class => "form-control ckeditorCustom", :id => "offer_providers_message_body" 
+
+              .col-xs-12
+                .form-group
+                  - if @event.send_offer_request and @event.service_provider_ids.present?
+                    = link_to t("referral_event.send_offer_request.attachment_link", event_date: @event.event_date.to_datetime.to_s(:default_date)),   send_offer_request_to_provider_pdf_index_path(@event.id, :format => "pdf"), class: "h50 stepBtn nextBtn"
+                  - elsif !@event.send_offer_request and @event.service_provider.present?
+                    = link_to t("referral_event.send_offer_request.service_provider_attachment_link", event_date: @event.event_date.to_datetime.to_s(:default_date)),send_offer_request_to_provider_pdf_index_path(@event.id, :format => "pdf"), class: "h50 stepBtn nextBtn"
+                    
+              .col-xs-12.col-xs-8
+                .form-group
+                  %label.subTitle#attachment_label
+                    = t ('general.attachments')
+                  = render :partial => "shared/upload_files", :locals => {:object => @event, :type => 'offer_providers', :resource_type => 'DOCUMENT', :resource_spec => 'ATTACHMENT_TEMP', :title => t('general.add_attachment'), :index => "0"}
+        %td.stepBtnGroup{:width => "20%"}
+          %button.backBtn.stepBtn{:type => "button", :id => "emailSendOfferToProviders"}
+            %span
+              =t("form_action_button.return_button")
+            = image_tag "back_btn.png", :class => "mt15"          
+          %button.stepBtn#saveMediaNext{:name => "save", :type => "submit"}
+            %span
+              =t("form_action_button.send_message")
+            = image_tag "brand_email_btn.png", :class => "mt15"

@@ -1,0 +1,73 @@
+.container
+  .formField
+    .row
+      %table.tableForm{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+        %tbody
+          %tr
+            %td#stepBtnHeight.leftCol.minH200{:width => "80%"}
+              .formBox.moreOptions
+                .formHeader.clearfix
+                  %h1
+                    = t("general.more_options")
+                - if @office.present?
+                  .form-group.formTitle
+                    = t("office.delete_message")
+                  .form-group
+                    %a.btn.btn-primary.btn-lg{"data-target" => "#moreOptions", "data-toggle" => "modal", :href => "javascript:void(0);"}
+                      =t("office.remove_office")
+                - elsif @customer.present?
+                  .form-group
+                    %a.btn.btn-primary.btn-lg{"data-target" => "#moreOptions", "data-toggle" => "modal", :href => "javascript:void(0);"}
+                      =t("customer.remove_customer")
+                - elsif @user.role == "INSPECTOR"
+                  .form-group
+                    %a.btn.btn-primary.btn-lg{"data-target" => "#moreOptions", "data-toggle" => "modal", :href => "javascript:void(0);"}
+                      =t("inspector.remove_inspector")
+                - else
+                  - if @user.role == "NETWORK_PARTNER" or @user.role == "INTERNAL" or @user.role == "EXTERNAL"
+                    .form-group
+                      %a.btn.btn-primary.btn-lg{"data-target" => "#moreOptions", "data-toggle" => "modal", :href => "javascript:void(0);"}
+                        =t('general.remove_user', user: @user.role.humanize)
+                  - else
+                    .form-group
+                      = link_to send_pdf_path(@user.id, format: 'pdf'), :class => "btn btn-primary btn-lg btn-blue" do
+                        %span
+                          =t("form_action_button.print_member_profile_pdf")
+                    .form-group
+                      %a{"data-target" => "#remaxLoginInfoEmailModal", "data-toggle" => "modal", :type => "button", :class => "btn btn-primary btn-lg btn-blue", href: "javascript:void(0);"}
+                        = t("form_action_button.send_login_info_by_email")
+                    - unless @user.role == "INTERNAL" or @user.role == "EXTERNAL"
+                      .form-group
+                        %a.btn.btn-primary.btn-lg.btn-blue{"data-target" => "#agentInfoModal", "data-toggle" => "modal", :type => "button", :class => "btn btn-primary btn-lg btn-blue", href: 'javascript:void(0)'}
+                          = t('form_action_button.move_agent_info_to_brand_website',brand_name: @current_brand.name)
+                    .form-group.pt18
+                      = link_to remove_user_data_settings_path, :class => "btn btn-primary btn-lg" do
+                        %span
+                          = t("general.remove_user")                          
+            %td.stepBtnGroup{:width => "20%"}
+              %a.h100.stepBtn.backBtn{:href => @back_path, :class => btn_height_class}
+                %span
+                  =t("form_action_button.return_button")
+                = image_tag "remax_back_btn.png", :class => "mt15"
+
+        #moreOptions.modal.fade{"aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+          .modal-dialog.modal-md.modal-confirm{:role => "document"}
+            .modal-content
+              .modal-body
+                - if @office.present?
+                  = render 'soft_delete', :locals => {:office => @office}
+                - elsif @customer.present?
+                  = render 'soft_delete', :locals => {:customer => @customer}
+                - else
+                  =  render 'soft_delete', :locals => {:user => @user}
+      - if @user.present?
+        #remaxLoginInfoEmailModal.modal.fade{"aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+          .modal-dialog.modal-lg{:role => "document"}
+            .modal-content
+              .modal-body
+                = render :partial => "emails/form_login_info_email", :locals => {:object => @user}
+        #agentInfoModal.modal.fade{"aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+          .modal-dialog.modal-lg{:role => "document"}
+            .modal-content
+              .modal-body
+                = render :partial => "shared/move_agent_info", :locals => {:object => @user}

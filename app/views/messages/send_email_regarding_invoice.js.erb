@@ -1,0 +1,5 @@
+$('.modal').modal('hide');
+<% @success_msg = t('general.information_saved')%>
+setFlashMessage("email_regarding_invoice_flash", "email_regarding_invoice_notice" "<%= @success_msg %>");
+
+<%= render :partial => "shared/ajax_js" %>

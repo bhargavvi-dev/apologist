@@ -1,0 +1,32 @@
+.col-xs-12.col-sm-7.col-lg-7
+  .form-group.file_attachments
+    - lkv_certificate = responsible_person.resources['DOCUMENT::LKV_CERTIFICATE']
+    = f.fields_for :resources, (lkv_certificate || Resource.new) do |ff|
+      - resource_type = ResourceType.find_by(name: "DOCUMENT").id
+      - resource_spec = ResourceSpec.find_by(name: "LKV_CERTIFICATE").id
+      = render :partial => "shared/upload_file", :locals => {f: ff, :resource_type => resource_type, :resource_spec => resource_spec, :object => lkv_certificate, :title => t("office.responsible_person.upload_lkv_certificate")}
+.col-xs-12.col-sm-7.col-lg-7
+  - nda_class = responsible_person.role == 'EXTERNAL' ? '' : 'hide'
+  .form-group.file_attachments#nda_wrapper{:class => nda_class}
+    - nda_document = responsible_person.resources['DOCUMENT::NDA']
+    = f.fields_for :resources, (nda_document || Resource.new) do |ff|
+      - resource_type = ResourceType.find_by(name: "DOCUMENT").id
+      - resource_spec = ResourceSpec.find_by(name: "NDA").id
+      = render :partial => "shared/upload_file", :locals => {f: ff, :resource_type => resource_type, :resource_spec => resource_spec, :object => nda_document, :title => t("office.responsible_person.upload_nda_document")}
+.col-xs-12.col-sm-7.col-lg-7
+  .form-group
+    - user_photo = responsible_person.resources['IMAGE::USER_PHOTO']
+    = f.fields_for :resources, (user_photo || Resource.new) do |ff|
+      #upload_media.uploadFile.form-control
+        %i.fa.fa-picture-o
+        = t('general.upload_photos', :user_type => 'User')
+        .btn.btn-primary.btn-lg
+          = t("general.upload")
+        = ff.file_field :media, id: 'user_photo', class: 'fileUploadMedia form-control file-control'
+      = ff.hidden_field :resource_type_id, value: ResourceType.find_by(name: "IMAGE").id
+      = ff.hidden_field :resource_spec_id, value: ResourceSpec.find_by(name: "USER_PHOTO").id
+    .col-xs-12
+      .mt10.row
+        %label.preview_file_box
+          - if user_photo.present? and user_photo.media.present?
+            = image_tag user_photo.media.url(:small)

@@ -1,0 +1,84 @@
+.row.pt15
+  .col-xs-12
+    .form-group.formTitle
+      =t('user.office.job_role.title')
+  .col-xs-12
+    - if job_role_txt.present?
+      .form-group
+        = ff.text_area :job_role_txt, :class => "form-control", :cols => 6 , :rows => 1, :placeholder => t('user.office.job_role.placeholder')
+    - else
+      .row.row-inline
+        - job_roles.each do |job_role|
+          .col-xs-12.col-sm-6.col-lg-4
+            .form-group
+              %label.radioBox
+                - if job_role == default_job_role
+                  - checked = (office_user.job_role == job_role or OfficeUser.job_roles[office_user.job_role] == 0)
+                - else
+                  - checked = office_user.job_role == job_role
+                = ff.radio_button :job_role, job_role, checked: checked
+                %span.lbl=t("user.office.job_role.#{job_role.downcase}")
+.row
+  .col-xs-12
+    .hr.hr25
+  .col-xs-12
+    .form-group.formTitle
+      =t('user.office.position_and_profile_brand', brand_name: office_user.office.brand.name)      
+    .row.row5
+      .col-xs-12.col-sm-6.col-md-4.col-lg-4
+        .form-group
+          = ff.select :position, office_user_positions_to_select, {}, :class => "form-control officeChoosePosition"
+      .col-xs-12.col-sm-6.col-md-4.col-lg-4
+        .form-group
+          = ff.select :profile_brand_type, office_user_brand_types(office_user.office.brand.name), {}, :class => "form-control"
+      .col-xs-12.col-sm-6.col-md-4.col-lg-4
+        .form-group
+          - team_class = (office_user.position == 'TEAM_MEMBER' or office_user.position == 'TEAM_LEADER') ? '' : 'hide'
+          - teams = office_user.office.office_teams.map{|team| [team.name, team.id]}
+          = ff.select :team_id, teams, {:include_blank => t('user.office.choose_team')}, :class => "form-control #{team_class}"
+.row
+  .col-xs-12
+    .hr.hr25
+  .col-xs-12
+    .form-group.formTitle
+      =t('user.office.contract_length_and_type')
+  .col-xs-12
+    #contract_start_date.form-group.row.row5
+      = ff.label t('executive.remax_starting_date'), :class => "normal pt15 col-xs-12 col-sm-4 col-lg-3"
+      .col-xs-12.col-sm-8.col-lg-9
+        %span.selectBox
+          = ff.date_select :contract_start_date, :start_year => 1950, :end_year => Time.now.year, :order => [:day, :month, :year]
+  .col-xs-12
+    #contract_type.form-group.row.row5
+      %label.col-xs-12.col-sm-4.col-lg-3
+      .col-xs-12.col-sm-8.col-lg-9
+        - OfficeUser.valid_contract_types.each do |contract_type|
+          %label.radioBox.radioInline{:id => "#{contract_type.downcase}_#{office_user.id}", :class => "contract_type_#{contract_type.downcase}"}
+            = ff.radio_button :contract_type, contract_type, :id => "contract_type_#{contract_type.downcase}_#{office_user.id}"
+            %span.lbl= t("#{contract_type}")
+
+  .col-xs-12
+    #probation.row.row5
+      = ff.label t('executive.probation'), :class => "normal col-xs-12 col-sm-4 col-lg-3"
+      .col-xs-12.col-sm-8.col-lg-9
+        %label.radioBox.radioInline{:id => "probation_lbl_true_#{office_user.id}", :class => "contract_probation_true"}
+          = ff.radio_button :contract_probation, true, :id => "contract_probation_true_#{office_user.id}"
+          %span.lbl=t("user.office.probation_yes")
+        %label.radioBox.radioInline{:id => "probation_lbl_false_#{office_user.id}", :class => "contract_probation_false"}
+          = ff.radio_button :contract_probation, false, :id => "contract_probation_false_#{office_user.id}"
+          %span.lbl=t("user.office.probation_no")
+  .contract_until.none{:id => "contract_until_#{office_user.id}"}
+    .col-xs-12
+      .form-group.row.row5
+        = ff.label t('executive.until'), :class => "normal pt15 col-xs-12 col-sm-4 col-lg-3"
+        .col-xs-12.col-sm-8.col-lg-9
+          %span.selectBox
+            = ff.date_select :contract_end_date, :start_year => 1950, :end_year => Time.now.year + 80, :class => "form-control", :order => [:day, :month, :year]
+  .col-xs-12
+    .hr.hr25
+  .col-xs-12.col-sm-7.col-lg-7
+    .form-group
+      = render :partial => "shared/upload_files", :locals => {:object => office_user, :type => 'OfficeUser', :resource_type => 'DOCUMENT', :resource_spec => 'WRITTEN_CONTRACT', :title => t("user.office.upload_written_contract"), :index => index}
+  .col-xs-12.col-sm-7.col-lg-7
+    .form-group
+      = render :partial => "shared/upload_files", :locals => {:object => office_user, :type => 'OfficeUser', :resource_type => 'DOCUMENT', :resource_spec => 'CONTRACT_ATTACHMENT', :title => t("user.office.upload_contract_attachment"), :index => index+1}

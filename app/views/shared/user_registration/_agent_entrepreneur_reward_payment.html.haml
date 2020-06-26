@@ -1,0 +1,198 @@
+.row.pt15
+  .col-xs-12
+    .form-group.formTitle
+      = t('user.office.reward_and_payment.entrepreneur.title')
+= render :partial => 'agents/agent_share', :locals => {:ff => ff, :office_user => office_user, :modal => false}
+.row.row7.flexRowWrap.pt10
+  .col-xs-12.col-sm-6.form-group
+    %button.btn.btn-primary.btn-lg.btn-block.btn-wrap.iconLgLeft.h100p{:type => "button", "data-show_modal_id" => "agentShareModal", :class => "hideShowModal"}
+      = image_tag "icon_reload_w.png", :class => "icon"
+      .text-left.p10
+        = t('user.office.reward_and_payment.entrepreneur.create_new_share')
+  .col-xs-12.col-sm-6.form-group
+    %button.btn.btn-blue.btn-lg.btn-block.btn-wrap.iconLgLeft.h100p{:type => "button", "data-show_modal_id" => "archiveRewardModal", :class => "hideShowModal"}
+      = image_tag "icon_open_w.png", :class => "icon"
+      .text-left.p10
+        = t('user.office.reward_and_payment.entrepreneur.press_here_to_open')
+  .col-xs-12
+    .hr.hr25
+- reward_share = eval (office_user.try(:reward_share).to_s)
+- reward_share = reward_share.present? ? reward_share : {}
+.row
+  .col-xs-12
+    .row.row5.row-inline.form-group
+      .col-xs-12.col-sm-8.col-lg-6.pt12
+        %label.radioBox{:id => "fee_share_radio_#{office_user.id}", :class => "reward_fee_share"}
+          = ff.radio_button :reward_type, 'FEE_AND_SHARE'
+          %span.lbl
+            = t('user.office.reward_and_payment.entrepreneur.fixed_fee_per_month')
+      .col-xs-8.col-sm-2.col-lg-2
+        = ff.text_field :fixed_fee, :class => "virtualKeyboard addThousandSeparators form-control w85", disabled: (office_user.reward_type != "FEE_AND_SHARE"), :id => "fee_share_fee_#{office_user.id}", :value => addThousandSeparators(ff.object.fixed_fee)
+      .col-xs-4.col-sm-2.col-lg-4
+        %label.pt12
+          = @current_brand.currency_code
+          = t('user.office.reward_and_payment.entrepreneur.euros_and')
+      .col-xs-12.col-sm-2.col-lg-2
+        = text_field_tag "reward_share_common", reward_share["reward_share_common"], :class => "virtualKeyboard form-control w85", disabled: (office_user.reward_type != "FEE_AND_SHARE"), :id => "fee_share_share_#{office_user.id}"
+      .col-xs-12.col-sm-8.col-lg-6
+        %label.pt12
+          = t('user.office.reward_and_payment.entrepreneur.pct_from_commission')
+  .col-xs-12
+    .hr.hr25
+.row
+  .col-xs-12
+    .row.row5.row-inline
+      .col-xs-12.col-sm-8.col-lg-6.pt12
+        %label.radioBox{:id => "commissoin_share_radio_#{office_user.id}", :class => "commission_reward_type_commission"}
+          = ff.radio_button :commission_reward_type, 'COMMISSION_WISE', :class => "radio_button_checked"
+          %span.lbl
+            = t('user.office.reward_and_payment.partner.commission_chain_fee_adjustment')
+            = ff.text_field :chain_fee_share, :class => "virtualKeyboard addThousandSeparators form-control w85 mt10 check_radio_reward_type", :id => "chain_fee_share_#{office_user.id}", :value => addThousandSeparators(ff.object.chain_fee_share)
+            = t('user.office.reward_and_payment.partner.chain_fee_share_note')
+  / .col-xs-12
+  /   .row.row5.row-inline
+  /     .col-xs-12.form-group
+  /       %label
+  /         = t('user.office.reward_and_payment.entrepreneur.commission_chain_fee_adjustment')
+  /         = ff.text_field :chain_fee_share, :class => "virtualKeyboard form-control w85 mt10"
+  /         = "%."
+  /     .col-xs-12
+  /       .form-group
+  /         %label
+  /           = t('user.office.reward_and_payment.entrepreneur.chain_fee_share_note')
+.row.row5.pt10
+  .col-xs-12.form-group
+    %label.checkBox
+      = ff.check_box :charge_customer_pay_expense, :class => "form-control"
+      %span.lbl
+        = t('user.office.reward_and_payment.entrepreneur.office_charges_and_expenses')
+.row
+  .col-xs-12
+    .row.row5.row-inline
+      .col-xs-12.pt12
+        %label.radioBox{:id => "calculated_directly_radio_#{office_user.id}", :class => "commission_reward_type_total_sales"}
+          = ff.radio_button :commission_reward_type, 'TOTAL_SALES'
+          %span.lbl
+            = t('director.office.reward_and_payment.partner.agent_fee_calculated_directly')
+.row
+  .col-xs-12
+    .hr.hr25
+  .col-xs-12.form-group.formTitle
+    = t('user.office.reward_and_payment.entrepreneur.payment_rules.title')
+  .col-xs-12
+    .row.form-group
+      .col-xs-12.col-sm-6
+        %label
+          = t('user.office.reward_and_payment.entrepreneur.payment_rules.rule_1')
+      .col-xs-12.col-sm-6
+        %label
+          = t('user.office.reward_and_payment.entrepreneur.payment_rules.explanation_1')  
+        .pt10
+          %label.radioBox.radioInline{:class => "charge_permission_true", :id => "charge_permission_true_#{office_user.id}"}
+            = ff.radio_button :charge_permit, true
+            %span.lbl=t('user.office.reward_and_payment.entrepreneur.payment_rules.charge_permission_yes')
+          %label.radioBox.radioInline{:class => "charge_permission_false", :id => "charge_permission_false_#{office_user.id}"}
+            = ff.radio_button :charge_permit, false
+            %span.lbl=t('user.office.reward_and_payment.entrepreneur.payment_rules.charge_permission_no')
+
+    .row
+      .col-xs-12.col-sm-6
+        %label
+          = t('user.office.reward_and_payment.entrepreneur.payment_rules.rule_2')
+      .col-xs-12.col-sm-6
+        %label
+          = t('user.office.reward_and_payment.entrepreneur.payment_rules.explanation_2')
+        .pt10
+          %label.radioBox.radioInline{:class => "charge_permission_true", :id => "charge_permission_true_#{office_user.id}"}
+            = ff.radio_button :charge_permission, true
+            %span.lbl=t('user.office.reward_and_payment.entrepreneur.payment_rules.charge_permission_yes')
+          %label.radioBox.radioInline{:class => "charge_permission_false", :id => "charge_permission_false_#{office_user.id}"}
+            = ff.radio_button :charge_permission, false
+            %span.lbl=t('user.office.reward_and_payment.entrepreneur.payment_rules.charge_permission_no')
+
+    .row.row-inline
+      - charge_days_class = office_user.charge_permission ? "hide" : ""
+      %div{:class => "#{charge_days_class}", :id => "charge_days_#{office_user.id}"}
+        .col-xs-12.form-group
+          %label
+            = t('user.office.reward_and_payment.entrepreneur.payment_rules.office_charge')
+            = ff.text_field :charge_days, :class => "virtualKeyboard form-control w85 mt10"
+            = t('user.office.reward_and_payment.entrepreneur.payment_rules.days_after')
+.row
+  .col-xs-12
+    .hr.hr25
+  .col-xs-12
+    .form-group.formTitle
+      = t('user.office.reward_and_payment.entrepreneur.company_bank_responsible_person')
+  .col-xs-12.col-sm-6
+    .form-group
+      = ff.text_field :company_name, :class => "form-control", :placeholder => t('user.office.reward_and_payment.entrepreneur.company_name')
+  .col-xs-12.col-sm-6
+    .form-group
+      = ff.text_field :company_address, :class => "form-control", :placeholder => t('user.office.reward_and_payment.entrepreneur.company_address')
+  .col-xs-12.col-sm-6
+    .form-group
+      = ff.text_field :company_post_number, :class => "virtualKeyboard form-control", :placeholder => t('user.office.reward_and_payment.entrepreneur.company_post_number')
+  .col-xs-12.col-sm-6
+    .form-group
+      = ff.text_field :company_city, :class => "form-control", :placeholder => t('user.office.reward_and_payment.entrepreneur.company_city')
+  
+  - show_visiting_address = (office_user.visiting_company_name.present? || office_user.visiting_address.present? || office_user.visiting_post_number.present? || office_user.visiting_city.present?)
+  - unless show_visiting_address
+    .col-xs-12{:id => "add_visiting_address_wrapper_#{office_user.id}"}
+      .form-group
+        %label
+          = link_to "javascript:void(0);", :id => "add_visiting_address_#{office_user.id}", :class => "addLink add_visiting_address" do
+            %i.addIcon
+            = t('user.office.reward_and_payment.entrepreneur.add_visiting_address')
+
+  .visiting_address_wrapper{:class => (show_visiting_address ? "" : "hide"), :id => "visiting_address_wrapper_#{office_user.id}"}
+    .col-xs-12.col-sm-12
+      .form-group.formTitle
+        = t("office.visiting_address")
+    .col-xs-12.col-sm-6
+      .form-group
+        = ff.text_field :visiting_company_name, :class => "form-control", :placeholder => t('user.office.reward_and_payment.entrepreneur.visiting_company_name')
+    .col-xs-12.col-sm-6
+      .form-group
+        = ff.text_field :visiting_address, :class => "form-control", :placeholder => t('user.office.reward_and_payment.entrepreneur.visiting_address')
+    .col-xs-12.col-sm-6
+      .form-group
+        = ff.text_field :visiting_post_number, :class => "virtualKeyboard form-control", :placeholder => t('user.office.reward_and_payment.entrepreneur.visiting_post_number')
+    .col-xs-12.col-sm-6
+      .form-group
+        = ff.text_field :visiting_city, :class => "form-control", :placeholder => t('user.office.reward_and_payment.entrepreneur.visiting_city')
+
+  .col-xs-12.col-sm-6
+    .form-group
+      = ff.text_field :business_id, :class => "form-control", :placeholder => t('user.office.reward_and_payment.entrepreneur.business_id')
+  .col-xs-12.col-sm-6
+    .form-group
+      = ff.text_field :bank_name, :class => "form-control", :placeholder => t('user.office.reward_and_payment.entrepreneur.bank_name')
+  .col-xs-12.col-sm-12
+    .form-group
+      = ff.text_field :bank_account_number, :class => "form-control", :placeholder => t('user.office.reward_and_payment.entrepreneur.bank_account_number')
+  - if office_user.office.present?
+    .col-xs-12.col-sm-6
+      .hide{:id => "#{office_user.id}_selected_responsible_persons"}
+        = office_user.user.responsible_office_users[office_user.office.id].pluck(:responsible_person_id).join(",")
+      .form-group
+        %label
+          %a{"data-target" => "#responsiblePersons", "data-toggle" => "modal", :type => "button", :class => "addLink modalLink", :onclick => "setResponsiblePersonsInfo('#{office_user.office.id}', '#{office_user.id}', '#{office_user.office.name}');"}
+            %i.addIcon
+            = t('user.office.reward_and_payment.entrepreneur.choose_responsible_person_from_register')
+
+      .form-group
+        %label
+          %a{"data-target" => "#registerResponsiblePerson", "data-toggle" => "modal", :type => "button", :class => "addLink modalLink", :onclick => "setRegisterResponsiblePersonInfo('#{office_user.office.id}');"}
+            %i.addIcon
+            - if current_user.director?
+              = t('user.office.reward_and_payment.entrepreneur.suggest_new_responsible_person')
+            - else
+              = t('user.office.reward_and_payment.entrepreneur.register_new_responsible_person')
+    .col-xs-12.col-sm-6
+      - assigned_responsible_office_user = office_user.user.responsible_office_users[office_user.office.id].last
+      - assigned_responsible_person = assigned_responsible_office_user.responsible_person if assigned_responsible_office_user.present?
+      %div{:id => "agentResponsiblePerson_#{office_user.id}", :class => "form-group"}
+        - if assigned_responsible_person.present?
+          = render :partial => "responsible_persons/show_responsible_person", :locals => {:responsible_person => assigned_responsible_person}

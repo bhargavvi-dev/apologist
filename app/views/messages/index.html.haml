@@ -1,0 +1,20 @@
+.container
+  #SendQuestionsEmailModal.modal.fade{"aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+    .modal-dialog.modal-lg{:role => "document"}
+      .modal-content
+        .modal-body
+          #send_questions_email_Modal
+  #InvoiceAttachmentModal.modal.fade{"aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+    .modal-dialog.modal-lg{:role => "document"}
+      .modal-content
+        .modal-body
+          #invoice_attachment_modal
+  .page-title
+    %h1
+      / = image_tag @current_brand.logo.url, :class => "mr15", :width => "160"
+      =t('executive.message_box')
+  #messages_notice
+  .row
+    = render :partial => 'filter'
+  #filter_messages
+    = render :partial => "fetchMessages"

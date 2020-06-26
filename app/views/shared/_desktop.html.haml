@@ -1,0 +1,100 @@
+.container
+  .page-title
+    %h1
+      .title-logo
+        = image_tag  "", :width => "115"
+      - if current_user.executive?
+        =t('desktop.executive_desktop')
+      - elsif current_user.director?
+        =t('desktop.director_desktop')
+      - elsif current_user.office_manager?
+        =t('desktop.office_manager_desktop')
+      - elsif current_user.agent?
+        =t('desktop.agent_desktop')
+      - elsif current_user.customer?
+        = t('desktop.customer_desktop')
+      - elsif current_user.inspector?
+        = t('desktop.inspector_desktop')
+  .row.row-10
+    #feedbackModal.modal.fade{"aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+      .modal-dialog.modal-lg{:role => "document"}
+        .modal-content
+          .modal-body
+            #feedback_modal_step_1
+              /= render :partial => "emails/form_feedback"
+    #feedbackSuccessModal.modal.fade{"aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+      .modal-dialog.modal-lg{:role => "document"}
+        .modal-content
+          .modal-body
+            = render :partial => "emails/feedback_success"
+    .col-xs-12.col-sm-4.col-md-3
+      %a.toolBox{:href => messages_path}
+        .toolImage
+          = image_tag "remax_messages_1.png"
+        .toolTitle
+          = t("desktop.two_messages", :count => current_user.received_messages.unread.count).html_safe
+
+    - if current_user.executive?
+      .col-xs-12.col-sm-4.col-md-3
+        %a.toolBox{:href => center_messages_path}
+          .toolImage
+            = image_tag "icon_best_practice_sharing_pool_knowledge.png"
+          .toolTitle
+            = t("desktop.message_center").html_safe    
+      .col-xs-12.col-sm-4.col-md-3
+        %a.toolBox{:href => resource_variable_executives_path}
+          .toolImage
+            = image_tag "icon_business_intelligence.png"
+          .toolTitle
+            = t("desktop.resource_and_variable").html_safe
+    - elsif current_user.director? or current_user.office_manager? or current_user.agent?
+      - if current_user.office_manager?
+        - document_registers_path = document_registers_office_managers_path
+      - elsif current_user.director?
+        - document_registers_path = document_registers_directors_path
+      - elsif current_user.agent?
+        - document_registers_path = document_registers_agents_path
+      - else
+        - document_registers_path = ''    
+
+    - if current_user.executive? or current_user.director? or current_user.office_manager? or current_user.agent?
+
+      - if current_user.director? or current_user.office_manager? or current_user.agent?
+        .col-xs-12.col-sm-4.col-md-3
+          %a.toolBox{:href => center_messages_path}
+            .toolImage
+              = image_tag "icon_best_practice_sharing_pool_knowledge.png"
+            .toolTitle
+              = t("desktop.message_center").html_safe
+
+      - if document_registers_path.present?      
+        .col-xs-12.col-sm-4.col-md-3
+          %a.toolBox{:href => document_registers_path}
+            .toolImage
+              = image_tag "icon_certificate.png"
+            .toolTitle
+              = t("desktop.document_registers").html_safe
+    
+      / .col-xs-12.col-sm-4.col-md-3.hide
+      /   #feedbackModal.modal.fade{"aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+      /     .modal-dialog.modal-lg{:role => "document"}
+      /       .modal-content
+      /         .modal-body
+      /           = render :partial => "emails/form_feedback"
+      /   #feedbackSuccessModal.modal.fade{"aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+      /     .modal-dialog.modal-lg{:role => "document"}
+      /       .modal-content
+      /         .modal-body
+      /           = render :partial => "emails/feedback_success"
+    .col-xs-12.col-sm-4.col-md-3
+      %a.toolBox{:href => personal_settings_path}
+        .toolImage
+          = image_tag "icon_tools.png"
+        .toolTitle
+          = t("desktop.my_settings").html_safe
+    .col-xs-12.col-sm-4.col-md-3
+      %a.toolBox{:href => destroy_user_session_path, "data-method" => "delete"}
+        .toolImage
+          = image_tag "remax_end_session.png"
+        .toolTitle
+          = t("desktop.end_session").html_safe

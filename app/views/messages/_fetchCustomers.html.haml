@@ -1,0 +1,11 @@
+.scroll.row
+  - if @recipients.present?
+    - @recipients.each do |recipient|
+      = render :partial => 'customer', :locals => {recipient: recipient, message: @message}
+    - if @recipients.count > Settings.system.per_page
+      = link_to next_customers_messages_path(2, id: @message.id), :remote => true, :class => 'loadMore jscroll-next' do
+        %i.downArrow
+        = t("general.next")
+  - else
+    .col-xs-12.col-sm-6.col-md-4.alert.alert-warning
+      %span= t('general.no_record_found')

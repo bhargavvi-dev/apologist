@@ -1,0 +1,46 @@
+.number-picker{:style => "display:none"}
+  %table.content{:border => "0"}
+    %tr
+      %td
+        %button.numeric-keyped{:type => "button", :value => "1"}
+          = "1"
+      %td
+        %button.numeric-keyped{:type => "button", :value => "2"}
+          = "2"
+      %td
+        %button.numeric-keyped{:type => "button", :value => "3"}
+          = "3"
+    %tr
+      %td
+        %button.numeric-keyped{:type => "button", :value => "4"}
+          = "4"
+      %td
+        %button.numeric-keyped{:type => "button", :value => "5"}
+          = "5"
+      %td
+        %button.numeric-keyped{:type => "button", :value => "6"}
+          = "6"
+    %tr
+      %td
+        %button.numeric-keyped{:type => "button", :value => "7"}
+          = "7"
+      %td
+        %button.numeric-keyped{:type => "button", :value => "8"}
+          = "8"
+      %td
+        %button.numeric-keyped{:type => "button", :value => "9"}
+          = "9"
+    %tr
+      %td
+        %button.numeric-keyped{:type => "button", :value => "0"}
+          = "0"
+      %td
+        %button.numeric-keyped{:type => "button", :value => ","}
+          = ","
+      %td
+        %button.numeric-remove{:type => "button", :value => "<"}
+          %i.backspaceIcon 
+    %tr
+      %td{:colspan => "3"}
+        %a.numeric-btn-colse.btn-full
+          %i.closeIcon

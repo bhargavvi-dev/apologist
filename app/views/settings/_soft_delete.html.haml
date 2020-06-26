@@ -1,0 +1,23 @@
+.formBox
+  .formHeader.clearfix
+    - if @office.present?
+      %h1
+        = t("office.confirm_deletion", office: @office.office_name)
+    - elsif @customer.present?
+      %h1
+        = t("customer.confirm_deletion", customer: @customer.name)
+    - else
+      %h1
+        = t("general.confirm_deletion", user: @user.name)
+
+  .form-group.formTitle
+    = t('general.delete_content')
+  .form-group
+    - if @office.present?
+      = link_to t('general.general_yes'), soft_delete_settings_path('delete','Office', @office.id), method: :post, :class => "btn btn-primary btn-md"
+    - elsif @customer.present?
+      = link_to t('general.general_yes'), soft_delete_settings_path('delete','Customer', @customer.id), method: :post, :class => "btn btn-primary btn-md"
+    - else
+      = link_to t('general.general_yes'), soft_delete_settings_path('delete','User', @user.id), method: :post, :class => "btn btn-primary btn-md"
+    %button.btn.btn-primary.btn-md{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+      =t('general.general_no')

@@ -1,0 +1,8 @@
+<% if (@commission and @commission.errors.any?) or @error.present? %>
+  <% error_msg = @error.present? ? t('general.something_went_wrong') : @commission.errors.full_messages.first%>
+  setFlashMessage("set_flash_msg", "set_flash_msg", "<%= t('general.something_went_wrong') %>");
+<% else %>
+  setFlashMessage("set_flash_msg", "set_flash_msg", "<%= t('message.email_successfully_sent') %>");
+<% end %>
+redirectTo(window.location.href);
+<%= render :partial => "shared/ajax_js" %>

@@ -1,0 +1,62 @@
+= form_for(@message, :url => message_path(@message), :method => "PUT") do |f|
+  = hidden_field_tag 'step', @step
+  /= hidden_field_tag 'form_submit', true
+  %table.tableForm{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+    %tbody
+      %tr
+        %td#stepBtnHeight.leftCol{:width => "85%"}
+          .formBox
+            .formHeader.clearfix
+              %h1
+                - if session[:message_recipient_type] == "partner"
+                  = t("message.send_new_message_to_partner")
+                  %span= t("message.write_subject_message_proceed")
+                - elsif session[:message_recipient_type] == "customer"
+                  = t("message.send_new_message_to_customer")
+                  %span= t("message.write_subject_message_proceed")
+                - elsif session[:message_recipient_type] == "agent"
+                  = t("message.send_new_message_to_agents")
+                  / %span= t("message.write_subject_message_proceed")
+                - else
+                  = t("message.send_new_message_to_staff")
+                  %span= t("message.write_subject_message_proceed")
+            - if session[:message_recipient_type] == "agent"
+              - if current_user.customer?
+                .row.form-group
+                  .col-xs-12.col-sm-6.col-sm-offset-6.col-lg-4.col-lg-offset-8
+                    = image_tag "logo_remax_agent.png", :class => "remaxAgentLogo"
+              .row.row5
+                .col-xs-12.col-sm-9.col-lg-10
+                  .form-group
+                    %label=t("message.recipients")
+                    = text_field_tag :recipients,"",:class => "form-control", :placeholder => t('message.customer_login.recipients_placeholder'), :id => "recipient_agent_email_id", readonly: true
+                .col-xs-12.col-sm-3.col-lg-2
+                  .form-group
+                    %label.hidden-xs=("&nbsp;").html_safe
+                    %a{"data-target" => "#ChooseYourAgents", "data-toggle" => "modal", :type => "button", :class => "btn btn-primary btn-lg btn-block" }
+                      %span.f16.medium
+                        =t("message.customer_login.your_agents")
+            .row
+              .col-xs-12
+                .form-group
+                  %label=t("message.subject")
+                  = f.text_field :subject, :class => "form-control mandatory_field", :placeholder => t('message.subject_placeholder')
+              .col-xs-12
+                .form-group
+                  %label=t("message.message")
+                  = f.text_area :body, :rows => 12, :class => "form-control ckeditorCustomStatic", :value => @message.body.to_s.html_safe#, :placeholder => t('message.subject_placeholder')
+              .col-xs-12
+                = render :partial => "shared/upload_files", :locals => {:object => @message, :type => 'Message', :resource_type => 'DOCUMENT', :resource_spec => 'ATTACHMENT', :title => t('general.add_attachment'), :index => "0"}
+        %td.stepBtnGroup{:width => "15%"}
+          - if session[:message_recipient_type] == "agent"
+            - back_url = desktop_customers_path
+          - else
+            - back_url = edit_message_path(@message, :step => (@step.to_i - 1))
+          %a.h25.stepBtn.backBtn{:href => back_url }
+            %span
+              =t("form_action_button.return_button")
+            = image_tag "remax_back_btn.png", :class => "mt15"
+          %button.h75.stepBtn.nextBtn#saveMediaNext{:name => "proceed_next", :type => "submit", :class => "checkMandatory"}
+            %span
+              = t("form_action_button.save_and_next_button")
+            = image_tag "remax_save_and_next_btn.png", :class => "mt15"

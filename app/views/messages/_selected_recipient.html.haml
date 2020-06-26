@@ -1,0 +1,30 @@
+.col-xs-12.col-sm-6.col-md-4
+  .rpCheckBox.recipient{:id => "responsible_person_#{recipient.id}"}    
+    - if session[:message_recipient_type] == "partner"
+      .rpPhoto
+        - profile_photo = recipient.resources['IMAGE::LOGO']
+        %div
+          - if profile_photo.present?
+            = image_tag profile_photo.media.url(:small)
+          - else
+            = image_tag "remax_customer_register_small.png"          
+      = check_box_tag 'receivers[]', recipient.id, (message.receiver_ids.to_s.split(",").include? recipient.id.to_s), :id => "responsible_person_check_#{recipient.id}", :class => "checkMark"
+      .rpContent{:href => "javascript:void(0);"}
+        .rpTitle
+          = set_proper_name(recipient.company_name, 20)
+        .rpDesc
+          = recipient.role.humanize
+    - else
+      .rpPhoto
+        - profile_photo = recipient.resources['IMAGE::USER_PHOTO']
+        %div
+          - if profile_photo.present?
+            = image_tag profile_photo.media.url(:small)
+          - else
+            = image_tag "remax_customer_register_small.png"
+      = check_box_tag 'receivers[]', recipient.id, (message.receiver_ids.to_s.split(",").include? recipient.id.to_s), :id => "responsible_person_check_#{recipient.id}", :class => "checkMark"
+      .rpContent{:href => "javascript:void(0);"}
+        .rpTitle
+          = set_proper_name(recipient.name, 20)
+        .rpDesc
+          = recipient.role.humanize

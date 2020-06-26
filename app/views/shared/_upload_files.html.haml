@@ -1,0 +1,33 @@
+.row.row7
+  .col-xs-12
+    .form-group
+      #upload_media.uploadFile.form-control
+        %i.fa.fa-file-text-o
+        = title
+        .btn.btn-primary.btn-lg
+          = t("general.upload")
+        = file_field_tag :media, id: "#{index}", multiple: true, class: "form-control file-control upload_files"
+        - if resource_spec == 'ATTACHMENT_TEMP'
+          = hidden_field_tag 'form_submit', true, :id => "form_submit"        
+        = hidden_field_tag 'resource_type', resource_type, :id => "resource_type_name#{index}"
+        = hidden_field_tag 'creator_id', (current_user.id if current_user.present?), :id => "creator_id#{index}"
+        = hidden_field_tag 'resource_spec', resource_spec, :id => "resource_spec_name#{index}"
+        = hidden_field_tag 'object_id', object.id, :id => "object_id#{index}"
+        = hidden_field_tag 'object_type', type, :id => "object_type#{index}"
+        - agent_office_resource = agent_office_resource.present? ? agent_office_resource : false
+        = hidden_field_tag 'agent_office_resource', agent_office_resource, :id => "agent_office_resource#{index}"
+        = hidden_field_tag 'error_msg', t("general.something_went_wrong"), :id => 'error_msg'
+      /#save_delete_media_error.mt10
+    %div.upload-file-box
+      %ul.row.preview_attachments{:id => "preview_attachments#{index}"}
+        - files = object.resources.with_type("#{resource_type}::#{resource_spec}")
+        - if files.any?
+          - files.each do |i|
+            - if i.media.present?
+              %li.form-group{:id => "uploaded_file_#{i.id}"}
+                - owner = owner.present? ? owner : ''
+                - file_name = i.media_attachment_name.present? ? i.media_attachment_name : i.media_file_name
+                = link_to (file_name), (i.media.url+"&owner=#{owner}")
+                %a{:href => 'javascript:void(0);', :class => 'remove-file dib'}
+                  %div{ :onclick => "removeMedia(#{i.id}, 'uploaded_file_#{i.id}', #{object.id}, '#{type}', '#{t("general.are_you_sure")}'); return false", :class => 'remove'}
+                    %i.fa.fa-times

@@ -1,0 +1,49 @@
+= form_for(@commission, url: send_selling_commission_contract_emails_path(@commission) , :html => {:id => "send_renting_commission_contract", :method => 'POST'}) do |f|
+  %table.tableForm{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+    %tbody
+      %tr
+        %td#stepBtnModalHeight.leftCol{:width => "80%"}
+          .formBox
+            .formHeader.clearfix
+              %h1
+                = t("selling_commission.listing_agreement_down").html_safe
+            .row
+              .col-xs-12
+                .form-group
+                  %label=t("message.recipient")
+                  = text_field_tag 'recipient_email', @commission.customers.pluck(:email).join(';'), :class => "form-control", :readonly => true
+              .col-xs-12
+                .form-group
+                  %label=t("message.subject")
+                  = text_field_tag 'subject', (selling_commission_contract_name @commission), :class => "form-control"
+              .col-xs-12
+                .form-group
+                  %label=t("message.message")
+                  - if @current_brand.logo.present?
+                    - logo_url = absolute_url(@current_brand.logo.url, @current_brand)
+                  - else
+                    - logo_url = ''
+                  - message = t("selling_commission.send_email.contract.body", name: current_user.name, email: current_user.email, phone_number: current_user.phone_number, role: current_user.role.humanize, :footer_logo_url => logo_url).html_safe
+                  = text_area_tag 'body', message, :rows => 12, :class => "form-control ckeditorCustom"
+              .col-xs-12
+                %label= t('message.attachments')
+              .col-xs-12
+                .form-group
+                  - if @commission.estimating?
+                    = link_to (selling_commission_contract_name @commission), estimating_commission_contract_pdf_path(@commission, :format => 'pdf'), class: "h50 stepBtn nextBtn"
+                  - else
+                    - resources = @commission_contract.resources.with_type("DOCUMENT::OWN_PDF")
+                    - if resources.present?
+                      - download_url = download_resource_path(resources.last.id, :owner => "agent_office")
+                    - else
+                      - download_url = selling_commission_contract_pdf_path(@commission, :format => 'pdf')
+                    = link_to (selling_commission_contract_name @commission), download_url, class: "h50 stepBtn nextBtn"
+        %td.stepBtnGroup{:width => "20%"}
+          %button.h50.stepBtn.backBtn{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+            %span
+              =t("form_action_button.close")
+            = image_tag "remax_back_btn.png", :class => "mt15"
+          %button.h50.stepBtn.nextBtn{:name => "next", :type => "submit"}
+            %span
+              =t("form_action_button.send_message")
+            = image_tag "remax_save_btn.png", :class => "mt15"

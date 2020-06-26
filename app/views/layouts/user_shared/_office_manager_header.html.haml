@@ -1,0 +1,49 @@
+.col-xs-12.col-sm-4.col-md-3
+  %a.toolBox{:href => new_customer_reassigner_path}
+    .toolImage
+      = image_tag "icon_best_practice_sharing_1.png"
+    .toolTitle
+      = t("toogle_header.commission_reassigner").html_safe
+.col-xs-12.col-sm-4.col-md-3
+  %a.toolBox{:href => "javascript:void(0);"}
+    .toolImage
+      = image_tag "remax_control_panel.png"
+    .toolTitle
+      = t("toogle_header.control_panel").html_safe
+
+.col-xs-12.col-sm-4.col-md-3
+  %a.toolBox{:href => switch_office_path}
+    .toolImage
+      = image_tag "remax_office_register.png"
+    .toolTitle
+      = t("toogle_header.switch_office").html_safe
+.col-xs-12.col-sm-4.col-md-3
+  %a.toolBox{:href => choose_customer_agent_office_commissions_path(:commission_type => 'sell')}
+    .toolImage
+      = image_tag "remax_selling_commissions.png"
+    .toolTitle
+      =t('desktop.commission_management.sell').html_safe
+.col-xs-12.col-sm-4.col-md-3
+  %a.toolBox{:href => "javascript:void(0);"}
+    .toolImage
+      = image_tag "remax_buying_commissions.png"
+    .toolTitle
+      = t("desktop.commission_management.buy").html_safe
+.col-xs-12.col-sm-4.col-md-3
+  %a.toolBox{:href => "javascript:void(0);"}
+    .toolImage
+      = image_tag "remax_renting_commissions.png"
+    .toolTitle
+      = t("desktop.commission_management.rent").html_safe
+.col-xs-12.col-sm-4.col-md-3
+  %a.toolBox{:href => "javascript:void(0);"}
+    .toolImage
+      = image_tag "remax_background_variables.png"
+    .toolTitle
+      = t("desktop.commission_management.make_property_estimation").html_safe
+.col-xs-12.col-sm-4.col-md-3
+  %a.toolBox{:href => customers_path}
+    .toolImage
+      = image_tag "remax_customer_register.png"
+    .toolTitle
+      = t("toogle_header.customer_register").html_safe

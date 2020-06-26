@@ -1,0 +1,106 @@
+.col-xs-12.col-md-6.col-10
+  .rxTeamBox.form-group.recipient{:id => "responsible_person_#{recipient.id}"}
+    - if session[:message_recipient_type] == "partner"
+      .row.row1.flexRowWrap
+        .col-xs-12.col-sm-3.text-center.flexRow.flexCenter
+          - profile_photo = recipient.resources['IMAGE::LOGO']
+          - if profile_photo.present?
+            = image_tag profile_photo.media.url(:small)
+          - else
+            = image_tag "remax_customer_register_small.png"
+        .col-xs-12.col-sm-9
+          .p5.text-blue
+            .formSubTitle
+              = set_proper_name(recipient.company_name, 20)
+            .pb10
+              = recipient.role.humanize
+              - if recipient.other_business_degrees.present?
+                =","
+              = recipient.other_business_degrees
+              - if recipient.job_role.present?
+                =","
+              = recipient.job_role
+            .flexRow.pb5
+              %span.pr5
+                = image_tag "icon_call.png", :width => "32"
+              %span.pt5
+                = recipient.phone_number
+            .flexRow.pb5
+              %span.pr5
+                = image_tag "icon_email.png", :width => "32"
+              %span.pt5
+                = set_proper_email(recipient.email)
+            .flexRow.pb5
+              %span.pr5
+                = image_tag "icon_office.png", :width => "32"
+              %span.pt5
+                / = @office.office_name
+        .col-xs-12
+          = check_box_tag 'receivers[]', recipient.id, (message.receiver_ids.to_s.split(",").include? recipient.id.to_s), :id => "responsible_person_check_#{recipient.id}", :class => "checkMark recipient_check"
+          .checkConfirm
+            %a{:class => "btn btn-transparent btn-wrap btn-md btn-block"}
+              - if message.receiver_ids.to_s.split(",").include? recipient.id.to_s
+                - select_class = "hide"
+                - unselect_class = ""
+              - else
+                - select_class = ""
+                - unselect_class = "hide"
+              %span{:id => "responsible_select_text_#{recipient.id}", :class => "#{select_class} responsible_select_text"}
+                = t("desktop.press_here_to_select_person")
+              %span{:id => "responsible_unselect_text_#{recipient.id}", :class => "#{unselect_class} responsible_unselect_text"}
+                = t("desktop.press_here_to_unselect_person")
+    - else
+      .row.row1.flexRowWrap
+        .col-xs-12.col-sm-3.text-center.flexRow.flexCenter
+          - profile_photo = recipient.resources['IMAGE::USER_PHOTO']
+          - if profile_photo.present?
+            = image_tag profile_photo.media.url(:small)
+          - else
+            = image_tag "remax_customer_register_small.png"
+        .col-xs-12.col-sm-9
+          .p5.text-blue
+            .formSubTitle
+              = set_proper_name(recipient.name, 20)
+            .pb10
+              = recipient.role.humanize
+              - if recipient.other_business_degrees.present?
+                =","
+              = recipient.other_business_degrees
+              - if recipient.job_role.present?
+                =","
+              = recipient.job_role
+            .flexRow.pb5
+              %span.pr5
+                = image_tag "icon_call.png", :width => "32"
+              %span.pt5
+                = recipient.phone_number
+            .flexRow.pb5
+              %span.pr5
+                = image_tag "icon_email.png", :width => "32"
+              %span.pt5
+                = set_proper_email(recipient.email)
+            .flexRow.pb5
+              %span.pr5
+                = image_tag "icon_office.png", :width => "32"
+              %span.pt5
+                / = @office.office_name
+        .col-xs-12
+          - if current_user.executive?
+            = check_box_tag 'receivers[]', recipient.id, (message.receiver_ids.to_s.split(",").include? recipient.id.to_s), :id => "responsible_person_check_#{recipient.id}", :class => "checkMark recipient_check"
+          - else
+            - if current_user.belongs_to_office?(recipient)
+              = check_box_tag 'receivers[]', recipient.id, (message.receiver_ids.to_s.split(",").include? recipient.id.to_s), :id => "responsible_person_check_#{recipient.id}", :class => "checkMark recipient_check"
+            - else
+              = check_box_tag 'receivers[]', recipient.id, (message.receiver_ids.to_s.split(",").include? recipient.id.to_s), :id => "responsible_person_check_#{recipient.id}", :class => "checkMark recipient_check_as_radio"
+          .checkConfirm
+            %a{:class => "btn btn-transparent btn-wrap btn-md btn-block"}
+              - if message.receiver_ids.to_s.split(",").include? recipient.id.to_s
+                - select_class = "hide"
+                - unselect_class = ""
+              - else
+                - select_class = ""
+                - unselect_class = "hide"
+              %span{:id => "responsible_select_text_#{recipient.id}", :class => "#{select_class} responsible_select_text"}
+                = t("desktop.press_here_to_select_person")
+              %span{:id => "responsible_unselect_text_#{recipient.id}", :class => "#{unselect_class} responsible_unselect_text"}
+                = t("desktop.press_here_to_unselect_person")

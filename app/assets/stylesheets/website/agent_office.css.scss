@@ -1,0 +1,9 @@
+.photography_rotator{width:310px; height:220px; overflow:hidden;  position:relative;}
+.photography_rotator .images{position:relative; z-index:1;}
+.photography_rotator .images .imageHolder{width:310px; float:left; height:220px; position:relative;}
+.photography_rotator .images .imageHolder img{width:310px;  height:220px; position:absolute; display:block; top:0; left:0; z-index:3;}
+
+.plan_rotator{width:310px; height:220px; overflow:hidden;  position:relative;}
+.plan_rotator .images{position:relative; z-index:1;}
+.plan_rotator .images .imageHolder{width:310px; float:left; height:220px; position:relative;}
+.plan_rotator .images .imageHolder img{width:310px;  height:220px; position:absolute; display:block; top:0; left:0; z-index:3;}

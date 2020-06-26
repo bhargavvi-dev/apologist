@@ -1,0 +1,169 @@
+$(document).ready(function(){
+
+  common_events();
+
+  initiateDatePicker();
+
+  $('.scroll').jscroll({
+    loadingHtml: '<img src="/loading.gif" alt="Loading" />',
+    autoTrigger: true,
+    nextSelector: 'a.jscroll-next:last',
+    callback: common_events
+  });  
+
+  $('.scroll-office').jscroll({
+    loadingHtml: '<img src="/loading.gif" alt="Loading" />',
+    autoTrigger: true,
+    nextSelector: 'a.jscroll-next-office:last',
+    callback: common_events
+  });
+  
+  $('.scroll-agent').jscroll({
+    loadingHtml: '<img src="/loading.gif" alt="Loading" />',
+    autoTrigger: true,
+    nextSelector: 'a.jscroll-next-agent:last',
+    callback: common_events
+  });  
+
+  $('.scroll-person').jscroll({
+    loadingHtml: '<img src="/loading.gif" alt="Loading" />',
+    autoTrigger: true,
+    padding: 20,
+    nextSelector: 'a.jscroll-next-person:last',
+    callback: common_events
+  });  
+
+  $('.location_search_input_tags').tagit({
+    placeholderText: I18n.t("js.general.task.property_fill_placeholder"),
+    afterTagAdded: function(event, ui) {
+      $('.location_search_input_tags').parent().find('.tagit-new').find('input').attr('placeholder', '');
+    },
+    afterTagRemoved: function(event, ui) {
+      if ($('.location_search_input_tags').parent().find('ul').children('li').size() == 1){
+        $('.location_search_input_tags').parent().find('.tagit-new').find('input').attr('placeholder', I18n.t("js.general.task.property_fill_placeholder"));
+      }
+    }
+  });
+
+  $('input[type="range"]').rangeslider({
+    // Feature detection the default is `true`.
+    // Set this to `false` if you want to use
+    // the polyfill also in Browsers which support
+    // the native <input type="range"> element.
+    polyfill: false,
+
+    // Default CSS classes
+    rangeClass: 'rangeslider',
+    disabledClass: 'rangeslider--disabled',
+    horizontalClass: 'rangeslider--horizontal',
+    verticalClass: 'rangeslider--vertical',
+    fillClass: 'rangeslider__fill',
+    handleClass: 'rangeslider__handle',
+    //Callback function
+    onSlide: function(position, value) {
+      var current_ele = $(this)[0]['$element'];
+      if (current_ele){
+        var parentEl = $(current_ele).closest('.analysis_report_class');
+        var other_ele = $(parentEl).find('.other_analysis_report_input_value');
+        if (other_ele){
+          $(other_ele).val(value);
+        }
+      }
+    },
+    // Callback function
+    onSlideEnd: function(position, value) {
+      var current_ele = $(this)[0]['$element'];
+      if (current_ele){
+        var parentEl = $(current_ele).closest('.analysis_report_class');
+        var other_ele = $(parentEl).find('.other_analysis_report_input_value');
+        if (other_ele){
+          $(other_ele).val(value);
+        }
+      }
+    }
+  });
+
+});
+
+function fadeOutFlashMessage(id){  
+  $("#" + id).delay(3000).fadeOut(500);
+}
+
+function SetFocusOnTopOfPage(){
+  $(".modal").animate({ scrollTop: 0 }, "slow");
+}
+
+function getFlashMessageEle(msg, flashId){  
+  return "<div id='" + flashId + "' class='alert alert-dismissible alert-success'><button class='close' data-dismiss='alert' type='button'>×</button>" + msg + "</div>"
+}
+
+function setFlashMessage(parentId, flashId, msg, fadeOut, animate){
+  $("#" + parentId).html(getFlashMessageEle(msg, flashId));
+  if (animate != false){
+    SetFocusOnTopOfPage()
+    //$('html, body').animate({scrollTop:$('#' + parentId).position().top}, 'slow');
+  }
+  if (fadeOut != false) {
+    fadeOutFlashMessage(flashId);
+  }
+}
+
+
+function common_events(){
+
+  if ($("#pc_browser").val() != 'true') {
+    $('.container').on('cocoon:after-insert', function(e, insertedItem) {
+      $('.virtualKeyboard').keyboard({
+        position: {
+          of: null,
+          my: 'top'
+        }
+      });
+    });
+  }
+
+  if ($("#pc_browser").val() != 'true') {
+    $('.virtualKeyboard').keyboard({
+      position: {
+        of: null,
+        my: 'top'
+      }
+    });
+  }
+
+  $(".addThousandSeparators").focusout(function() {
+    $(this).val(addThousandSeparators($(this).val()));
+  });
+
+  // date picker
+  $('.datepickeron').datepicker({
+    format: 'dd.mm.yyyy',
+    weekStart: 1,
+    autoclose: true,
+    todayHighlight: true,
+    clearBtn: true,
+    disableTouchKeyboard: true,
+    Readonly: true
+  }).attr("readonly", "readonly");
+  
+  $("#loader-image, .pre-icon").hide();
+  
+  $("#loader-image_floor, .pre-icon").hide();
+
+  $("#loader-image_photograph, .pre-icon").hide();
+
+  $("#flash_msg").delay(3000).fadeOut(500);
+ 
+  $("#filter-btn, #saveMedia, #saveMediaNext").click(function(){
+    $("#loader-image").show();
+  });
+  
+  $(".pre-icon-load").click(function(){
+    $(".pre-icon").show();
+  });
+
+  $(".pre-load-form").submit(function(){    
+    $(".pre-icon").show();
+  });
+
+}

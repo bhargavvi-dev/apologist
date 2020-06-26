@@ -1,0 +1,13 @@
+.row.messagesList
+  .scroll
+    - if @message_associations.present?
+      - @message_associations.each do |message_association|
+        = render :partial => 'message', :locals => {message_association: message_association}
+      - if @message_associations.count > Settings.system.per_page
+        = link_to next_messages_path(2), :remote => true, :class => 'loadMore jscroll-next' do
+          %i.downArrow
+          = t("general.next")
+    - else
+      .row
+        .col-xs-12.alert.alert-warning
+          %span= t('general.no_record_found')

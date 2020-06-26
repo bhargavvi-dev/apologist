@@ -1,0 +1,15 @@
+system:
+  domain: 'localhost:3000'
+database:
+  username: 'root'
+  password: 'root'
+  master_office:
+    name: "max_office_development"
+price_navigator:
+  google_map:
+    key: "AIzaSyB1CdTOiXnEj1uGwCpbkPGA8qhzxcVmymA"
+  kvkl:
+    base_url: "https://staging.hintaseurantapalvelu.fi/api/v1/transactions"
+    account: "remax-fenux"
+    key: "BmyKpWadRNSBLaUw5Mr3sjMUEjFckZceFtcR47Ed"
+    features_times_span: 5

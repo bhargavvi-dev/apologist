@@ -1,0 +1,14 @@
+<% if @error.present? %>
+  setFlashMessage("messages_notice", "message_flash_msg", "<%= t('general.something_went_wrong') %>");
+<% else %>
+  <% if @read_status == true %>
+    $("#body_" + "<%= params[:message_association_id] %>").addClass('read');
+    var mark_btn_status = "<%= t('message.mark_unread') %>"
+  <% else %>
+    $("#body_" + "<%= params[:message_association_id] %>").removeClass('read');
+    var mark_btn_status = "<%= t('message.mark_read') %>"
+  <% end %>
+  $("#message_read_status_" + "<%= params[:message_association_id] %>").text(mark_btn_status);
+  $("#open_message_subject_" + "<%= params[:message_association_id] %>").attr("read_status", "<%= @read_status %>");
+  $("#open_message_btn_" + "<%= params[:message_association_id] %>").attr("read_status", "<%= @read_status %>");
+<% end %>

@@ -1,0 +1,19 @@
+- if object.office_users.any?
+  %ul.nav.nav-tabs
+    - object.office_users.each_with_index do |office_user, i|
+      - active_class = (i == 0) ? "active" : ""
+      %li{:class => active_class}
+        %a{"data-toggle" => "tab", :href => "#office_#{i}"}
+          = office_user.office.name if office_user.office.present?
+  .tab-content
+    - index = 0
+    - object.office_users.each_with_index do |office_user, i|
+      - in_active_class = (i == 0) ? "in active" : ""
+      .tab-pane.fade{:id => "office_#{i}", :class => "user_role_position_form #{in_active_class}"}
+        = f.fields_for :office_users, office_user do |ff|
+          = render  :partial => 'shared/user_registration/role_position_contract', :locals => {:office_user => office_user, :job_roles => job_roles, :default_job_role => default_job_role, :job_role_txt => job_role_txt, ff: ff, :index => index}
+      - index += 2
+- else
+  = f.hidden_field :id, :value => object.id
+  .col-md-6.alert.alert-warning
+    %span= t('user.no_office_found')

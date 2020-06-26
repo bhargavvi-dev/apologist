@@ -1,0 +1,8 @@
+- if @message_associations.present?
+  - @message_associations.each do |message_association|
+    = render :partial => 'message', :locals => {message_association: message_association}
+  - if @message_associations.count > Settings.system.per_page
+    - count = params[:page].to_i + 1
+    = link_to next_messages_path(count), :remote => true, :class => 'loadMore jscroll-next' do
+      %i.downArrow
+      = t("general.next")        

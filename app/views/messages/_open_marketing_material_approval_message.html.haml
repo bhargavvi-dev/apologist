@@ -1,0 +1,178 @@
+- set_office_connection message.office_id if message.office_id.present?
+- material = message.object
+- if material.present?
+  - material_next_version = material.next_version
+  - @creator_is_agent_entrepreneur = material.creator.try(:master_user).is_agent_entrepreneur? message.office_id, false
+  - @is_approved = (material.is_approved? or material.latest_version.try(:is_approved?))
+  - #for inspector/agent in next version is inspected by someone, then he can edit current option
+  / - @can_update_material = !(material_next_version.try(:inspector).present?)
+  - @can_update_material = (!(material_next_version.try(:inspector).present?) and !(next_version_material_message_arrived material_next_version, message))
+  - selling_commission = material.try(:marketing_app).try(:commission)
+  - inspector = material.try(:inspector)
+  - @can_inspect = inspector.present? ? (inspector.master_id == current_user.id) : true
+  
+  = form_for material, :url => material_quality_check_agent_office_commissions_path(material), :method => 'post', :method => "PUT" do |f|
+    %table.tableForm{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+      %tbody
+        %tr
+          %td#stepBtnModalHeight.leftCol{:width => "80%"}
+            .formBox.minH300
+              .formHeader.clearfix
+                %h1
+                  = t("selling_commission.marketing_app.inspector.quality_check_card").html_safe
+                .row.formHeaderInfo
+                  .col-xs-12.col-sm-6
+                    %label
+                      = t('selling_commission.specifications.office')
+                    %span
+                      = ":"
+                    %span
+                      = message.office.try(:name)
+                  .col-xs-12.col-sm-6
+                    %label
+                      = t('selling_commission.commission_contract.customer_down')
+                    %span
+                      = ":"
+                    %span
+                      = "#{selling_commission.try(:customer_name)}"
+                  .col-xs-12.col-sm-6
+                    %label
+                      = t('selling_commission.commission_contract.flat_address')
+                    %span
+                      = ":"
+                    %span
+                      = "#{selling_commission.try(:get_property_address)}"
+                  .col-xs-12.col-sm-6
+                    %label
+                      = t('selling_commission.specifications.commission_number')
+                    %span
+                      = ":"
+                    %span
+                      = selling_commission.try(:contract).try(:commission_number)
+              .row.row5
+                .col-xs-12
+                  .form-group.formTitle
+                    - if material.channel_type == 'SALES_BROCHURE' and (selling_commission.buying? or selling_commission.renting_tenant?)
+                      - if selling_commission.renting_tenant?
+                        - channel_type = t("selling_commission.marketing_app.rent_brochure_cap")
+                      - else
+                        - channel_type = t("selling_commission.marketing_app.purchase_brochure_cap")
+                    - else
+                      - channel_type = t("selling_commission.marketing_app.#{material.channel_type.downcase}")
+                    = t('selling_commission.marketing_app.inspector.quality_check_card_with_version', :channel_type => channel_type, :version => material.version)
+              - if @is_approved
+                .row.row5
+                  .col-xs-12
+                    .form-group.formTitle
+                      = t('selling_commission.marketing_app.inspector.material_has_been_approved')
+              - if !@can_inspect and current_user.inspector?
+                .row.row5
+                  .col-xs-12
+                    .form-group.formTitle
+                      = t('selling_commission.marketing_app.inspector.material_has_been_inspected_by', :name => inspector.try(:master_user).try(:name))
+              .row.row5
+                .col-xs-12.col-sm-1.pb5
+                  %label
+                    = t('selling_commission.marketing_app.inspector.number')
+                .col-xs-12.col-sm-7.pb5
+                  %label
+                    = t('selling_commission.marketing_app.inspector.comment')
+                .col-xs-12.col-sm-4.pb5
+                  %label
+                    = t('selling_commission.marketing_app.inspector.recommendation')
+                - @count = 0
+                - @office_user = @office_user || AgentOffice::User.where("master_id = ?", session[:current_office_user_id]).first
+                - inspector_comments = material.comments.joins(:user).where('users.role = ?', AgentOffice::User.roles['INSPECTOR'])
+                - @answer_comment = answer_comment
+                - @material = material
+                - if @answer_comment
+                  = hidden_field_tag :sender, 'NOT_INSPECTOR'
+                - else
+                  = hidden_field_tag :sender, 'INSPECTOR'
+                  - unless material.inspector
+                    = f.hidden_field :inspector_id, :value => current_office_user.id
+                .col-xs-12.comments
+                  = f.fields_for :comments, inspector_comments do |comment|
+                    - if comment.object.present?
+                      - @count += 1
+                      = render 'comment_fields', f: comment
+                  - unless @answer_comment
+                    - if !@is_approved or @creator_is_agent_entrepreneur
+                      - if @can_inspect and @can_update_material
+                        .form-group
+                          %label
+                            = link_to_add_association f, :comments, :class => "addLink" do
+                              %i.addIcon
+                              = t('selling_commission.marketing_app.inspector.add_new_comment')
+                - if current_user.inspector?
+                  .row.row5
+                    .col-xs-12
+                      .hr
+                    - previous_version = material.previous_version
+                    - if previous_version.present? and previous_version.inspector.present?
+                      .col-xs-12
+                        .form-group.formSubTitle
+                          = t("selling_commission.marketing_app.inspector.previous_version_was_inspected_by", :name => previous_version.inspector.try(:master_user).try(:name))
+                    .col-xs-12
+                      .form-group.formSubTitle
+                        - if material.channel_type == 'SALES_BROCHURE' and (selling_commission.buying? or selling_commission.renting_tenant?)
+                          - if selling_commission.renting_tenant?
+                            = t("selling_commission.marketing_app.inspector.verify_rent_brochure")
+                          - else
+                            = t("selling_commission.marketing_app.inspector.verify_purchase_brochure")
+                        - else
+                          = t("selling_commission.marketing_app.inspector.verify_#{material.channel_type.downcase}")
+                      .form-group
+                        %a{:href => sales_brochure_inspection_agent_office_commissions_path(material, channel_type: material.channel_type.downcase, :office_id => message.office_id), target: "_blank"}
+                          %span
+                            - if material.channel_type == 'SALES_BROCHURE' and (selling_commission.buying? or selling_commission.renting_tenant?)
+                              = t("selling_commission.marketing_app.inspector.purchase_brochure_cap")
+                            - else
+                              = t("selling_commission.marketing_app.inspector.#{material.channel_type.downcase}")
+
+                .row.row5
+                  .col-xs-12
+                    .hr
+                  .col-xs-12
+                    .form-group.formSubTitle
+                      = t('selling_commission.marketing_app.inspector.open_comment_recommendation_feedabck')
+                  .col-xs-12
+                    .form-group
+                      = f.text_area :open_comment, :class => "form-control", :placeholder => t('selling_commission.marketing_app.inspector.write_here_open_comment_recommendation_feedback'), :disabled => ((@is_approved and !@creator_is_agent_entrepreneur) or !@can_inspect or !@can_update_material)
+          %td.stepBtnGroup{:width => "20%"}
+            %button.stepBtn.backBtn{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+              - if @is_approved or (current_user.inspector? and !@can_inspect)
+                %span
+                  =t("form_action_button.return_button")
+                = image_tag "remax_back_btn.png"
+              - else
+                %span
+                  =t("form_action_button.discard_changes_and_return_back")
+                = image_tag "remax_back_btn.png"
+            / %button.stepBtn.nextBtn{:name => "save", :value => "save", :type => "submit"}
+            /   %span
+            /     =t("form_action_button.save_button")
+            /   = image_tag "btn_save.png"
+            %a.h15.stepBtn.nextBtn{:href => "javascript:void(0)"}
+              %span
+                =t('selling_commission.marketing_app.property_documents')
+              = image_tag "button_files.png", :class => "mt15"
+            - if (!@is_approved or @creator_is_agent_entrepreneur) and @can_update_material
+              - unless @answer_comment
+                - if @can_inspect
+                  - material_approve_btn_class, material_quality_card_btn_class, material_approve_btn_disabled, material_quality_card_btn_disabled = material.must_fix_comments.count > 0 ? ['hide', '', true, false] : ['', 'hide', false, true]
+                  %button.stepBtn.nextBtn.material_approve_btn{:name => "approve", :value => "approve", :type => "submit", :class => "#{material_approve_btn_class}", :disabled => material_approve_btn_disabled}
+                    %span
+                      = t('selling_commission.marketing_app.inspector.send_approved_message_to_agent')
+                    = image_tag "button_thumb_up.png"
+                  - unless @creator_is_agent_entrepreneur
+                    %button.stepBtn.nextBtn.material_quality_card_btn{:name => "send", :value => "send", :type => "submit", :class => "#{material_quality_card_btn_class}", :disabled => material_quality_card_btn_disabled}
+                      %span
+                        = t('selling_commission.marketing_app.inspector.send_filled_quality_card_to_agent')
+                      = image_tag "remax_save_and_next_btn.png"
+              - else
+                - unless @creator_is_agent_entrepreneur
+                  %button.stepBtn.nextBtn{:name => "send", :value => "send", :type => "submit"}
+                    %span
+                      = t('selling_commission.marketing_app.inspector.send_version_for_inspection', :version => material.version.to_i + 1)
+                    = image_tag "remax_save_and_next_btn.png"

@@ -1,0 +1,43 @@
+#signatureModal.modal.fade{"aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog.modal-lg{:role => "document"}
+    .modal-content
+      .modal-body
+        %table.tableForm{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+          %tbody
+            %tr
+              %td#stepBtnHeight.leftCol{:width => "80%"}
+                .formBox.minHForm
+                  .formHeader.clearfix
+                    %h1
+                      = t('general.signature')
+                  .row.row5
+                    .hide
+                      = text_field_tag :signature_object_id, '', :id => 'signature_object_id'
+                      = text_field_tag :signature_object_type, '', :id => 'signature_object_type'
+                      = text_field_tag :signature_resource_type, '', :id => 'signature_resource_type'
+                      = text_field_tag :signature_resource_spec, '', :id => 'signature_resource_spec'
+                      = text_field_tag :signature_associate_type, '', :id => 'signature_associate_type'
+                      = text_field_tag :signature_associate_id, '', :id => 'signature_associate_id'
+                      = text_field_tag :signature_agent_office_resource, '', :id => 'signature_agent_office_resource'
+                      = text_field_tag :signature_after_close_modal, '', :id => 'signature_after_close_modal'
+                    .col-xs-12
+                      #signature_notice
+                    .col-xs-12
+                      .form-group.text-center
+                        %label
+                          = t("general.sign_on_screen")
+                      .form-group.text-center                    
+                        %canvas#signature_canvas{:width => "500"}
+              %td.stepBtnGroup{:width => "20%"}
+                %a.stepBtn.backBtn{:type => "button", :href => "javascript:void(0);", :id => "signature_modal_close"}
+                  %span
+                    =t("form_action_button.discard_changes_and_return_back")
+                  = image_tag "btn_discard_white.png"
+                %button.stepBtn.nextBtn{:type => "button", :id => "clear_signature"}
+                  %span
+                    = t("form_action_button.clear_signature")
+                  = image_tag "btn_discard.png"
+                %button.stepBtn.nextBtn{:type => "button", :id => "save_signature"}
+                  %span
+                    = t("form_action_button.save_signature_and_return_back")
+                  = image_tag "remax_save_btn.png"

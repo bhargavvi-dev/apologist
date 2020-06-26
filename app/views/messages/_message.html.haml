@@ -1,0 +1,51 @@
+.msgListRow
+  - message = message_association.message
+  - if message.present?
+    .modal.fade{:id => "message_modal_#{message.id}", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+      .modal-dialog.modal-lg{:role => "document"}
+        .modal-content
+          .modal-body
+            - if message.message_type == 'LEAD'
+              = render :partial => "open_lead_message", :locals => {:message => message, :source => 'messages'}
+            - elsif message.message_type == 'MARKETING_MATERIAL_APPROVAL'
+              - answer_comment = current_user.inspector? ? false : true
+              = render :partial => "open_marketing_material_approval_message", :locals => {:message => message, :answer_comment => answer_comment}
+            - elsif message.message_type == 'PUSH_INVOICE'
+              = render :partial => "open_received_invoice_message", :locals => {:message => message}
+            - elsif message.message_type == 'HINT_APPROVAL'
+              - if message.hint_status == 'ACCEPTED'
+                - if message.object_type == 'Message'
+                  = render :partial => "open_accepted_hint_message", :locals => {:message => message}
+                - else
+                  = render :partial => "open_hint_message", :locals => {:message => message}
+              - elsif message.hint_status == 'REJECTED'
+                - if message.object_type == 'Message'
+                  = render :partial => "open_rejected_hint_message", :locals => {:message => message}
+                - else
+                  = render :partial => "open_hint_message", :locals => {:message => message}
+              - elsif message.hint_status == 'NO_REPLY'
+                - if message.object_type == 'Message'
+                  = render :partial => "open_no_reply_message", :locals => {:message => message}
+                - else
+                  = render :partial => "open_hint_message", :locals => {:message => message}
+              - else
+                = render :partial => "open_hint_message", :locals => {:message => message}
+            - elsif message.message_type == 'PUSH_REPORT_REMINDER'
+              = render :partial => "open_sales_report_reminder_message", :locals => {:message => message}
+            - else
+              = render :partial => "open_message", :locals => {:message => message}
+
+    .msgListCol{:class => message_association.read ? 'read' : '', :id => "body_#{message_association.id}"}
+      .row.row10
+        .col-xs-12.col-sm-4.col-md-5.col-lg-6
+          .msgSubject
+            %a{:href => "javascript:void(0);", "data-target" => "#message_modal_#{message.id}", "data-toggle" => "modal", :class => "open_message", :read_status => "#{message_association.read}", :id => "open_message_subject_#{message_association.id}"}
+              = message.subject
+        .col-xs-12.col-sm-4.col-lg-4
+          .msgActions
+            .btn.btn-primary{"data-target" => "#message_modal_#{message.id}", "data-toggle" => "modal", :type => "button", :class => "open_message", :read_status => "#{message_association.read}", :id => "open_message_btn_#{message_association.id}"}=t("message.open_message")
+            - link_name =  message_association.read ? t("message.mark_unread") : t("message.mark_read")
+            = link_to link_name, update_read_status_messages_path(message_association), :class => "btn btn-primary", method: 'POST', remote: true, :id => "message_read_status_#{message_association.id}"
+        .col-xs-12.col-sm-4.col-md-2
+          .msgDate.text-blue
+            = "#{message.sent_at.to_datetime.to_s(:default_date)}, #{message.sender_name}"

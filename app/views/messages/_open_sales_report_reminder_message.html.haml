@@ -1,0 +1,38 @@
+%table.tableForm{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+  %tbody
+    %tr
+      %td#stepBtnModalHeight.leftCol{:width => "85%"}
+        .formBox.minH300
+          .formHeader.clearfix
+            %h1
+              = "#{message.sender_name},  #{message.sent_at.to_datetime.to_s(:default_date)}"
+          .row
+            .col-xs-12.form-group.formTitle
+              = message.subject
+          .row.pt40
+            .col-xs-12.form-group
+              - body_hash = JSON.parse(message.body.html_safe)
+              - selected_year = body_hash["selected_year"]
+              - selected_month = body_hash["selected_month"]
+              - month_name = (Time.now + selected_month.to_i.month).strftime("%B")
+              .col-xs-12.col-sm-6.col-lg-offset-3.form-group
+                .formTitle.pb10.ttu.normal.visible-xs
+                  = "&nbsp".html_safe
+                %a.btn.blueBg.btn-lg.btn-block.btn-wrap.iconLgRight.h100p{"data-remote" => "true" ,:type => "button",:href => reminder_message_sales_report_agent_office_commissions_path(:selected_year => selected_year.to_i,:selected_month => selected_month.to_i)}
+                  = image_tag "remax_next_btn.png", :class => "icon"
+                  .text-left.bold
+                    =t('monthly_sales_report.office_summary_report.go_to_monthly_sales_report',:month => month_name, :year => selected_year)
+          - attachments = message.resources.with_type('DOCUMENT::ATTACHMENT')
+          - if attachments.any?
+            .form-group.formTitle
+              =t("message.attachments")
+            .row
+              - attachments.each do |attachment|
+                .col-xs-12
+                  .form-group
+                    = link_to attachment.media_file_name, attachment.media.url, :class => 'bold blue'
+      %td.stepBtnGroup{:width => "15%"}
+        %button.stepBtn.backBtn{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+          %span
+            =t("form_action_button.close")
+          = image_tag "remax_back_btn.png", :class => "mt15"  

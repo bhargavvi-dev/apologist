@@ -1,0 +1,88 @@
+.row.pt15
+  .col-xs-12
+    .form-group.formTitle
+      = t('user.office.reward_and_payment.entrepreneur.title')
+= render :partial => 'agents/agent_share', :locals => {:ff => ff, :office_user => office_user, :modal => false}
+.row.row7.flexRowWrap.pt10
+  .col-xs-12.col-sm-6.form-group
+    %button.btn.btn-primary.btn-lg.btn-block.btn-wrap.iconLgLeft.h100p{:type => "button", "data-show_modal_id" => "agentShareModal", :class => "hideShowModal"}
+      = image_tag "icon_reload_w.png", :class => "icon"
+      .text-left.p10
+        = t('user.office.reward_and_payment.entrepreneur.create_new_share')
+  .col-xs-12.col-sm-6.form-group
+    %button.btn.btn-blue.btn-lg.btn-block.btn-wrap.iconLgLeft.h100p{:type => "button", "data-show_modal_id" => "archiveRewardModal", :class => "hideShowModal"}
+      = image_tag "icon_open_w.png", :class => "icon"
+      .text-left.p10
+        = t('user.office.reward_and_payment.entrepreneur.press_here_to_open')
+  .col-xs-12
+    .hr.hr25
+- reward_share = eval (office_user.try(:reward_share).to_s)
+- reward_share = reward_share.present? ? reward_share : {}
+.row.pt15
+  .col-xs-12
+    .form-group.formTitle
+      =t('user.office.reward_and_payment.salary_based.title')
+  .col-xs-12
+    / .row.row5.row-inline.form-group
+    /   .col-xs-12.col-sm-8.col-lg-6.pt12
+    /     %label.radioBox{:id => "only_share_radio_#{office_user.id}", :class => "reward_only_share"}
+    /       = ff.radio_button :reward_type, 'ONLY_SHARE'
+    /       %span.lbl
+    /         =t('user.office.reward_and_payment.salary_based.share_from_commission')
+    /   .col-xs-8.col-sm-2.col-lg-2
+    /     = ff.text_field :reward_share, :class => "virtualKeyboard form-control w85", disabled: (office_user.reward_type != "ONLY_SHARE"), :id => "only_share_share_#{office_user.id}"
+    /   .col-xs-4.col-sm-2.col-lg-4
+    /     %label.pt12 %
+  .col-xs-12
+    .row.row5.row-inline.form-group
+      .col-xs-12.col-sm-8.col-lg-6.pt12
+        %label.radioBox{:id => "fee_share_radio_#{office_user.id}", :class => "reward_fee_share"}
+          = ff.radio_button :reward_type, 'FEE_AND_SHARE'
+          %span.lbl
+            = t('user.office.reward_and_payment.salary_based.fixed_fee_per_month')
+      .col-xs-8.col-sm-2.col-lg-2
+        = ff.text_field :fixed_fee, :class => "virtualKeyboard addThousandSeparators form-control w85", disabled: (office_user.reward_type != "FEE_AND_SHARE"), :id => "fee_share_fee_#{office_user.id}", :value => addThousandSeparators(ff.object.fixed_fee)
+      .col-xs-4.col-sm-2.col-lg-4
+        %label.pt12
+          = @current_brand.currency_code
+          = t('user.office.reward_and_payment.salary_based.euros_and')
+      .col-xs-12.col-sm-2.col-lg-2
+        - reward_share_common = reward_share.present? ? reward_share["reward_share_common"] : ""
+        = text_field_tag "reward_share_common", reward_share_common, :class => "virtualKeyboard form-control w85", disabled: (office_user.reward_type != "ONLY_SHARE"), :id => "only_share_share_#{office_user.id}"
+      .col-xs-12.col-sm-8.col-lg-6
+        %label.pt12
+          = t('user.office.reward_and_payment.salary_based.pct_from_total')          
+  
+  .col-xs-12
+    .hr.hr25
+  .col-xs-12.form-group.formTitle
+    = t('user.office.reward_and_payment.salary_based.payment_rules.title')
+  .col-xs-12
+    .row.form-group
+      .col-xs-12.col-sm-6
+        %label
+          = t('user.office.reward_and_payment.salary_based.payment_rules.rule_1')
+      .col-xs-12.col-sm-6
+        %label
+          = t('user.office.reward_and_payment.salary_based.payment_rules.explanation_1')
+    .row.form-group
+      .col-xs-12.col-sm-6
+        %label
+          = t('user.office.reward_and_payment.salary_based.payment_rules.rule_2')
+      .col-xs-12.col-sm-6
+        %label
+          = t('user.office.reward_and_payment.salary_based.payment_rules.explanation_2_part_1')
+          = ff.text_field :salary_day, :class => "virtualKeyboard form-control w85 mt10"
+          = t('user.office.reward_and_payment.salary_based.payment_rules.explanation_2_part_2')
+
+.row
+  .col-xs-12
+    .hr.hr25
+  .col-xs-12.form-group.formTitle
+    = t('user.office.reward_and_payment.salary_based.bank_account_info')
+  .col-xs-12.col-sm-6
+    .form-group
+      = ff.text_field :bank_name, :class => "form-control", :placeholder => t('user.office.reward_and_payment.salary_based.bank_name')
+  .col-xs-12.col-sm-6
+    .form-group
+      = ff.text_field :bank_account_number, :class => "form-control", :placeholder => t('user.office.reward_and_payment.salary_based.bank_account_number')

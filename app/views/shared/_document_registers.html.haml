@@ -1,0 +1,20 @@
+#wrapper.page-wrap
+  .container
+    .page-title
+      %h1
+        = image_tag @current_brand.logo.url, :class => "mr15", :width => "160"
+        =t('desktop.document_and_registers.title')
+    .clearfix.mt15 &nbsp;
+    .row
+      .col-xs-12.col-md-6
+        %a.toolBox{:href => document_groups_path}
+          .toolImage
+            = image_tag "remax_document_folder.png"
+          .toolTitle
+            =t('desktop.document_and_registers.document_folder').html_safe
+      .col-xs-12.col-md-6
+        %a.toolBox{:href => (current_user.director? ? user_register_directors_path : "javascript:void(0)")}
+          .toolImage
+            = image_tag "remax_user_register.png"
+          .toolTitle
+            =t('desktop.document_and_registers.user_register').html_safe

@@ -1,0 +1,70 @@
+.form-group.formTitle
+  = t('user.upload_photos')
+.col-xs-12
+  .row
+    = f.file_field :avatar, class: "form-control file-control upload_photos"
+  .col-xs-12
+    %div.upload-file-box
+      %ul#preview_files.class_for_preview_files
+    - user_photos = object.avatar if object.avatar.attached?
+    - if user_photos.present?
+      .preview-photos.row.row10
+        .upload-image-col
+          .upload-image-box
+            .uploadedImg
+              = image_tag user_photos, id: "user_photo_#{user_photos.id}"
+        %div
+          %ul#preview_files.center
+.col-xs-12
+  .row
+    .hr.hr25  
+.row
+  .col-xs-12
+    .form-group.formTitle
+      = t('user.introduction_text')
+      %div
+        .add_introduction_text.mt10
+          %a.addLink{href: 'javascript:void(0)'}
+            %i.addIcon
+            = t('user.add_introduction_text')
+      #introduction_text_area.hide
+        = f.text_area :introduction, :class => "form-control", :cols => 6 , :rows => 1
+.row
+  .col-xs-12
+    .hr.hr25
+  .col-xs-12#working_areas
+    #working_area_holder.hide
+      = user_type
+    - current_working_areas = (eval object.working_areas.to_s())
+    - if current_working_areas.present?
+      - first_working_area, first_working_area_is_c_city = current_working_areas.first
+      - current_working_areas.delete(first_working_area)
+    - else
+      - first_working_area = object.city
+      - first_working_area_is_c_city = first_working_area.present?
+    .form-group.formTitle
+      =t('user.working_areas', :user_type => user_type.capitalize)
+    .row.row5.form-group#working_area_wrapper_0
+      .col-xs-12.col-sm-6.col-lg-6
+        = text_field_tag "working_areas[0]", first_working_area, :id => "working_area_0", :class => "working_area form-control"
+      .col-xs-12.col-sm-6.col-lg-6.pt15
+        %label.checkBox
+          = check_box_tag :confirm_current_city_as_wa_0, true,first_working_area_is_c_city
+          %span.lbl=t("user.confirm_living_city", :user_type => user_type)
+    - if current_working_areas.present?
+      - current_working_areas.each_with_index do |(name, is_c_city), i|
+        %div.row.row5.form-group{:id => "working_area_wrapper_#{i+1}"}
+          .col-xs-12.col-sm-6.col-lg-6
+            = text_field_tag "working_areas[#{i+1}]", name, :id => "working_area_#{i+1}", :class => "working_area form-control"
+          .col-xs-12.col-sm-6.col-lg-6.pt15
+            %a.addLink.remove_working_area{:id => "remove_working_area_#{i+1}", :href => "javascript:void(0)"}
+              %i.removeIcon
+              =t("user.remove_working_area")
+.row
+  .col-xs-12
+    %label
+      %a{:href => "javascript:void(0)", :class => "addLink", :id => "add_new_working_area"}
+        %i.addIcon
+        =t("user.add_new_working_area")
+= render partial: 'shared/add_social_profiles', locals: {f: f}
+= render :partial => "shared/image_crop"

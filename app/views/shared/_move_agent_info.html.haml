@@ -1,0 +1,33 @@
+.formBox
+  .row
+    .col-xs-12
+      %h1.formTitle.blue
+        = t("rearrange_customer_listings.max_notification")
+  .row
+    .col-xs-12.col-sm-6.col-lg-3.pt20
+      = image_tag "icon_warning_large.png", :class => "icon"
+    .col-xs-12.col-sm-6.col-lg-9
+      .form-group.bold
+        = t('user.you_are_about').html_safe
+      .form-group
+        = t('user.max_note_for_agent').html_safe
+      .form-group
+        = t('user.max_note_for_agent_1').html_safe
+.formBox.mt5
+  .row
+    .col-xs-12.col-sm-8
+      .form-group.pt5.f20.text-center.bold
+        = t("user.do_you_want_remove").html_safe
+    .col-xs-12.col-sm-4
+      .row
+        .col-xs-12.col-sm-6
+          %a.btn.btn-blue.btn-md.btn-block.btn-wrap.iconLgLeft{"data-show_modal_id" => "#", :type => "button", :href => "javascript:void(0);", class: "hideShowModal"}
+            = image_tag "button_confirm_w.png", :width => '60', :class => "icon"
+            .normal.f15
+              = t("selling_commission.pep_forms.yess")
+
+        .col-xs-12.col-sm-6
+          %a.redBg.btn.btn-md.btn-block.btn-wrap.iconLgLeft{:type => "button", :href => "javascript:void(0);", class: "hideShowModal"}
+            = image_tag "btn_discard_white.png", :width => '60', :class => "icon"
+            .normal.f15
+              = t("selling_commission.pep_forms.noo")

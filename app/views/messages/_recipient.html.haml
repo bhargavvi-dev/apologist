@@ -1,0 +1,56 @@
+.col-xs-12.col-sm-6.col-md-4.col-10
+  .rpCheckBox.recipient{:id => "responsible_person_#{recipient.id}"}
+    - if session[:message_recipient_type] == "partner"
+      .rpPhoto
+        - profile_photo = nil #recipient.resources['IMAGE::LOGO']
+        %div
+          - if profile_photo.present?
+            = image_tag profile_photo.media.url(:small)
+          - else
+            = image_tag "remax_customer_register_small.png"
+      = check_box_tag 'receivers[]', recipient.id, (message.receiver_ids.to_s.split(",").include? recipient.id.to_s), :id => "responsible_person_check_#{recipient.id}", :class => "checkMark recipient_check"
+      .rpContent{:href => "javascript:void(0);"}
+        .rpTitle
+          = set_proper_name(recipient.company_name, 20)
+        .rpDesc
+          = recipient.role.humanize
+        - if message.receiver_ids.to_s.split(",").include? recipient.id.to_s
+          - select_class = "hide"
+          - unselect_class = ""
+        - else
+          - select_class = ""
+          - unselect_class = "hide"
+        .rpBottom{:id => "responsible_select_text_#{recipient.id}", :class => "#{select_class} responsible_select_text"}
+          = t("desktop.press_here_to_select_person")
+        .rpBottom{:id => "responsible_unselect_text_#{recipient.id}", :class => "#{unselect_class} responsible_unselect_text"}
+          = t("desktop.press_here_to_unselect_person")
+    - else
+      .rpPhoto
+        - profile_photo = nil # recipient.resources['IMAGE::USER_PHOTO']
+        %div
+          - if profile_photo.present?
+            = image_tag profile_photo.media.url(:small)
+          - else
+            = image_tag "remax_customer_register_small.png"
+      - if current_user.executive?
+        = check_box_tag 'receivers[]', recipient.id, (message.receiver_ids.to_s.split(",").include? recipient.id.to_s), :id => "responsible_person_check_#{recipient.id}", :class => "checkMark recipient_check"
+      - else
+        - if current_user.belongs_to_office?(recipient)
+          = check_box_tag 'receivers[]', recipient.id, (message.receiver_ids.to_s.split(",").include? recipient.id.to_s), :id => "responsible_person_check_#{recipient.id}", :class => "checkMark recipient_check"
+        - else
+          = check_box_tag 'receivers[]', recipient.id, (message.receiver_ids.to_s.split(",").include? recipient.id.to_s), :id => "responsible_person_check_#{recipient.id}", :class => "checkMark recipient_check_as_radio"
+      .rpContent{:href => "javascript:void(0);"}
+        .rpTitle
+          = set_proper_name(recipient.name, 20)
+        .rpDesc
+          = recipient.role.humanize
+        - if message.receiver_ids.to_s.split(",").include? recipient.id.to_s
+          - select_class = "hide"
+          - unselect_class = ""
+        - else
+          - select_class = ""
+          - unselect_class = "hide"
+        .rpBottom{:id => "responsible_select_text_#{recipient.id}", :class => "#{select_class} responsible_select_text"}
+          = t("desktop.press_here_to_select_person")
+        .rpBottom{:id => "responsible_unselect_text_#{recipient.id}", :class => "#{unselect_class} responsible_unselect_text"}
+          = t("desktop.press_here_to_unselect_person")

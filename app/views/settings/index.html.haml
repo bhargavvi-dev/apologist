@@ -1,0 +1,8 @@
+.container
+  .formField
+    .row
+      .col-xs-12
+        - if params[:type] == "background_variables"
+          = render "background_variables"
+        - elsif params[:type] == "notification_values"
+          = render "notification_values"

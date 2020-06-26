@@ -1,0 +1,101 @@
+.row.row10
+  .col-xs-12
+    .form-group.formTitle
+      - if open_card == true
+        = t("user.basic_information", :type => t("general." + object.role.downcase))
+      - else
+        = t("user.confirm_info_and_finish_registration", :type => t("general." + object.role.downcase))
+  .col-xs-12.col-md-6
+    .card-row
+      %label.label-view
+        %span
+          = t('user.card_name', :type => t("general." + object.role.downcase))
+      %label.label-value
+        = object.first_name
+        = object.last_name
+    - unless current_user.agent?
+      .card-row
+        %label.label-view
+          %span
+            = t('user.address')
+        %label.label-value
+          = object.address
+      .card-row
+        %label.label-view
+          %span
+            = t('user.date_of_birth')
+        %label.label-value
+          = object.birthdate.to_datetime.to_s(:default_date) if object.birthdate.present?
+      .card-row
+        %label.label-view
+          %span
+            = t('user.phone_number')
+        %label.label-value
+          = object.phone_number
+      .card-row
+        %label.label-view
+          %span
+            = t('user.email')
+        %label.label-value
+          = object.email
+    .card-row
+      %label.label-view
+        %span
+          = t('user.city')
+      %label.label-value
+        = object.city    
+  .col-xs-12.visible-xs.visible-sm.form-group
+  .col-xs-12.col-md-6
+    .card-row
+      %label.label-view
+        %span
+          = t('user.other_degrees')
+      %label.label-value
+        .card-overflow
+          .overflowValue
+            = object.other_business_degrees
+
+- unless current_user.agent?
+  .row.row10
+    .col-xs-12
+      .hr.hr25
+    .col-xs-12
+      .form-group.formTitle
+        =t("office.social_media_profile")
+    .col-xs-12.col-md-6
+      .card-row
+        %label.label-view
+          = image_tag "linkedin.png"
+        %label.label-value
+          %a{:href => "javascript:void(0);"}
+            = object.linkedin_url
+      .card-row
+        %label.label-view
+          = image_tag "youtube.png"
+        %label.label-value
+          %a{:href => "javascript:void(0);"}
+            = object.youtube_url
+    .col-xs-12.col-md-6
+      .card-row
+        %label.label-view
+          = image_tag "facebook.png"
+        %label.label-value
+          %a{:href => "javascript:void(0);"}
+            = object.facebook_url
+      .card-row
+        %label.label-view
+          = image_tag "skype.png"
+        %label.label-value
+          %a{:href => "javascript:void(0);"}
+            = object.skype_id
+
+    .col-xs-12.center
+      .form-group.row
+        .col-xs-12.pt10
+          = image_tag object.avatar.first if object.avatar.attached?
+      .row
+        %label.col-xs-12
+          - if object.introduction.present?
+            .form-group
+              .intro-text
+                = object.introduction

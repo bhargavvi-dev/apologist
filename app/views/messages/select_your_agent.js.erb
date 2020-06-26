@@ -1,0 +1,7 @@
+<% if @recipients.present? %>
+	setFlashMessage("messages_notice", "message_flash_msg", "<%= t('general.success') %>");
+	$("#recipient_agent_email_id").val("<%= @recipients_emails %>")
+<% end %>
+setTimeout(function(){
+  $("#ChooseYourAgents").modal('hide')
+}, 1000);

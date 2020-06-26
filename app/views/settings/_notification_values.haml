@@ -1,0 +1,101 @@
+= form_for(@current_brand, :url => update_settings_path, :method => "PUT", :html => {:multipart => true, :id => 'notification-value-form'}) do |f|
+  %table.tableForm{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+    %tbody
+      %tr
+        %td#stepBtnHeight.leftCol{:width => "80%"}
+          .formBox
+            .formHeader.clearfix
+              %h1
+                = t("notification_value.notification_values")
+            .row
+              .col-xs-12
+                .form-group.formTitle
+                  = t("notification_value.years_in_service_notifications", :brand_name => @current_brand.name)
+              - (1..4).to_a.each do |i|
+                .col-xs-12.form-group
+                  .row.row5
+                    .col-xs-12.col-sm-12.col-md-5.pt12.pb5
+                      %label= t("notification_value.years_in_service", :brand_name => @current_brand.name, :number => i)
+                    .col-xs-4.col-sm-2
+                      = render :partial => "settings/setting_form", :locals => {f: f, :setting_key => "SERVICE_YEARS_#{i}", :decimal_points => 0}
+                    .col-xs-8.col-sm-2.col-md-1.pt12.form-group
+                      %label= t("notification_value.years")
+                    .col-xs-4.col-sm-2
+                      = render :partial => "settings/setting_form", :locals => {f: f, :setting_key => "SERVICE_DAYS_#{i}", :decimal_points => 0}
+                    .col-xs-8.col-sm-3.col-md-2.pt12.form-group
+                      %label= t("notification_value.days_before")             
+            .row
+              .col-xs-12
+                .hr.hr25
+              .col-xs-12
+                .form-group.formTitle
+                  = t("notification_value.contract_related_notifications")
+              .col-xs-12.form-group
+                .row.row5
+                  .col-xs-12.col-sm-6.col-lg-6.pt12
+                    %label= t("notification_value.temporary_contract_ending")
+                  .col-xs-4.col-sm-2.col-lg-2
+                    = render :partial => "settings/setting_form", :locals => {f: f, :setting_key => "TEMPORARY_CONTRACT_END_DAYS", :decimal_points => 0}
+                  .col-xs-8.col-sm-4.col-lg-4.pt12.pl0.form-group
+                    %label= t("notification_value.days_before_ending")
+              .col-xs-12.form-group
+                .row.row5
+                  .col-xs-12.col-sm-6.col-lg-6.pt12
+                    %label= t("notification_value.probation_contract_ending")
+                  .col-xs-4.col-sm-2.col-lg-2
+                    = render :partial => "settings/setting_form", :locals => {f: f, :setting_key => "PROBATION_CONTRACT_END_DAYS", :decimal_points => 0}
+                  .col-xs-8.col-sm-4.col-lg-4.pt12.pl0.form-group
+                    %label= t("notification_value.days_before_ending")
+              .col-xs-12.form-group
+                .row.row5
+                  .col-xs-12.col-sm-6.col-lg-6.pt12
+                    %label= t("notification_value.commission_is_ending")
+                  .col-xs-4.col-sm-2.col-lg-2
+                    = render :partial => "settings/setting_form", :locals => {f: f, :setting_key => "COMMISSION_END_DAYS", :decimal_points => 0}
+                  .col-xs-8.col-sm-4.col-lg-4.pt12.pl0.form-group
+                    %label= t("notification_value.days_before_ending")
+            .row
+              .col-xs-12
+                .hr.h25
+              .col-xs-12
+                .form-group.formTitle
+                  = t("notification_value.birthday_notifications")
+              .col-xs-12.form-group
+                .row.row5
+                  .col-xs-12.col-sm-6.col-lg-6.pt12
+                    %label= t("notification_value.employee_birthday")
+                  .col-xs-4.col-sm-2.col-lg-2
+                    = render :partial => "settings/setting_form", :locals => {f: f, :setting_key => "EMPLOYEE_BIRTHDAY_DAYS", :decimal_points => 0}
+                  .col-xs-8.col-sm-4.col-lg-4.pt12.pl0.form-group
+                    %label= t("notification_value.days_before_birthday")
+              .col-xs-12.form-group
+                .row.row5
+                  .col-xs-12.col-sm-6.col-lg-6.pt12
+                    %label= t("notification_value.customer_birthday")
+                  .col-xs-4.col-sm-2.col-lg-2
+                    = render :partial => "settings/setting_form", :locals => {f: f, :setting_key => "CUSTOMER_BIRTHDAY_DAYS", :decimal_points => 0}
+                  .col-xs-8.col-sm-4.col-lg-4.pt12.pl0.form-group
+                    %label= t("notification_value.days_before_birthday")
+            .row
+              .col-xs-12
+                .hr.hr25
+              .col-xs-12
+                .form-group.formTitle
+                  = t("notification_value.superintendent_documents")
+              .col-xs-12.form-group
+                .row.row5
+                  .col-xs-12.col-sm-6.col-lg-6.pt12
+                    %label= t("notification_value.superintendent_document_valid_time")
+                  .col-xs-4.col-sm-2.col-lg-2
+                    = render :partial => "settings/setting_form", :locals => {f: f, :setting_key => "SUPERINTENDENT_DOCUMENT_VALID_TIME", :decimal_points => 0}
+                  .col-xs-8.col-sm-4.col-lg-4.pt12.pl0.form-group
+                    %label= t("notification_value.days_before")        
+        %td.stepBtnGroup{:width => "20%"}
+          %a.h50.stepBtn.backBtn{:href => resource_variable_executives_path}
+            %span
+              =t("form_action_button.discard_changes_and_return_back")
+            = image_tag "remax_back_btn.png", :class => "mt15"
+          %button.h50.stepBtn.nextBtn{:name => "proceed_next", :type => "submit"}
+            %span
+              = t("form_action_button.save_changes_and_return_back")
+            = image_tag "remax_save_btn.png", :class => "mt15"

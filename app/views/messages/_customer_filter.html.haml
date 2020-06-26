@@ -1,0 +1,10 @@
+.msgFilter
+  .col-xs-12.pt12
+    .row.row7
+      = form_for '', :url => customer_filter_messages_path, :method => 'post', :html => {:id => "CustomerfilterFormId"}, :remote => true do
+        = hidden_field_tag :id, @message.id
+        = hidden_field_tag 'role', role
+        .col-xs-12.col-sm-8.col-md-4.form-group
+          = text_field_tag :search, session[:recipient_customer_search], :class => "form-control", placeholder: t("general.search_name_or_city"), :id => "customer_messageSearch"
+      %div{id: 'loader-image', class: 'loader'}
+        = image_tag 'loader-small.gif'

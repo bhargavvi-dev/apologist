@@ -1,0 +1,41 @@
+.row.parent_upload_photos
+  .col-xs-12.col-md-6
+    .form-group        
+      #upload_media.uploadFile.form-control
+        %i.fa.fa-picture-o
+        = t('general.upload_photos', :user_type => user)
+        .btn.btn-primary.btn-lg
+          = t("general.upload")
+        = file_field_tag :media, multiple: true, class: "form-control file-control upload_photos"
+        = hidden_field_tag 'resource_type', resource_type, :id => 'resource_type_name'
+        = hidden_field_tag 'resource_spec', resource_spec, :id => 'resource_spec_name'
+        = hidden_field_tag 'object_id', object.id, :id => 'object_id'
+        = hidden_field_tag 'object_type', type, :id => 'object_type'
+        = hidden_field_tag 'resource_user_type', user, :id => 'resource_user_type'
+        - agent_office_resource = agent_office_resource.present? ? agent_office_resource : false
+        = hidden_field_tag 'agent_office_resource', agent_office_resource, :id => "agent_office_resource"
+        - holder_type = associate_type.present? ? associate_type : ""
+        = hidden_field_tag 'associate_type', associate_type, :id => "associate_type"
+        = hidden_field_tag 'error_msg', t("general.something_went_wrong"), :id => 'error_msg'
+      #save_delete_media_error.mt10
+  .col-xs-12
+    %div.upload-file-box
+      %ul#preview_files.class_for_preview_files
+    - if associate_type.present?
+      - user_photos = object.resources.with_type("#{resource_type}::#{resource_spec}")
+      - user_photos = user_photos.where(:associate_type => associate_type)
+    - else
+      - user_photos = object.resources.with_type("#{resource_type}::#{resource_spec}")
+    - if user_photos.any?
+      .preview-photos.row.row10
+        - user_photos.each do |i|
+          .upload-image-col{:id => "user_photo_#{i.id}"}
+            .upload-image-box
+              - owner = agent_office_resource.present? ? 'agent_office' : ''
+              = link_to "#", :onclick => "removeMedia(#{i.id}, 'user_photo_#{i.id}', #{object.id}, '#{type}', '#{t("general.are_you_sure")}'); return false", :class => 'remove' do
+                %i.fa.fa-times
+              .uploadedImg
+                = image_tag (i.media.url+"&owner=#{owner}"), id: "user_photo_#{i.id}"
+        %div
+          %ul#preview_files.center
+/= render :partial => "shared/image_crop"

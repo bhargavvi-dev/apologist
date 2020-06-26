@@ -1,0 +1,108 @@
+= form_for(current_user, url: personal_settings_path, :multipart => true, :html => {:class => "form-horizontal"}) do |f|
+  %table.tableForm{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+    %tbody
+      %tr
+        %td#stepBtnHeight.leftCol{:width => "80%"}
+          .formBox
+            .formHeader.clearfix
+              %h1
+                = t("user.my_settings.manage_setting")
+            .row
+              .col-xs-12
+                .col-xs-12.col-md-6.col-lg-8
+                  .form-group.formTitle
+                    = t("user.my_settings.login_id_and_password")
+                  .form-group
+                    = f.text_field :email, :class => "form-control", :placeholder => t("user.my_settings.login_id")
+                  .row.row7
+                    .col-xs-12.col-lg-8.form-group
+                      = f.password_field :password, :class => "form-control", :placeholder => t("user.my_settings.password"), :disabled=>true
+                    .col-xs-12.col-sm-5.col-md-8.col-lg-4.form-group
+                      %button.btn.btn-primary.btn-lg.btn-block{"data-target" => "#changePasswordModal", "data-toggle" => "modal", :type => "button"}
+                        %span
+                          =t("general.change_password")
+                .col-xs-12.visible-sm.visible-xs
+                  .hr.hr25      
+                .col-xs-12.col-md-6.col-lg-4
+                  .row.row7
+                    .col-xs-12
+                      .formTitle.form-group
+                        = t("user.my_settings.choose_language")
+                    - User.languages.keys.each do |language|
+                      .col-xs-12.col-sm-4.col-md-6
+                        .form-group
+                          .langaugeOpt
+                            = f.radio_button :language, language
+                            = image_tag "flags/#{language}.png", width: 140
+            - if current_user.director? or current_user.office_manager? or current_user.agent? or current_user.customer?
+              .row
+                .col-xs-12
+                  .hr.hr25
+                .col-xs-12    
+                  .col-xs-12.col-md-6.col-lg-4
+                    .row.row7
+                      .col-xs-12.form-group
+                        %a.leadTransBtn.grayBgBox.flexRow.noHoverLine{:href => switch_office_path}
+                          .row.row10.flexRow
+                            .col-xs-12.col-sm-4.flexCol
+                              = image_tag "remax_office_register.png"
+                            .col-xs-12.col-sm-8.flexCol
+                              = t("user.my_settings.switch_office").html_safe
+            .row
+              .col-xs-12
+                .hr.hr25
+              .col-xs-12
+                .col-xs-12
+                  .formTitle.form-group
+                    = t("user.my_settings.basic_information")
+                  .formSubTitle.form-group
+                    = current_user.name
+                .row
+                  .col-xs-12
+                    .col-xs-12.col-sm-8
+                      .form-group
+                        = f.text_field :address, :class => "form-control", :placeholder => t("user.address")
+                      .form-group
+                        = f.text_field :post_number, :class => "virtualKeyboard form-control", :placeholder => t("user.post_number")
+                      .form-group
+                        = f.text_field :city, :class => "form-control", :placeholder => t("user.city")
+                      .form-group
+                        = f.text_field :phone_number, :class => "virtualKeyboard form-control", :placeholder => t("user.phone_number")
+                    .col-xs-12.col-sm-4
+                      - resource = f.object.avatar
+                      - if resource.attached?
+                        .groupContent.center
+                          = image_tag src="#{resource.media.url(:medium)}"
+            .row
+              .col-xs-12
+                .col-xs-12
+                  = render partial: 'shared/add_social_profiles', locals: {f: f}
+
+            - unless @current_user.customer?
+              .row
+                .col-xs-12
+                  .hr.hr25
+                .col-xs-12
+                  .col-xs-12.col-lg-6
+                    .formTitle.form-group
+                      = t("user.my_settings.user_manual")
+                    .formSubTitle.form-group
+                      = link_to t("user.my_settings.Login_page_and_main_functions"), "/manual/MAX_Login page and main functions.pdf", :download=> "MAX_Login page and main functions.pdf"
+                    .formSubTitle.form-group
+                      = link_to t("user.my_settings.Sell_commission"), "/manual/MAX_Sell commission.pdf", :download=> "MAX_Sell commission.pdf"
+                    .formSubTitle.form-group
+                      = link_to t("user.my_settings.Buy_commission"), "/manual/MAX_Buy commission.pdf", :download=> "MAX_Buy commission.pdf"
+                    .formSubTitle.form-group
+                      = link_to t("user.my_settings.Rent_commission - services_for_lessors"), "/manual/MAX_Rent commission - services for lessors.pdf", :download=> "MAX_Rent commission - services for lessors.pdf"
+                    .formSubTitle.form-group
+                      = link_to t("user.my_settings.Rent_commission - services_for_tenants"), "/manual/MAX_Rent commission - services for tenants.pdf", :download=> "MAX_Rent commission - services for tenants.pdf"
+
+          %td.stepBtnGroup{:width => "20%"}
+            %a.h50.stepBtn.backBtn{:href => desktop_executives_path}
+              %span
+                =t("form_action_button.discard_changes_and_return_back")
+              = image_tag "remax_back_btn.png", :class => "mt15"
+            %button.h50.stepBtn.nextBtn#step3Save{:name => "save", :type => "submit"}
+              %span
+                =t("form_action_button.save_changes_and_return_back")
+              = image_tag "remax_save_btn.png", :class => "mt15"

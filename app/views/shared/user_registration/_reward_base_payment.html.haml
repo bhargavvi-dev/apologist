@@ -1,0 +1,30 @@
+- if object.office_users.any?
+  %ul.nav.nav-tabs
+    - first_tab = true
+    - object.office_users.each_with_index do |office_user, i|
+      - if relationship_types.include? office_user.relationship_type
+        - active_class = (first_tab) ? "active" : ""
+        - first_tab = false
+        %li{:class => active_class}
+          %a{"data-toggle" => "tab", :href => "#office_#{i}"}
+            = office_user.office.name if office_user.office.present?
+  .hide{:id => "add_responsible_modal_user"}
+  .tab-content
+    - first_tab = true
+    - object.office_users.each_with_index do |office_user, i|
+      - if relationship_types.include? office_user.relationship_type
+        - in_active_class = (first_tab) ? "in active" : ""
+        - first_tab = false
+        - partial_name = "shared/user_registration/#{office_user.relationship_type.downcase}_reward_payment"
+        .tab-pane.fade{:id => "office_#{i}", :class => "#{in_active_class}"}
+          = f.fields_for :office_users, office_user do |ff|
+            #agentShareModal.modal.fade{"aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+              .modal-dialog.modal-lg{:role => "document"}
+                .modal-content
+                  .modal-body
+                    = render :partial => 'agents/create_agent_share', :locals => {office_user: office_user, ff: ff, :reward_share_key => reward_share_key,:step => step,:open_card => open_card, :modal => true}
+            = render :partial => partial_name, :locals => {office_user: office_user, ff: ff}
+- else
+  = f.hidden_field :id, :value => object.id
+  .col-md-6.alert.alert-warning
+    %span= t('user.no_office_found')                              

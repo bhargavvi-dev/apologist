@@ -1,0 +1,32 @@
+= form_for(@message, :url => select_your_agent_messages_path, :method => "POST", :remote => true, :class => "edit_message2") do |f|
+  = hidden_field_tag :id, @message.id
+  = hidden_field_tag 'step', @step
+  .form-group.hide
+    = text_field_tag :final_recipients, @message.receiver_ids, :id => "final_recipients"
+    = text_field_tag :removed_recipients, "", :id => "removed_recipients"
+  %table.tableForm{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+    %tbody
+      %tr
+        %td#stepBtnModalHeight.leftCol{:width => "80%"}
+          .formBox.minH300
+            .formHeader.clearfix
+              %h1
+                = t("message.customer_login.your_remax_team")
+            .row.form-group
+              .col-xs-12.col-sm-6.col-sm-offset-6.col-lg-5.col-lg-offset-7
+                = image_tag "logo_remax_agent.png", :class => "remaxAgentLogo"
+            .row
+              .col-xs-12.form-group
+                = t("message.customer_login.select_agents").html_safe
+            .row
+              #messages_notice
+            = render :partial => "fetchRecipients"
+        %td.stepBtnGroup{:width => "20%"}
+          %a.stepBtn.backBtn{:type => "button", :href => "javascript:void(0);", :class => 'hideShowModal'}
+            %span
+              =t("form_action_button.return_button")
+            = image_tag "remax_back_btn.png", :class => "mt15"
+          %button.stepBtn.nextBtn{:name => "proceed_next", :type => "submit"}
+            %span
+              = t("form_action_button.save_and_next_button")
+            = image_tag "remax_save_and_next_btn.png", :class => "mt15" 

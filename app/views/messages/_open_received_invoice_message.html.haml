@@ -1,0 +1,131 @@
+- set_office_connection message.office_id if message.office_id.present?
+- commission = message.object
+- if commission.present?
+  - sales_team_member = commission.try(:sales_team_members).where(:member_id => current_user.id).first
+  - agent = sales_team_member.member
+  - office_agent = agent.office_users.first
+%table.tableForm{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+  %tbody
+    %tr
+      %td#stepBtnHeight.leftCol{:width => "80%"}
+        .formBox
+          .formHeader.clearfix
+            #email_regarding_invoice_flash
+            %h1
+              = t("settlement_app.commission_calculation.received_invoice").html_safe
+            .row.pt10
+              .col-xs-12
+                .hr.hr25
+              .col-xs-12.text-blue
+                %label.bold.f20
+                  = t('settlement_app.commission_calculation.listing_id').html_safe
+                %span
+                  = ":"
+                %label.f20
+                  = commission.id
+
+          .row.row2.bold
+            .col-xs-12.col-sm-3
+              .p5.h100p.flexRowWrap.flexCenter.text-center
+                = t('settlement_app.commission_calculation.invoice_inc_vat')
+            .col-xs-12.col-sm-3
+              .p5.h100p.flexRowWrap.flexCenter.text-center
+                = t('settlement_app.commission_calculation.due_date_of_invoice')
+            .col-xs-12.col-sm-3
+              .p5.h100p.flexRowWrap.flexCenter.text-center
+                = office_agent.charge_permit == true ? t('settlement_app.commission_calculation.payment_receiver') : t('settlement_app.commission_calculation.payer')
+            .col-xs-12.col-sm-3
+              .p5.h100p.flexRowWrap.flexCenter.text-center
+                = t('settlement_app.commission_calculation.invoice_reason')
+          .row.row1.flexRowWrap.f14.medium.grayBg.flexCenter
+            .col-xs-12.col-sm-3.mb2
+              .grayBg.grayBorder1.h100p.flexRowWrap.flexCenter.p10
+                = commission.reward_shares.pluck(:total_amount_of_invoice_with_vat).map(&:to_f).sum if commission.reward_shares.present?
+            .col-xs-12.col-sm-3
+              .grayBg.grayBorder1.h100p.flexRowWrap.flexCenter.p10
+                - if office_agent.relationship_type == "AGENT_ENTREPRENEUR"
+                  - charge_days = office_agent.charge_days.present? ? office_agent.charge_days : 0
+                  - invoice_due_date = (commission.customer_invoice.created_at+charge_days.days).to_datetime.to_s(:default_date)
+                - else
+                  - invoice_due_date = (commission.customer_invoice.created_at+3.days).to_datetime.to_s(:default_date)
+                = invoice_due_date
+            .col-xs-12.col-sm-3
+              .grayBg.grayBorder1.h100p.flexRowWrap.flexCenter.p10
+                = office_agent.charge_permit == true ? office_agent.office.office_name  : t('settlement_app.commission_calculation.real_estate_franchise')
+            .col-xs-12.col-sm-3
+              .grayBg.grayBorder1.h100p.flexRowWrap.flexCenter.p10
+                = office_agent.charge_permit == true ? t('settlement_app.commission_calculation.offices_commission_fee') : t('settlement_app.commission_calculation.chain_fee')
+          .row.row5.pt5
+            .col-xs-12.col-sm-4
+              - if office_agent.charge_permit == true
+                %a.btn.btn-blue.btn-md.btn-wrap.btn-block.iconLgLeft.h100p{"data-remote" => "true", :type => "button", :href => invoice_attachment_messages_path(commission_id: commission.id, :email => sales_team_member.id)}
+                = image_tag "open_card_w.png", :class => "icon"
+                .text-left.bold
+                  = t('settlement_app.commission_calculation.press_here_to_open')
+                  .normal.f17
+                    = t('settlement_app.commission_calculation.invoice_attchment')
+              - else
+                = link_to chain_invoice_pdf_path(commission, sales_team_member_id: sales_team_member.id, format: 'pdf'), class: "btn btn-blue btn-md btn-block btn-wrap iconLgLeft h100p" do
+                  = image_tag "open_card_w.png", :class => "icon"
+                  .text-left.bold
+                    = t('settlement_app.commission_calculation.press_here_to_open')
+                    .normal.f17
+                      = t('settlement_app.commission_calculation.invoice_attchment')
+            .col-xs-12.col-sm-4
+              = link_to send_questions_regarding_invoice_messages_path(commission_id: commission.id, :email => sales_team_member.id), method: "POST", remote: true, class: "btn redBg btn-md btn-block btn-wrap iconLgLeft h100p" do
+                = image_tag "icon_question.png", :class => "icon"
+                .text-left.bold
+                  = t('settlement_app.commission_calculation.press_here_to_send')
+                  .normal.f17
+                    = t('settlement_app.commission_calculation.question_regarding')
+            .col-xs-12.col-sm-4 
+              = link_to invoice_reward_archive_invoices_path, :class => "btn grayBg btn-md btn-block btn-wrap iconLgLeft h100p" do
+                = image_tag "icon_budget_price_eur.png", :class => "icon"
+                .text-left.text-blue.bold
+                  = t('settlement_app.commission_calculation.press_here_to_enter')
+                  .normal.f17
+                    = t('settlement_app.commission_calculation.the_invoice')
+          .row.pt15
+            .col-xs-12
+              .form-group.text-blue.tdu.f20
+                = t('settlement_app.commission_calculation.details_of_trustee').html_safe
+          .row
+            .col-xs-12.col-md-6.form-group
+              .rxTeamBox
+                .row.row1.flexRowWrap.payment_info
+                  .col-xs-12.col-sm-4.col-md-3.flexRow.flexCenterV
+                    - agent_photo = agent.resources['IMAGE::LOGO']
+                    - if agent_photo.present?
+                      = image_tag agent_photo.media.url(:small)
+                    - else
+                      = image_tag "remax_customer_register_small.png"
+                  .col-xs-12.col-sm-8.col-md-9
+                    .text-blue
+                      .formSubTitle.text-left
+                        = set_proper_name(agent.name, 20)
+                      .pb5.text-left
+                        = agent.role.humanize
+                      .flexRow
+                        %span.pr5
+                          = image_tag "icon_call.png", :width => "32"
+                        %span.pt5
+                          = agent.phone_number
+                      .flexRow
+                        %span.pr5
+                          = image_tag "icon_email.png", :width => "32"
+                        %span.pt5
+                          = set_proper_email(agent.email)
+                      .flexRow
+                        %span.pr5
+                          = image_tag "icon_office.png", :width => "32"
+                        %span.pt5
+                          - office = agent.offices.first
+                          - @office = Office.find_by_id(office.id)
+                          = @office.office_name
+
+      %td.stepBtnGroup{:width => "20%"}
+        %button.stepBtn.backBtn{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+          %span
+            =t("form_action_button.close")
+          = image_tag "btn_discard_white.png"
+        

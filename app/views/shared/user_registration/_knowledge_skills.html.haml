@@ -1,0 +1,64 @@
+- business_degrees = @current_brand.business_degrees
+- language_skills = @current_brand.language_skills
+- special_skills = @current_brand.special_skills
+- other_languages = object.languages.to_s.split(",") if object.languages.present?
+.row
+  .col-xs-12
+    .form-group.formTitle
+      =t('user.business_degrees')
+  - business_degrees.each do |business_degree|
+    .col-xs-12.col-sm-6.col-lg-6
+      .form-group
+        %label.checkBox
+          = check_box_tag 'business_degrees[]', business_degree.id, (object.business_degrees.pluck(:id).include? business_degree.id)
+          %span.lbl
+            = business_degree.localize(I18n.locale).try(:name)
+.row
+  .col-xs-12
+    %label.normal
+      = t('user.other_business_degrees')
+  .col-xs-12.form-group
+    = f.text_area :other_business_degrees, :class => "form-control", :placeholder => t("user.other_businees_degree_example"), :cols => 6 , :rows => 1, :id => "degree"
+.row
+  .col-xs-12
+    .form-group.formTitle
+      =t('user.language_skills')
+  .col-xs-12#languages
+    .row.row-inline
+      - language_skills.each do |language_skill|
+        .col-xs-12.col-sm-3.col-md-4
+          .form-group
+            %label.checkBox
+              = check_box_tag 'language_skills[]', language_skill.id, (object.language_skills.pluck(:id).include? language_skill.id)
+              %span.lbl
+                = language_skill.localize(I18n.locale).try(:name)
+      - if other_languages
+        - other_languages.each do |language|
+          .col-xs-12.col-sm-3.col-md-4
+            .form-group
+              %label.checkBox
+                = check_box_tag 'language_'+language, true, true
+                %span.lbl
+                  = language
+    .row
+      #input_add_language
+      .col-xs-12
+        %label
+          %a.addLink{:href => "javascript:void(0);", :id => "add_new_language"}
+            %i.addIcon
+            =t("user.add_language")
+.row
+  .col-xs-12
+    .hr.hr25  
+  .col-xs-12
+    .form-group.formTitle
+      =t('user.special_skills')
+  .col-xs-12
+    .row.row-inline
+      - special_skills.each do |special_skill|
+        .col-xs-12.col-sm-3.col-md-4
+          .form-group
+            %label.checkBox
+              = check_box_tag 'special_skills[]', special_skill.id, (object.special_skills.pluck(:id).include? special_skill.id)
+              %span.lbl
+                = special_skill.localize(I18n.locale).try(:name)

@@ -1,0 +1,52 @@
+.remaxEmail
+  .formField
+    - event_speaker = @event.event_speaker_members
+    - participant_list = event_speaker.participant_list
+    .row
+      .col-xs-12
+        = form_for(object, url: send_diplomas_to_participants_emails_path(@event) , :html => {:class => "", :method => "post"}) do |f|
+          = f.hidden_field :id, value: @event.id
+          %table.tableForm{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+            %tbody
+              %tr
+                %td#stepBtnModalHeight.leftCol{:width => "80%"}
+                  .formBox
+                    .row
+                      .col-xs-12
+                        .form-group
+                          #input_partner_recipient
+                            %p
+                              %label
+                                =t("referral_event.send_offer_request.recipient")
+                              = text_field_tag "recipient_email[]", t("referral_event.send_and_print_dipolmas.participant_list", count: participant_list.count, event_name: @event.event_name.gsub(' ', '_'), event_date: @event.event_date.strftime("%d.%m.%Y")), :class => "form-control form-group", :id => "input_recipient_email", :readonly =>true
+                      .col-xs-12
+                        .form-group
+                          %label
+                            =t("referral_event.send_offer_request.subject")
+                          = text_field_tag :subject, t("referral_event.send_and_print_dipolmas.subject_name",event_date: @event.event_date.to_datetime.to_s(:default_date), event_name: @event.event_name.gsub(' ', '_')),:class => "form-control"
+                      .col-xs-12
+                        .form-group
+                          %label
+                            =t("referral_event.send_offer_request.message")
+                          - if @current_brand.logo.present?
+                            - logo_url = absolute_url(@current_brand.logo.url, @current_brand)
+                          - else
+                            - logo_url = ''
+                          - user = @event.user
+                          - message = t("open_house_event.performance_review_email.text_area_message", name: user.name, email: user.email, phone_number: user.phone_number, role: user.role.humanize, :footer_logo_url => logo_url).html_safe
+                          = hidden_field_tag 'old_message', message
+                          = text_area_tag :message, message, :rows => 16, :class => "form-control ckeditorCustom"
+                      .col-xs-12
+                        %label= t('general.attachments')
+                      .col-xs-12
+                        .form-group
+                          = link_to t("referral_event.attachment_link", event_name: @event.event_name.gsub(' ', '_'), event_date: @event.event_date.to_datetime.to_s(:default_date))+"_"+t('referral_event.diplomas'), print_diplomas_pdf_index_path(@event.id, :format => "pdf" ), :class => "h15 stepBtn nextBtn"                          
+                %td.stepBtnGroup{:width => "20%"}
+                  %button.h25.stepBtn.backBtn{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+                    %span
+                      =t("form_action_button.return_button")
+                    = image_tag "back_btn.png", :class => "mt15"                      
+                  %button.h75.stepBtn.nextBtn{:name => "next", :type => "submit"}
+                    %span
+                      =t("form_action_button.send_message")
+                    = image_tag "brand_email_btn.png", :class => "mt15"

@@ -1,0 +1,27 @@
+.msgFilter
+  .col-xs-12.pt12
+    .row.row7
+      = form_for '', :url => user_filter_messages_path, :method => 'post', :html => {:id => "filterFormId"}, :remote => true do
+        = hidden_field_tag :id, @message.id
+        = hidden_field_tag 'role', role
+        - if session[:message_recipient_type] == "partner"
+          .col-xs-12.col-sm-8.col-md-4.form-group
+            = text_field_tag :search, session[:recipient_partner_search], :class => "form-control", placeholder: t("general.search_name_or_industry"), :id => "messageSearch"
+        - elsif session[:message_recipient_type] == "customer"
+          .col-xs-12.col-sm-8.col-md-4.form-group
+            = text_field_tag :search, session[:recipient_customer_search], :class => "form-control", placeholder: t("general.search_name_or_city"), :id => "messageSearch"
+        - else
+          .col-xs-12.col-sm-3.col-md-3.form-group
+            = text_field_tag :search, session[:recipient_staff_search], :class => "form-control", placeholder: t("general.search_by_name"), :id => "messageSearch"
+          .col-xs-12.col-sm-1.col-md-1.form-group
+            = link_to t("general.all"), user_filter_messages_path(id: @message.id, role: role, recipient_role: ""), :class => "mt8 btn #{@all_filter_active || 'btn-blue'} btn-primary btn-block", method: :post, remote: true, id: "allFilter"
+          .col-xs-12.col-sm-2.col-md-2.form-group
+            = link_to t("general.executives"),user_filter_messages_path(id: @message.id, role: role, recipient_role: "EXECUTIVE"), :class => "mt8 btn btn-primary #{@executive_filter_active || 'btn-blue'} btn-block", method: :post, remote: true, id: "executiveFilter"
+          .col-xs-12.col-sm-2.col-md-2.form-group
+            = link_to t("general.agents"), user_filter_messages_path(id: @message.id, role: role, recipient_role: "AGENT"), :class => "mt8 btn btn-primary #{@agent_filter_active || 'btn-blue'} btn-block", method: :post, remote: true, id: "agentFilter"
+          .col-xs-12.col-sm-2.col-md-2.form-group
+            = link_to t("general.directors"), user_filter_messages_path(id: @message.id, role: role, recipient_role: "DIRECTOR"), :class => "mt8 btn btn-primary #{@director_filter_active || 'btn-blue'} btn-block", method: :post, remote: true, id: "directorFilter"
+          .col-xs-12.col-sm-2.col-md-2.form-group
+            = link_to t("general.office_professionals"), user_filter_messages_path(id: @message.id, role: role, recipient_role: "OFFICE_MANAGER"), :class => "mt8 btn btn-primary #{@office_manager_filter_active || 'btn-blue'} btn-block", method: :post, remote: true, id: "officeManagerFilter"
+      %div{id: 'loader-image', class: 'loader'}
+        = image_tag 'loader-small.gif'

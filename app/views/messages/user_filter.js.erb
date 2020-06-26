@@ -1,0 +1,20 @@
+$("#filter_recipients").html("<%= escape_javascript(render("fetchRecipients")) %>");
+checkUncheckRecipients();
+<% case session[:recipient_role] %>
+<% when 'EXECUTIVE' %>
+  $("#executiveFilter").addClass('btn-red').removeClass('btn-blue');
+  $("#allFilter, #agentFilter, #directorFilter, #officeManagerFilter").addClass('btn-blue');
+<% when 'AGENT' %>
+  $("#agentFilter").addClass('btn-red').removeClass('btn-blue');
+  $("#allFilter, #executiveFilter, #directorFilter, #officeManagerFilter").addClass('btn-blue');
+<% when 'DIRECTOR' %>
+  $("#directorFilter").addClass('btn-red').removeClass('btn-blue');
+  $("#allFilter, #executiveFilter, #agentFilter, #officeManagerFilter").addClass('btn-blue');
+<% when 'OFFICE_MANAGER' %>
+  $("#officeManagerFilter").addClass('btn-red').removeClass('btn-blue');
+  $("#allFilter, #executiveFilter, #agentFilter, #directorFilter").addClass('btn-blue');
+<% else %>
+  $("#allFilter").addClass('btn-red').removeClass('btn-blue');
+  $("#executiveFilter, #agentFilter, #directorFilter, #officeManagerFilter").addClass('btn-blue');
+<% end %>
+<%= render :partial => "shared/ajax_js" %>

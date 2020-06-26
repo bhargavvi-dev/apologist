@@ -1,0 +1,19 @@
+%footer.footer
+  .container
+    / = hidden_field_tag "pc_browser", pc?
+    - if @back_to_top
+      .back-top
+        %a{:href => "#top"}
+          = 'TOP'
+    %p
+      =t('footer.powerby')
+      %span= t('footer.max')
+      - if user_signed_in?
+        - if current_user.executive? or current_user.director? or current_user.office_manager? or current_user.agent?
+          = form_for('', :url => send_feedback_developers_form_path, :method => "POST", :remote => true, :html => {:class => "pre-load-form", :id => "save_user_feedback_form_id"}) do |f|
+            = hidden_field_tag :browser_data, '', :id => 'get_current_user_browser_details'
+            = hidden_field_tag :current_page_url, '', :id => 'get_current_page_feedback_url'
+            %a.noHoverLine.bold{:href=> "javascript:void(0)", :id => "save_send_feedback_modal_form_btn"}
+              %span
+                = image_tag "remax_feedback.png", width: "27"
+              = t("desktop.send_feedback_to_developer_footer").html_safe

@@ -1,0 +1,40 @@
+= form_for(@message, :url => message_path(@message), :method => "PUT", :html => {:multipart => true, :id => 'message-form'}) do |f|
+  = hidden_field_tag 'step', @step
+  %table.tableForm{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+    %tbody
+      %tr
+        %td#stepBtnHeight.leftCol{:width => "85%"}
+          .formBox.minH300
+            .formHeader.clearfix
+              %h1
+                - if session[:message_recipient_type] == "partner"
+                  = t("message.send_new_message_to_partner")
+                  %span= t("message.choose_recipients_proceed")
+                - elsif session[:message_recipient_type] == "customer"
+                  = t("message.send_new_message_to_customer")
+                  %span= t("message.choose_recipients_proceed")
+                - else
+                  = t("message.send_new_message_to_staff")
+                  %span= t("message.choose_recipients_proceed")
+            .form-group.hide
+              = text_field_tag :final_recipients, @message.receiver_ids, :id => "final_recipients"
+              = text_field_tag :removed_recipients, "", :id => "removed_recipients"           
+            - if session[:message_recipient_type] == "customer"
+              .row#filter_customer
+                = render :partial => 'customer_filter', :locals => {:role => current_user.role}
+              #filter_customers
+                = render :partial => "fetchCustomers"
+            - else
+              .row#filter_recipient
+                = render :partial => 'recipient_filter', :locals => {:role => current_user.role}
+              #filter_recipients
+                = render :partial => "fetchRecipients"
+        %td.stepBtnGroup.stepBtnSticky{:width => "15%"}
+          %a.stepBtn.backBtn{:href => center_messages_path}
+            %span
+              =t("form_action_button.return_button")
+            = image_tag "remax_back_btn.png", :class => "mt15"
+          %button.stepBtn.nextBtn{:name => "proceed_next", :type => "submit"}
+            %span
+              = t("form_action_button.save_and_next_button")
+            = image_tag "remax_save_and_next_btn.png", :class => "mt15"

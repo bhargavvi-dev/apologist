@@ -1,0 +1,80 @@
+= form_for('', url: send_feedback_email_emails_path, :html => {:method => "post", :id => "send_feedback_email_form1", :remote => true}) do |f|
+  = hidden_field_tag 'feedback_resources', true, :id => "feedback_resource_form_submit"
+  = hidden_field_tag 'browser_name', browser_name
+  = hidden_field_tag 'browser_version', browser_version
+  = hidden_field_tag 'os_name', os_name
+  = hidden_field_tag 'os_version', os_version
+  = hidden_field_tag 'screen_size', screen_size
+  = hidden_field_tag 'device_type', device_type
+  %table.tableForm{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+    %tbody
+      %tr
+        %td#stepBtnModalHeight.leftCol{:width => "80%"}
+          .formBox.view-details
+            .formHeader.clearfix
+              %h1
+                = t("feedback.send_feedback_to_developers")
+            #feedback_notice
+            .formBox#feedback
+              .row
+                .col-xs-12
+                  .form-group.row
+                    %p
+                      %label=t("feedback.tip_1")
+                .col-xs-12
+                  .form-group.row
+                    %p
+                      %label=t("feedback.tip_2")
+                .col-xs-12
+                  .form-group.row
+                    %p
+                      %label=t("feedback.tip_3")
+                .col-xs-12
+                  .row
+                    .col-xs-12.col-sm-6.col-lg-6
+                      .form-group.row
+                        %label.radioBox
+                          = radio_button_tag :subject, 'BUG', true, :id => "feedback_subject_bug"
+                          %span.lbl.bold=t('feedback.found_bug')
+                    .col-xs-12.col-sm-6.col-lg-6
+                      .form-group.row
+                        %label.radioBox
+                          = radio_button_tag :subject, 'DEVELOPMENT_IDEA'
+                          %span.lbl.bold=t('feedback.have_development_idea')
+                .col-xs-12
+                  .form-group.row
+                    %p
+                      %label=t("feedback.tip_4")
+                .col-xs-12
+                  .row
+                    .col-xs-12.col-sm-6.col-lg-6
+                      .form-group.row
+                        %label.radioBox
+                          = radio_button_tag :feedback_phase, 'YES', true, :class => "check_feedback_phase_attachment_type"
+                          %span.lbl.bold=t('general.general_yes')
+                    .col-xs-12.col-sm-6.col-lg-6
+                      .form-group.row
+                        %label.radioBox
+                          = radio_button_tag :feedback_phase, 'NO', false, :class => "check_feedback_phase_attachment_type"
+                          %span.lbl.bold=t('general.general_no')
+
+                .col-xs-12
+                  .form-group.row
+                    = raw text_area_tag :message, "", :rows => 12, :class => "form-control ckeditorCustom", :id => "feedback_message", :placeholder => t("feedback.message_placeholder")
+                .col-xs-12.attach_current_page_location
+                  .form-group.formTitle
+                    = t('feedback.your_max_location')
+                  .form-group
+                    = text_field_tag 'current_page_location', current_page_url, :class => "form-control", :id => "current_page_feedback_url"
+                .col-xs-12.attach_feedback_resources.hide
+                  - @index = 0
+                  = render :partial => "shared/upload_files", :locals => {:object => @current_brand, :type => 'temp_folder_feedback_resources', :resource_type => 'IMAGE', :resource_spec => 'ATTACHMENT', :title => t("general.add_attachment").html_safe, :agent_office_resource => false, :index => @index, :owner => ""}    
+        %td.stepBtnGroup{:width => "20%"}
+          %button.h25.stepBtn.backBtn{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+            %span
+              =t("form_action_button.close")
+            = image_tag "remax_back_btn.png", :class => "mt15"
+          %button.h75.stepBtn.nextBtn{:name => "next", :type => "submit", :id => "send_feedback_email_submit", :class => "pre-icon-load"}
+            %span
+              =t("form_action_button.send_feedback")
+            = image_tag "remax_email_btn.png", :class => "mt15"

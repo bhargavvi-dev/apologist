@@ -1,0 +1,29 @@
+.row.pt15
+  .col-xs-12.form-group.formTitle
+    = t('director.office.reward_and_payment.office_model.payment_rules.title')
+  .col-xs-12
+    .row.form-group
+      .col-xs-12.col-sm-6
+        %label
+          = t('director.office.reward_and_payment.office_model.payment_rules.rule_1')
+      .col-xs-12.col-sm-6
+        %label
+          = t('director.office.reward_and_payment.office_model.payment_rules.explanation_1')
+    .row.form-group
+      .col-xs-12.col-sm-6
+        %label
+          = t('director.office.reward_and_payment.office_model.payment_rules.rule_2')
+      .col-xs-12.col-sm-6
+        %label
+          = t('director.office.reward_and_payment.office_model.payment_rules.explanation_2')
+  .col-xs-12
+    .row.row5.row-inline
+      .col-xs-12.form-group
+        %label
+          = t('director.office.reward_and_payment.office_model.commission_chain_fee_adjustment')
+          = ff.text_field :chain_fee_share, :class => "form-control w85 mt10", :value => addThousandSeparators(ff.object.chain_fee_share)
+          = "%."
+      .col-xs-12
+        .form-group
+          %label
+            = t('director.office.reward_and_payment.office_model.chain_fee_note')

@@ -1,0 +1,80 @@
+= form_for(@message, :url => message_path(@message), :method => "PUT") do |f|
+  = hidden_field_tag 'step', @step
+  %table.tableForm{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+    %tbody
+      %tr
+        %td#stepBtnHeight.leftCol{:width => "85%"}
+          .formBox
+            .formHeader.clearfix
+              %h1
+                - if session[:message_recipient_type] == "partner"
+                  = t("message.send_new_message_to_partner")
+                  %span= t("message.write_subject_message_proceed_step_3")
+                - elsif session[:message_recipient_type] == "agent"
+                  = t("message.send_new_message")
+                  %span= t("message.write_subject_message_proceed_step_3")
+                - else
+                  = t("message.send_new_message_to_staff")
+                  %span= t("message.write_subject_message_proceed_step_3")
+            .row
+              .col-xs-12
+                .form-group
+                  %label=t("message.subject")
+                  = f.text_field :subject, :class => "form-control disabled", :id => "subject", :placeholder => t('message.subject_placeholder'), :disabled => true
+              .col-xs-12
+                .form-group
+                  %label=t("message.message")
+                  = f.text_area :body, :rows => 12, :class => "form-control disabled ckeditorCustomStatic", :placeholder => t('message.subject_placeholder'), :disabled => true, :value => @message.body.to_s.html_safe
+              .col-xs-12
+                .row.row5.row-inline
+                  - if session[:message_recipient_type] == "partner"
+                    .col-xs-12.col-sm-8
+                      %label.radioBox.radioInline
+                        = f.radio_button :message_type, 'EMAIL', checked: true, hidden: true
+                  - else
+                    - if current_user.executive?
+                      = f.label t("message.send_message_as"), :class => "normal col-xs-12 col-sm-4 subTitle"
+                      .col-xs-12.col-sm-8
+                        %label.radioBox.radioInline
+                          = f.radio_button :message_type, 'PUSH'
+                          %span.lbl=t('message.push_message')
+                        %label.radioBox.radioInline
+                          = f.radio_button :message_type, 'EMAIL'
+                          %span.lbl=t('message.email')
+                    - else
+                      .col-xs-12.col-sm-8
+                        %label.radioBox.radioInline
+                          = f.radio_button :message_type, 'EMAIL', checked: true, hidden: true
+              - attachments = @message.resources.with_type('DOCUMENT::ATTACHMENT')
+              - if attachments.any?
+                .col-xs-12
+                  .col-xs-12
+                    .form-group.row
+                      %label.subTitle=t("message.attachments")
+                  - attachments.each do |attachment|
+                    .col-xs-12
+                      .row
+                        = link_to attachment.media_file_name, attachment.media.url, :class => 'bold blue'
+                  .col-xs-12
+                    .row
+                      %hr
+              .col-xs-12
+                .form-group
+                  %label.subTitle=t("message.chosen_recipients")
+              .col-xs-12
+                .form-group.row.msgRecipient
+                  - if @recipients.present?
+                    - @recipients.each do |recipient|
+                      - if session[:message_recipient_type] == "customer"
+                        = render :partial => 'selected_customer', :locals => {recipient: recipient, message: @message}
+                      - else
+                        = render :partial => 'selected_recipient', :locals => {recipient: recipient, message: @message}
+        %td.stepBtnGroup{:width => "15%"}
+          %a.h25.stepBtn.backBtn{:href => edit_message_path(@message, :step => (@step.to_i - 1))}
+            %span
+              =t("form_action_button.return_button")
+            = image_tag "remax_back_btn.png", :class => "mt15"
+          %button.h75.stepBtn.nextBtn#saveMediaNext{:name => "proceed_next", :type => "submit"}
+            %span
+              = t("form_action_button.send_message")
+            = image_tag "remax_save_and_next_btn.png", :class => "mt15"

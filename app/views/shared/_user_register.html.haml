@@ -1,0 +1,20 @@
+.container
+  .page-title
+    %h1
+      .title-logo
+        = image_tag @current_brand.logo, :class => "mr15", :width => "160"
+      =t('executive.user_register')
+  .row.row-10
+    .col-xs-12.col-sm-4.col-md-3
+      %a.toolBox{:href => directors_path}
+        .toolImage
+          = image_tag "icon_personal_meeting.png"
+        .toolTitle
+          =t("executive.user_register_desktop.director_register").html_safe
+    - if current_user.executive?
+      .col-xs-12.col-sm-4.col-md-3
+        %a.toolBox{:href => executives_path}
+          .toolImage
+            = image_tag "icon_team.png"
+          .toolTitle
+            =t("executive.user_register_desktop.executive_resgister").html_safe

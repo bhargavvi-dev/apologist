@@ -1,0 +1,36 @@
+.col-xs-12.col-sm-4.col-md-3
+  %a.toolBox{:href => messages_path}
+    .toolImage
+      = image_tag "remax_messages.png"
+    .toolTitle
+      = t("toogle_header.inbox", :count => current_user.received_messages.unread.count).html_safe
+.col-xs-12.col-sm-4.col-md-3
+  %a.toolBox{:href => new_commission_agent_office_commissions_path}
+    .toolImage
+      = image_tag "register_new_customer.png"
+    .toolTitle
+      = t("toogle_header.new_commission").html_safe
+.col-xs-12.col-sm-4.col-md-3
+  %a.toolBox{:href => new_customer_reassigner_path}
+    .toolImage
+      = image_tag "icon_best_practice_sharing_1.png"
+    .toolTitle
+      = t("toogle_header.commission_reassigner").html_safe
+.col-xs-12.col-sm-4.col-md-3
+  %a.toolBox{:href => customers_and_listings_agent_office_commissions_path}
+    .toolImage
+      = image_tag "icon_business_intelligence.png"
+    .toolTitle
+      = t("toogle_header.lead_customers_and_listings").html_safe
+.col-xs-12.col-sm-4.col-md-3
+  %a.toolBox{:href => "javascript:void(0);"}
+    .toolImage
+      = image_tag "icon_offer_statistics.png"
+    .toolTitle
+      = t("toogle_header.performance_report").html_safe
+.col-xs-12.col-sm-4.col-md-3
+  %a.toolBox{:href => customers_path}
+    .toolImage
+      = image_tag "remax_customer_register.png"
+    .toolTitle
+      = t("toogle_header.customer_register").html_safe

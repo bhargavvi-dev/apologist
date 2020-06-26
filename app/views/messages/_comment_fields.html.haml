@@ -1,0 +1,56 @@
+.nested-fields.comment
+  - unless @answer_comment
+    = f.hidden_field :user_id, :value => @office_user.id
+  - else
+    = hidden_field_tag :inspector_id, :value => @office_user.id
+  .row.row5
+    .col-xs-12.col-sm-1
+      .form-group.mt10
+        %label.comment_number
+          = @count
+    .col-xs-12.col-sm-7
+      .form-group
+        = f.text_field :body, :class => "form-control", :disabled => (@answer_comment or (@is_approved and !@creator_is_agent_entrepreneur) or !@can_inspect or !@can_update_material)
+    .col-xs-12.col-sm-4
+      .form-group
+        - recommendation_types = AgentOffice::Commission::MarketingComment.recommendation_types.keys
+        - if @creator_is_agent_entrepreneur
+          - recommendation_types = recommendation_types - ["MUST_FIX"]
+        = f.select :recommendation_type, (recommendation_types.map{|recommendation_type| [t("selling_commission.marketing_app.inspector.#{recommendation_type.downcase}"), recommendation_type]}), {}, :class => "form-control marketing_material_recommendation_type", :disabled => (@answer_comment or (@is_approved and !@creator_is_agent_entrepreneur) or !@can_inspect or !@can_update_material)
+    - if !@material.is_approved? or (@creator_is_agent_entrepreneur)
+      .col-xs-12
+        - answer_object = f.object.answer
+        - if @answer_comment and @can_update_material
+          - answer_object = answer_object || f.object.build_answer
+        = f.fields_for :answer, answer_object do |answer|
+          = answer.hidden_field :material_id, :value => f.object.id
+          = answer.hidden_field :user_id, :value => @office_user.id
+          .agentCommentImg
+            - resource = current_user.resources['IMAGE::USER_PHOTO']
+            - if resource.present?
+              = image_tag src="#{resource.media.url(:small)}"
+            - else
+              = image_tag "default/noimage.gif"
+            .row.row5
+              .col-xs-12.col-sm-3.col-md-2
+                %label
+                  = t("selling_commission.marketing_app.inspector.fixed")
+              .col-xs-12.col-sm-9.col-md-10
+                %label
+                  = t("selling_commission.marketing_app.inspector.comment")
+            .row.row5
+              .col-xs-12.col-sm-3.col-md-2
+                .form-group
+                  = answer.select :fixed, (AgentOffice::Commission::MarketingComment.fixeds.keys.map{|fixed_type| [t("selling_commission.marketing_app.inspector.#{fixed_type.downcase}"), fixed_type]}), {}, :class => "form-control", :disabled => (!@answer_comment or @is_approved or !@can_update_material)
+              .col-xs-12.col-sm-9.col-md-10
+                .form-group
+                  = answer.text_field :body, :class => "form-control", :disabled => (!@answer_comment or @is_approved or !@can_update_material)
+        - unless @answer_comment
+          - if !@is_approved or @creator_is_agent_entrepreneur
+            - if @can_inspect and @can_update_material
+              .col-xs-12
+                .text-right.pb5
+                  %label
+                    = link_to_remove_association f, :class => 'addLink remove_quality_check_comment' do
+                      %i.removeIcon
+                      = t("selling_commission.marketing_app.inspector.remove_comment")

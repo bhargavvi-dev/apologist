@@ -1,0 +1,52 @@
+.col-xs-12.col-sm-6.col-md-4.col-10
+  .rxBox
+    .rxHeader
+      .rxTitle
+        = director.name
+        .rxSubName
+          = "address"
+      .rxLogo
+        = image_tag director.avatar if director.avatar.attached?
+    .rxContent
+      .row.row5
+        .col-xs-12.col-sm-6
+          .rxDesc
+            %span
+              = t('director.city')
+            .rxValue
+              = director.city
+        .col-xs-12.col-sm-6
+          .rxDesc
+            %span
+              = t('director.job_role')
+            .rxValue
+              = "job role"
+        .col-xs-12.col-sm-6
+          .rxDesc
+            %span 
+              = t('director.company')
+            .rxValue
+              = "company"
+        .col-xs-12.col-sm-6
+          .rxDesc
+            %span
+              = t('director.phone')
+            .rxValue
+              = director.phone_number
+        .col-xs-12.col-sm-6
+          .rxDesc
+            %span
+              = t('director.email')
+            .rxValue
+              = director.email
+        .col-xs-12.col-sm-6
+          .rxDesc
+            %span
+              = t('general.change')
+            .rxValue
+              / %a.rxIconText{:href => user_edit_password_path(director.id) }
+              /   = t('general.password')    
+    .rxBottom
+      %a.rxNextBtn{:href => director_path(director) }
+        = t("agent.open_card")
+        %i.fa.fa-angle-double-right

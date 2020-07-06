@@ -52,9 +52,6 @@ class Brand < ApplicationRecord
     define_method :"#{setting_key.downcase}" do
       @@settings = @@settings || self.settings
       val = @@settings.where(:setting_key => setting_key).first.try(:setting_value)
-      if val.present? and ['LEAD_DELIVERE_START_TIME', 'LEAD_DELIVERE_END_TIME'].include? setting_key
-        val = Time.parse(val)
-      end
       val
     end
   end

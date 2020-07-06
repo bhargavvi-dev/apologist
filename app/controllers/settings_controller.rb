@@ -17,37 +17,13 @@ class SettingsController < ApplicationController
 
   # PUT settings/:type
   def update
-    if params[:start_hour]
-      setting = @current_brand.setting('LEAD_DELIVERE_START_TIME')
-      if setting.present?
-        setting.update(:setting_value => "#{params[:start_hour]}:#{params[:start_minute]}")
-      else
-        setting.save(:setting_value => "#{params[:start_hour]}:#{params[:start_minute]}")
-      end
-
-      setting = @current_brand.setting('LEAD_DELIVERE_END_TIME')
-      if setting.present?
-        setting.update(:setting_value => "#{params[:end_hour]}:#{params[:end_minute]}")
-      else
-        setting.save(:setting_value => "#{params[:end_hour]}:#{params[:end_minute]}")
-      end
-    end
-
     if params[:setting]
       convert_params_hash = convert_params_to_h(params[:setting])
       bank_details_hash = {}
-      kahiseva_bank_details_hash = {}
-      sales_area_hash = {}
 
       convert_params_hash.each do |key, value|
         if key.start_with?('bank_details')
           bank_details_hash[key] = value
-        end
-        if key.start_with?('kahiseva_bank_details')
-          kahiseva_bank_details_hash[key] = value
-        end
-        if key.start_with?('sales_area')
-          sales_area_hash[key] = value
         end
       end
 
@@ -56,37 +32,12 @@ class SettingsController < ApplicationController
           bank_details_hash.delete(key) if v1.empty?
         end
       end
-      setting = @current_brand.setting('REMAX_BANK_DETAILS')
+      setting = @current_brand.setting('BRAND_BANK_DETAILS')
       if setting.present?
         setting.update(:setting_value => bank_details_hash)
       else
         setting.save(:setting_value => bank_details_hash)
-      end
-
-      kahiseva_bank_details_hash.each do |key, value|
-        value.each do |k1,v1|
-          kahiseva_bank_details_hash.delete(key) if v1.empty?
-        end
-      end
-      setting = @current_brand.setting('KAHISEVA_BANK_DETAILS')
-      if setting.present?
-        setting.update(:setting_value => kahiseva_bank_details_hash)
-      else
-        setting.save(:setting_value => kahiseva_bank_details_hash)
-      end
-
-      sales_area_hash.each do |key, value|
-        value.each do |k1,v1|
-          sales_area_hash.delete(key) if v1.empty?
-        end
-      end
-
-      setting = @current_brand.setting('BRAND_SALES_AREA')
-      if setting.present?
-        setting.update(:setting_value => sales_area_hash)
-      else
-        setting.save(:setting_value => sales_area_hash)
-      end      
+      end  
     end
     # params[:setting][:common_tax_base] = convert_to_number(params[:setting][:common_tax_base])
     # params[:setting][:reduced_tax_base_1] = convert_to_number(params[:setting][:reduced_tax_base_1])

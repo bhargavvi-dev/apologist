@@ -6,34 +6,37 @@
           .formBox
             .formHeader.clearfix
               %h1
-                = t("user.my_settings.manage_setting")
+                = t("user.my_settings.manage_own_setting")
             .row
-              .col-xs-12
-                .col-xs-12.col-md-6.col-lg-8
-                  .form-group.formTitle
-                    = t("user.my_settings.login_id_and_password")
-                  .form-group
-                    = f.text_field :email, :class => "form-control", :placeholder => t("user.my_settings.login_id")
-                  .row.row7
-                    .col-xs-12.col-lg-8.form-group
+              .col-xs-12.col-sm-5
+                .grayBorder2.p5.mt5
+                  .medium
+                    = t("user.my_settings.user_name")
+                  = f.text_field :email, :class => "form-control", :placeholder => t("user.my_settings.login_id")
+                .grayBorder2.p5.mt5
+                  .row
+                    .col-xs-12.col-lg-6
+                      .medium
+                        = t("user.my_settings.password")
                       = f.password_field :password, :class => "form-control", :placeholder => t("user.my_settings.password"), :disabled=>true
-                    .col-xs-12.col-sm-5.col-md-8.col-lg-4.form-group
-                      %button.btn.btn-primary.btn-lg.btn-block{"data-target" => "#changePasswordModal", "data-toggle" => "modal", :type => "button"}
+                    .col-xs-12.col-sm-5.col-md-8.col-lg-6.pt20
+                      %button.btn.btn-lg.btn-block{"data-target" => "#changePasswordModal", "data-toggle" => "modal", :type => "button"}
                         %span
                           =t("general.change_password")
-                .col-xs-12.visible-sm.visible-xs
-                  .hr.hr25      
-                .col-xs-12.col-md-6.col-lg-4
-                  .row.row7
-                    .col-xs-12
-                      .formTitle.form-group
-                        = t("user.my_settings.choose_language")
-                    - User.languages.keys.each do |language|
-                      .col-xs-12.col-sm-4.col-md-6
-                        .form-group
+              .col-xs-12.visible-sm.visible-xs
+                .hr.hr25      
+              .col-xs-12.col-sm-7
+                .row.row7
+                  .col-xs-12.col-sm-offset-6
+                    .form-group.texr-center
+                      = t("user.my_settings.choose_language")
+                  .col-xs-12.col-sm-offset-6
+                    .row
+                      - User.languages.keys.each do |language|
+                        .col-xs-12.col-sm-3
                           .langaugeOpt
                             = f.radio_button :language, language
-                            = image_tag "flags/#{language}.png", width: 140
+                            = image_tag "flags/#{language}.png", width: 140, :class => "icon"
             - if current_user.director? or current_user.office_manager? or current_user.agent? or current_user.customer?
               .row
                 .col-xs-12
@@ -52,50 +55,55 @@
               .col-xs-12
                 .hr.hr25
               .col-xs-12
-                .col-xs-12
-                  .formTitle.form-group
-                    = t("user.my_settings.basic_information")
-                  .formSubTitle.form-group
-                    = current_user.name
-                .row
-                  .col-xs-12
-                    .col-xs-12.col-sm-8
-                      .form-group
-                        = f.text_field :address, :class => "form-control", :placeholder => t("user.address")
-                      .form-group
-                        = f.text_field :post_number, :class => "virtualKeyboard form-control", :placeholder => t("user.post_number")
-                      .form-group
-                        = f.text_field :city, :class => "form-control", :placeholder => t("user.city")
-                      .form-group
-                        = f.text_field :phone_number, :class => "virtualKeyboard form-control", :placeholder => t("user.phone_number")
-                    .col-xs-12.col-sm-4
-                      - resource = f.object.avatar
-                      - if resource.attached?
-                        .groupContent.center
-                          = image_tag src="#{resource.media.url(:medium)}"
+                .bold
+                  = t("user.my_settings.my_basic_information")
+              .col-xs-12.col-sm-5.pt15
+                .grayBorder2.p5.mt5
+                  .medium
+                    = t("user.my_settings.persons_name")
+                  = text_field_tag :name, current_user.name, :class => "form-control", :placeholder => t("user.name")
+                .grayBorder2.p5.mt5
+                  .medium
+                    = t("user.my_settings.postal_address")
+                  = f.text_field :post_number, :class => "virtualKeyboard form-control", :placeholder => t("user.post_number")
+                .grayBorder2.p5.mt5
+                  .medium
+                    = t("user.my_settings.postal_code")
+                  = f.text_field :city, :class => "form-control", :placeholder => t("user.city")
+                .grayBorder2.p5.mt5
+                  .medium
+                    = t("user.my_settings.city")
+                  = f.text_field :phone_number, :class => "virtualKeyboard form-control", :placeholder => t("user.phone_number")
+              .col-xs-12.col-sm-7
+                - resource = f.object.avatar
+                - if resource.attached?
+                  .groupContent.center
+                    = image_tag src="#{resource.media.url(:medium)}"
             .row
-              .col-xs-12
-                .col-xs-12
-                  = render partial: 'shared/add_social_profiles', locals: {f: f}
+              = render partial: 'shared/add_social_profiles', locals: {f: f}
 
-            - unless @current_user.customer?
-              .row
-                .col-xs-12
-                  .hr.hr25
-                .col-xs-12
-                  .col-xs-12.col-lg-6
-                    .formTitle.form-group
-                      = t("user.my_settings.user_manual")
-                    .formSubTitle.form-group
-                      = link_to t("user.my_settings.Login_page_and_main_functions"), "/manual/MAX_Login page and main functions.pdf", :download=> "MAX_Login page and main functions.pdf"
-                    .formSubTitle.form-group
-                      = link_to t("user.my_settings.Sell_commission"), "/manual/MAX_Sell commission.pdf", :download=> "MAX_Sell commission.pdf"
-                    .formSubTitle.form-group
-                      = link_to t("user.my_settings.Buy_commission"), "/manual/MAX_Buy commission.pdf", :download=> "MAX_Buy commission.pdf"
-                    .formSubTitle.form-group
-                      = link_to t("user.my_settings.Rent_commission - services_for_lessors"), "/manual/MAX_Rent commission - services for lessors.pdf", :download=> "MAX_Rent commission - services for lessors.pdf"
-                    .formSubTitle.form-group
-                      = link_to t("user.my_settings.Rent_commission - services_for_tenants"), "/manual/MAX_Rent commission - services for tenants.pdf", :download=> "MAX_Rent commission - services for tenants.pdf"
+            .row.pt40
+              .col-xs-12
+                .bold
+                  = t("user.my_settings.calender_sync_settings")
+              .col-xs-12.pt5
+                .normal
+                  = t("user.my_settings.sync_your_system")
+              .col-xs-12.pt10
+                %label.checkBox
+                  = check_box_tag 'calendar_type', false, false
+                  %span.lbl
+                    = t("user.my_settings.outlook")
+              .col-xs-12.pt5
+                %label.checkBox
+                  = check_box_tag 'calendar_type', false, false
+                  %span.lbl
+                    = t("user.my_settings.google")
+              .col-xs-12.pt5
+                %label.checkBox
+                  = check_box_tag 'calendar_type', false, false
+                  %span.lbl
+                    = t("user.my_settings.mac")
 
           %td.stepBtnGroup{:width => "20%"}
             %a.h50.stepBtn.backBtn{:href => desktop_executives_path}

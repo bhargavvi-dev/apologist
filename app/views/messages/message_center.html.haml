@@ -5,7 +5,7 @@
         / = image_tag @current_brand.logo.url, :class => "mr15", :width => "160"
       =t('message.message_center')
   .col-xs-12.pb10
-    .form-group.formTitle
+    .form-group.medium.f20
       =t('message.choose_group_to_send_message')
   .col-xs-12
     .row.row-10
@@ -14,7 +14,7 @@
           .toolImage
             = image_tag "icon_agents.png"
           .toolTitle
-            =t("message.send_message_to_staff").html_safe
+            =t("message.send_message_to_personnel").html_safe
       .col-xs-12.col-sm-4.col-md-4
         %a.toolBox{:href => new_message_path(recipient_type: "customer")}
           .toolImage
@@ -22,8 +22,8 @@
           .toolTitle
             =t("message.send_message_to_customers").html_safe
       .col-xs-12.col-sm-4.col-md-4
-        %a.toolBox{:href => new_message_path(recipient_type: "partner")}
+        %a.toolBox{:href => "javascript:void(0);"}
           .toolImage
             = image_tag "icon_cooperation.png"
           .toolTitle
-            =t("message.send_message_to_partners").html_safe
+            =t("message.send_message_to_message_group").html_safe

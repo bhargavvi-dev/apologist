@@ -5,16 +5,16 @@
         = image_tag "logo.png", :class => "mr15", :width => "160"
       =t('executive.user_register')
   .row.row-10
-    .col-xs-12.col-sm-4.col-md-3
-      %a.toolBox{:href => directors_path}
+    .col-xs-12.col-sm-4.col-md-4.col-sm-offset-2
+      %a.toolBox{:href => "javascript:void(0);"}
         .toolImage
           = image_tag "icon_personal_meeting.png"
         .toolTitle
-          =t("executive.user_register_desktop.director_register").html_safe
+          =t("executive.office_register_desktop.head_office").html_safe
     - if current_user.executive?
-      .col-xs-12.col-sm-4.col-md-3
-        %a.toolBox{:href => executives_path}
+      .col-xs-12.col-sm-4.col-md-4
+        %a.toolBox{:href => "javascript:void(0);"}
           .toolImage
             = image_tag "icon_team.png"
           .toolTitle
-            =t("executive.user_register_desktop.executive_resgister").html_safe
+            =t("executive.office_register_desktop.branch_office").html_safe

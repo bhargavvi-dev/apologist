@@ -206,18 +206,6 @@ class MessagesController < ApplicationController
     end
   end
 
-  def send_questions_regarding_invoice
-    @commission = AgentOffice::Commission::Base.find_by(:id => params[:commission_id])
-    @sales_team_member = @commission.sales_team_members.find_by(:id => params[:email])
-    render 'messages/send_questions_regarding_invoice.js.erb'
-  end
-
-  def invoice_attachment
-    @commission = AgentOffice::Commission::Base.find_by(:id => params[:commission_id])
-    @sales_team_member = @commission.sales_team_members.find_by(:id => params[:email])
-    render 'messages/invoice_attachment.js.erb'
-  end
-
   private
 
   def fetch_message_associations

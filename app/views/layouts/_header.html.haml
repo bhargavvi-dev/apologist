@@ -26,3 +26,23 @@
                   .toolTitle
                     = t("toogle_header.end_session").html_safe
           .menuOverlay
+      .pull-right
+        %a.btn{:type => "button",:href => destroy_user_session_path, "data-method" => "delete"}
+          = image_tag "remax_end_session.png", :width => "30"
+          .text-center.f17
+            =t('toogle_header.sign_out')
+      .pull-right
+        %a.btn{:type => "button",:href => "javascript:void(0);"}
+          = image_tag "remax_end_session.png", :width => "30"
+          .text-center.f17
+            =t('toogle_header.calendar')
+      .pull-right
+        %a.btn{:type => "button",:href => "javascript:void(0);"}
+          = image_tag "remax_end_session.png", :width => "30"
+          .text-center.f17
+            =t('toogle_header.biller')
+      .pull-right
+        %a.btn{:type => "button",:href => "javascript:void(0);"}
+          = image_tag "remax_end_session.png", :width => "30"
+          .text-center.f17
+            =t('toogle_header.inspector')

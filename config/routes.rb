@@ -3,9 +3,7 @@ Rails.application.routes.draw do
   mount Resque::Server.new, at: "/resque"
 
   devise_for :users
-  devise_scope :users do
-    get '/users/sign_out' => 'devise/sessions#destroy'
-  end
+  get '/users/sign_out' => 'devise/sessions#destroy'
 
   # executives
   resources :executives do
@@ -14,6 +12,7 @@ Rails.application.routes.draw do
       get 'brand_materials'
       get 'business_management'
       get 'resource_variable'
+      get 'office_register'
       get 'user_register'
       get 'network_partners'
       get 'product_pairs'

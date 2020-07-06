@@ -97,7 +97,22 @@ class ExecutivesController < ApplicationController
                         ]
   end
 
+  def office_register
+    common_nav_header_for_other_actions
+  end
+
+  def user_register
+    common_nav_header_for_other_actions
+  end
+
   private
+
+  def common_nav_header_for_other_actions
+    @nav_header_menus = [
+                          {:href => desktop_executives_path, :label => t("nav_header.desktop"), :arrowBack => false},
+                          {:href => resource_variable_executives_path, :label => t("nav_header.resource_and_variable"), :arrowBack => true},
+                        ]
+  end
 
   def fetch_users
     users = @current_brand.users.executives

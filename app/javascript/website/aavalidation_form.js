@@ -192,32 +192,7 @@ $(function(){
         }
       }      
     }
-  });      
-
-  //order_remax_email_form
-  $('#order_remax_email_form').formValidation({
-    framework: 'bootstrap',
-    fields: {
-      input_recipient_email: {
-        selector: "#input_recipient_email",
-        validators: {
-            notEmpty: {message: I18n.t("js.general.task.mandatory_field")}
-        }
-      },
-      subject: {
-        selector: "#subject",
-        validators: {
-            notEmpty: {message: I18n.t("js.general.task.mandatory_field")}
-        }
-      },
-      message: {
-        selector: "#message",
-        validators: {
-            notEmpty: {message: I18n.t("js.general.task.mandatory_field")}
-        }
-      }      
-    }
-  });  
+  });
 
   //send_login_info_email_form
   $('#send_login_info_email_form').formValidation({

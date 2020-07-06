@@ -2,54 +2,51 @@
   .page-title
     %h1
       .title-logo
-        = image_tag @current_brand.logo, :class => "mr15", :width => "160"
+        = image_tag "logo.png", :class => "mr15", :width => "160"
       =t('executive.resource_and_variable')
   .row.row-10
-    .col-xs-12.col-sm-4.col-md-3
-      %a.toolBox{:href => user_register_executives_path}
-        .toolImage
-          = image_tag "icon_new_agent.png"
-        .toolTitle
-          =t('executive.resource_and_variable_desktop.user_register').html_safe
-    / .col-xs-12.col-sm-4.col-md-3
-    /   %a.toolBox{:href => customers_path}
-    /     .toolImage
-    /       = image_tag "remax_customer_register.png"
-    /     .toolTitle
-    /       =t('executive.resource_and_variable_desktop.customer_register').html_safe
-    / .col-xs-12.col-sm-4.col-md-3
-    /   %a.toolBox{:href => network_partners_executives_path}
-    /     .toolImage
-    /       = image_tag "icon_cooperation.png"
-    /     .toolTitle
-    /       =t('executive.resource_and_variable_desktop.network_partners').html_safe
-    / .col-xs-12.col-sm-4.col-md-3
-    /   %a.toolBox{:href => document_groups_path}
-    /     .toolImage
-    /       = image_tag "icon_document_description.png"
-    /     .toolTitle
-    /       =t('executive.resource_and_variable_desktop.document_folder').html_safe
-    / .col-xs-12.col-sm-4.col-md-3
-    /   /%a.toolBox{:href => "javascript:void(0);"}
-    /   %a.toolBox{:href => product_pairs_executives_path}        
-    /     .toolImage
-    /       = image_tag "icon_business_model.png"
-    /     .toolTitle
-    /       =t('executive.resource_and_variable_desktop.product_pairs').html_safe
-    .col-xs-12.col-sm-4.col-md-3
-      %a.toolBox{:href => default_settings_path(:notification_values)}
-        .toolImage
-          = image_tag "icon_time.png"
-        .toolTitle
-          =t('executive.resource_and_variable_desktop.notification_values').html_safe
-    .col-xs-12.col-sm-4.col-md-3
-      %a.toolBox{:href => default_settings_path(:background_variables)}
-        .toolImage
-          = image_tag "icon_Transaction_Calculation.png"
-        .toolTitle
-          =t('executive.resource_and_variable_desktop.background_variables').html_safe   
+    .col-xs-12.col-sm-8.col-sm-offset-2
+      .row
+        .col-xs-12.col-sm-4.col-md-4
+          %a.toolBox{:href => office_register_executives_path}
+            .toolImage
+              = image_tag "icon_new_agent.png"
+            .toolTitle
+              =t('executive.resource_and_variable_desktop.office_register').html_safe
+        .col-xs-12.col-sm-4.col-md-4
+          %a.toolBox{:href => user_register_executives_path}
+            .toolImage
+              = image_tag "icon_new_agent.png"
+            .toolTitle
+              =t('executive.resource_and_variable_desktop.user_register').html_safe
+        .col-xs-12.col-sm-4.col-md-4
+          %a.toolBox{:href => product_pairs_executives_path}
+            .toolImage
+              = image_tag "icon_business_model.png"
+            .toolTitle
+              =t('executive.resource_and_variable_desktop.product_and_service_register').html_safe
+    .col-xs-12.col-sm-8.col-sm-offset-2
+      .row
+        .col-xs-12.col-sm-4.col-md-4
+          %a.toolBox{:href => "javascript:void(0);"}
+            .toolImage
+              = image_tag "icon_document_description.png"
+            .toolTitle
+              =t('executive.resource_and_variable_desktop.office_document').html_safe
+        .col-xs-12.col-sm-4.col-md-4
+          %a.toolBox{:href => default_settings_path(:background_variables)}
+            .toolImage
+              = image_tag "icon_Transaction_Calculation.png"
+            .toolTitle
+              =t('executive.resource_and_variable_desktop.background_variables').html_safe
+        .col-xs-12.col-sm-4.col-md-4
+          %a.toolBox{:href => "javascript:void(0);"}
+            .toolImage
+              = image_tag "icon_Transaction_Calculation.png"
+            .toolTitle
+              =t('executive.resource_and_variable_desktop.background_variables').html_safe
     - if Rails.env.production?
-      .col-xs-12.col-sm-4.col-md-3
+      .col-xs-12.col-sm-4.col-md-4
         %a.toolBox{:href => "/translation_tool/locales/fi" }
           .toolImage
             = image_tag "icon_offer_statistics.png"

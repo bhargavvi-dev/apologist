@@ -3,18 +3,6 @@
     %h1
       .title-logo
         = image_tag  "", :width => "115"
-      - if current_user.executive?
-        =t('desktop.executive_desktop')
-      - elsif current_user.director?
-        =t('desktop.director_desktop')
-      - elsif current_user.office_manager?
-        =t('desktop.office_manager_desktop')
-      - elsif current_user.agent?
-        =t('desktop.agent_desktop')
-      - elsif current_user.customer?
-        = t('desktop.customer_desktop')
-      - elsif current_user.inspector?
-        = t('desktop.inspector_desktop')
   .row.row-10
     #feedbackModal.modal.fade{"aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
       .modal-dialog.modal-lg{:role => "document"}
@@ -36,17 +24,35 @@
 
     - if current_user.executive?
       .col-xs-12.col-sm-4.col-md-3
+        %a.toolBox{:href => "javascript:void(0);"}
+          .toolImage
+            = image_tag "icon_best_practice_sharing_pool_knowledge.png"
+          .toolTitle
+            = t("desktop.lead_customer_and_assignments").html_safe
+      .col-xs-12.col-sm-4.col-md-3
+        %a.toolBox{:href => "javascript:void(0);"}
+          .toolImage
+            = image_tag "icon_best_practice_sharing_pool_knowledge.png"
+          .toolTitle
+            = t("desktop.manage_invoicing_and_fee_process").html_safe
+      .col-xs-12.col-sm-4.col-md-3
+        %a.toolBox{:href => "javascript:void(0);"}
+          .toolImage
+            = image_tag "icon_best_practice_sharing_pool_knowledge.png"
+          .toolTitle
+            = t("desktop.lead_performance").html_safe
+      .col-xs-12.col-sm-4.col-md-3
         %a.toolBox{:href => center_messages_path}
           .toolImage
             = image_tag "icon_best_practice_sharing_pool_knowledge.png"
           .toolTitle
-            = t("desktop.message_center").html_safe    
+            = t("desktop.message_center").html_safe  
       .col-xs-12.col-sm-4.col-md-3
         %a.toolBox{:href => resource_variable_executives_path}
           .toolImage
             = image_tag "icon_business_intelligence.png"
           .toolTitle
-            = t("desktop.resource_and_variable").html_safe
+            = t("desktop.manage_resources").html_safe
     - elsif current_user.director? or current_user.office_manager? or current_user.agent?
       - if current_user.office_manager?
         - document_registers_path = document_registers_office_managers_path
@@ -93,8 +99,8 @@
         .toolTitle
           = t("desktop.my_settings").html_safe
     .col-xs-12.col-sm-4.col-md-3
-      %a.toolBox{:href => destroy_user_session_path, "data-method" => "delete"}
+      %a.toolBox{:href => "javascript:void(0);"}
         .toolImage
           = image_tag "remax_end_session.png"
         .toolTitle
-          = t("desktop.end_session").html_safe
+          = t("desktop.my_link_library").html_safe

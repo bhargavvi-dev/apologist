@@ -1,8 +1,0 @@
-<% if @sales_team_member.present? %>
-  $('.modal').modal('hide');
-  $("#invoice_attachment_modal").html("<%= escape_javascript(render :partial => 'messages/invoice_attachment', :locals => {commission: @commission, sales_team_member: @sales_team_member}) %>");
-  setTimeout(function(){
-    $("#InvoiceAttachmentModal").modal("show");
-  }, 500);
-<% end %>
-<%= render :partial => "shared/ajax_js" %>

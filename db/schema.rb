@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_06_112602) do
+ActiveRecord::Schema.define(version: 2020_07_07_112944) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
@@ -110,54 +110,74 @@ ActiveRecord::Schema.define(version: 2020_07_06_112602) do
     t.index ["sender_id"], name: "index_messages_on_sender_id"
   end
 
+  create_table "office_banks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.integer "office_id", null: false
+    t.string "bank_name"
+    t.string "account_number"
+    t.integer "account_type", default: 0, null: false
+    t.boolean "is_active", default: true, null: false
+    t.boolean "is_deleted", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["office_id", "bank_name", "account_number", "account_type"], name: "idx_office_banks_office_account_details", unique: true
+  end
+
+  create_table "office_owners", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.integer "office_id", null: false
+    t.integer "owner_type", default: 0, null: false
+    t.integer "owner_role", default: 0, null: false
+    t.integer "share"
+    t.string "first_name", limit: 50
+    t.string "last_name", limit: 50
+    t.date "birthdate"
+    t.string "ssn", limit: 50
+    t.boolean "is_active", default: true, null: false
+    t.boolean "is_deleted", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "offices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "brand_id", null: false
     t.string "office_name", limit: 50, null: false
     t.string "company_name", limit: 50, null: false
-    t.string "company_id", limit: 50, null: false
     t.text "address"
     t.string "post_number"
     t.string "city", limit: 50
     t.string "phone_number", limit: 50
     t.string "email", limit: 50
     t.string "website", limit: 50
+    t.string "company_id", limit: 50, null: false
+    t.string "cost_place_number", limit: 50
     t.string "brand_provided_id", limit: 50
+    t.boolean "has_visiting_address", default: false
     t.text "visiting_address"
     t.string "visiting_post_number"
     t.string "visiting_city", limit: 50
+    t.boolean "has_invoice_address", default: false
+    t.string "invoice_address", limit: 500
+    t.boolean "has_billing_address", default: false
     t.text "billing_address"
     t.string "billing_post_number"
     t.string "billing_city", limit: 50
-    t.string "profile_brand_types"
     t.text "office_hours"
     t.string "logo_text", limit: 100
-    t.text "introduction"
+    t.text "presentation_text"
     t.string "linkedin_url"
     t.string "facebook_url"
     t.string "twitter_url"
     t.string "youtube_url"
     t.string "whatsapp_number", limit: 50
     t.string "skype_id", limit: 50
-    t.text "working_areas"
-    t.boolean "immediate_customer_reward_payment", default: true, null: false
-    t.integer "customer_reward_payment_days"
-    t.date "agreement_signing_date"
-    t.date "agreement_start_date"
-    t.date "agreement_end_date"
-    t.integer "joining_fee"
-    t.integer "fixed_fee"
-    t.integer "royalty"
-    t.string "average_profit"
+    t.text "gps_coordinates"
+    t.boolean "liability", default: false
+    t.boolean "is_own_customer_billing", default: false
+    t.boolean "is_own_fee_cal_process", default: false
     t.boolean "registered", default: false, null: false
     t.boolean "is_active", default: true, null: false
     t.boolean "is_deleted", default: false, null: false
-    t.text "gps_coordinates"
-    t.integer "fixed_fee_promotion"
-    t.string "sales_area"
-    t.text "address_specification"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["brand_id", "office_name"], name: "index_offices_on_brand_id_and_office_name", unique: true
   end
 
   create_table "settings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|

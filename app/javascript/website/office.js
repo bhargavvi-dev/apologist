@@ -1,5 +1,32 @@
 $(document).ready(function() {
 
+  $(document).on("change", "#separate_visiting_address", function(){
+    var address_type = $(this).val();
+    if (address_type == "YES"){
+      $('.visiting_address_info').removeClass('hide');
+    }else{
+      $('.visiting_address_info').addClass('hide');
+    }
+  });
+
+  $(document).on("change", "#email_invoice_address", function(){
+    var address_type = $(this).val();
+    if (address_type == "YES"){
+      $('.invoice_address_info').removeClass('hide');
+    }else{
+      $('.invoice_address_info').addClass('hide');
+    }
+  });
+
+  $(document).on("change", "#electronic_billing_address", function(){
+    var address_type = $(this).val();
+    if (address_type == "YES"){
+      $('.billing_address_info').removeClass('hide');
+    }else{
+      $('.billing_address_info').addClass('hide');
+    }
+  });
+
   $(document).on("click", ".responsible_person", function(){
     var id = getId(this.id);
     set_responsible_person(id);

@@ -3,41 +3,8 @@ $(function(){
   I18n.locale = document.documentElement.lang;
   $.fn.datepicker.defaults.language = I18n.locale;
 
-  // $('#selling-commission-housing-form').formValidation({
-  //   message: '',
-  //   excluded: [],
-  //   fields: {
-  //     agent_office_commission_selling_housing_company_attributes_name: {
-  //       selector: "#agent_office_commission_selling_housing_company_attributes_name",
-  //       validators: {
-  //           notEmpty: {message: I18n.t("js.general.task.mandatory_field")}
-  //       }
-  //     },
-  //     superintendent_office_name: {
-  //       selector: "#superintendent_office_name",
-  //       validators: {
-  //           notEmpty: {message: I18n.t("js.general.task.mandatory_field")}
-  //       }
-  //     }
-  //   }
-  // });
-
-  // $('#registerNewSuperintendentModal').on('shown.bs.modal', function () {
-  //   $(this).find('form').formValidation('destroy').formValidation({
-  //     framework: 'bootstrap',
-  //     fields: {
-  //       register_superintendent_office_name: {
-  //         selector: "#register_superintendent_office_name",
-  //         validators: {
-  //             notEmpty: {message: I18n.t("js.general.task.mandatory_field")}
-  //         }
-  //       }
-  //     }
-  //   })
-  // });
-
   // user form validation
-  $('#responsible-person-form, #office_manager-form, #executive-form, #agent-form, #director-form, #network_partner-form').formValidation({
+  $('#user-form').formValidation({
     framework: 'bootstrap',
     fields: {
       user_first_name: {
@@ -60,57 +27,6 @@ $(function(){
       }
     }
   });
-
-
-  // customer form validation
-  $('#lead-reassigner-form').formValidation({
-    framework: 'bootstrap',
-    fields: {
-      customer_first_name: {
-        selector: "#customer_first_name",
-        validators: {
-            notEmpty: {message: I18n.t("js.general.task.mandatory_field")}
-        }
-      },
-      customer_last_name: {
-        selector: "#customer_last_name",
-        validators: {
-            notEmpty: {message: I18n.t("js.general.task.mandatory_field")}
-        }
-      },
-      customer_email: {
-        selector: "#customer_email",
-        validators: {
-            notEmpty: {message: I18n.t("js.general.task.mandatory_field")}
-        }
-      }
-    }
-  });  
-
-  $('#register-responsible-person').formValidation({
-    framework: 'bootstrap',
-    fields: {
-      responsible_first_name: {
-        selector: "#responsible_first_name",
-        validators: {
-            notEmpty: {message: I18n.t("js.general.task.mandatory_field")}
-        }
-      },
-      responsible_last_name: {
-        selector: "#responsible_last_name",
-        validators: {
-            notEmpty: {message: I18n.t("js.general.task.mandatory_field")}
-        }
-      },            
-      responsible_email: {
-        selector: "#responsible_email",
-        validators: {
-            notEmpty: {message: I18n.t("js.general.task.mandatory_field")}
-        }
-      }      
-    }
-  });  
-
 
   //office form validation
   $('#office-form').formValidation({
@@ -266,30 +182,6 @@ $(function(){
             notEmpty: {message: I18n.t("js.general.task.mandatory_field")}
         }
       },      
-    }
-  });
-
-  $('#register-inspector').formValidation({
-    framework: 'bootstrap',
-    fields: {
-      inspector_first_name: {
-        selector: "#inspector_first_name",
-        validators: {
-            notEmpty: {message: I18n.t("js.general.task.mandatory_field")}
-        }
-      },
-      inspector_last_name: {
-        selector: "#inspector_last_name",
-        validators: {
-            notEmpty: {message: I18n.t("js.general.task.mandatory_field")}
-        }
-      },            
-      inspector_email: {
-        selector: "#inspector_email",
-        validators: {
-            notEmpty: {message: I18n.t("js.general.task.mandatory_field")}
-        }
-      }      
     }
   });
 });

@@ -1,0 +1,122 @@
+= form_for @office, :url => office_path(@office), :method => "PUT" do |f|
+  = hidden_field_tag 'step', @step
+  = hidden_field_tag 'open_card', params[:open_card]
+  %table.tableForm{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+    %tbody
+      %tr
+        %td#stepBtnHeight.leftCol{:width => "80%"}
+          .formBox
+            .formHeader.clearfix
+              %h1
+                - if !@office.registered?
+                  = t("office.register")
+                  %span= t("form.office.form_step_4")
+                -else
+                  = @office.name
+                  %span= t("form.office.form_step_4_without_number")
+            .row
+              .col-xs-12
+                .formTitle.form-group
+                  =t('office.account_numbers_for_customer_invoice')
+
+                - if @office.errors["reward_bank_accounts"].any?
+                  %div.text-error.text-message
+                    = t("data_invalid_or_required")
+                #reward_bank_accounts
+                  = f.fields_for :reward_bank_accounts do |reward_bank_account|
+                    = render 'reward_bank_account_fields', f: reward_bank_account
+                  .links.form-group
+                    = link_to_add_association f, :reward_bank_accounts, :class => "addLink" do
+                      %i.addIcon
+                      = t('office.add_account_number')
+            .row
+              .col-xs-12
+                .hr.hr25
+              .col-xs-12
+                .formTitle.form-group
+                  =t('office.account_number_for_customer_funds')
+                - if @office.errors["customer_fund_bank_accounts"].any?
+                  %div.text-error.text-message
+                    = t("data_invalid_or_required")
+                #customer_fund_bank_accounts
+                  = f.fields_for :customer_fund_bank_accounts do |customer_fund_bank_account|
+                    = render 'customer_fund_bank_account_fields', f: customer_fund_bank_account
+                  .links.form-group
+                    %label
+                      = link_to_add_association f, :customer_fund_bank_accounts, :class => "addLink" do
+                        %i.addIcon
+                        = t('office.add_account_number')
+
+            .row
+              .col-xs-12
+                .hr.hr25
+              .col-xs-12
+                .formTitle.form-group
+                  =t('office.ownership_structure')
+                - if @office.errors["share_owners"].any?
+                  %div.text-error.text-message
+                    = t("data_invalid_or_required")
+                #office_share_owners
+                  = f.fields_for :share_owners do |share_owner|
+                    = render 'share_owner_fields', f: share_owner
+                  .links.form-group
+                    %label
+                      = link_to_add_association f, :share_owners, :class => "addLink" do
+                        %i.addIcon
+                        = t('office.add_partner')
+            .row
+              .col-xs-12
+                .hr.hr25
+              .col-xs-12
+                .formTitle.form-group
+                  =t('office.members_of_board')
+                - if @office.errors["members"].any?
+                  %div.text-error.text-message
+                    = t("data_invalid_or_required")
+              .col-xs-12
+                = f.fields_for :members do |member|
+                  = render 'member_fields', f: member
+                .form-group
+                  = link_to_add_association f, :member, :class => "addLink" do
+                    %i.addIcon
+                    = t('office.add_member')
+            .row
+              .col-xs-12
+                .hr.hr25
+              .col-xs-12
+                .formTitle.form-group
+                  =t('office.chief_executive_officer')
+                - if @office.errors["ceo"].any?
+                  %div.text-error.text-message
+                    = t("data_invalid_or_required")
+                = f.fields_for :ceo, (@office.ceo || @office.build_ceo) do |ceo|
+                  .row.row5
+                    .col-xs-12.col-sm-6.form-group
+                      = ceo.text_field :first_name, :class => "form-control", :placeholder => t('office.ceo_first_name')
+                    .col-xs-12.col-sm-6.form-group
+                      = ceo.text_field :last_name, :class => "form-control", :placeholder => t('office.ceo_last_name')
+                  #birthdate.row
+                    %label.col-xs-12
+                      = t('general.date_of_birth')
+                    .col-xs-12
+                      %div.selectBox.verTop.form-group.dib
+                        = ceo.date_select :birthdate, :start_year => 1900, :end_year => Time.now.year, :class => "form-control", :order => [:day, :month, :year]
+                        = " - "
+                        #social_security_number.dib.verTop
+                          = ceo.text_field :ssn, :class => "form-control w85", :size => "4", :placeholder => t('office.ceo_ssn')
+              
+        %td.stepBtnGroup{:width => "20%"}
+          - back_btn_href = params[:open_card] == "true" ? office_path(@office.id) : edit_office_path(@office, :step => (@step.to_i - 1))
+          %a.stepBtn.backBtn{:href => back_btn_href, :class => btn_height_class }
+            %span
+              =t("form_action_button.return_button")
+            = image_tag "remax_back_btn.png", :class => "mt15"
+          %button.stepBtn.nextBtn#saveMedia{:name => "save", :type => "submit", :class => btn_height_class }
+            %span
+              =t("form_action_button.save_button")
+            = image_tag "remax_save_btn.png", :class => "mt15"
+          - unless params[:open_card] == "true"
+            %button.h50.stepBtn.nextBtn#saveMediaNext{:name => "proceed_next", :type => "submit"}
+              %span
+                = t("form_action_button.save_and_next_button")
+              = image_tag "remax_save_and_next_btn.png", :class => "mt15"

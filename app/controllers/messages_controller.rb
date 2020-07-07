@@ -4,8 +4,8 @@ class MessagesController < ApplicationController
 
   before_action :set_message, only: [:edit, :update, :next_users, :user_filter, :next_customers, :customer_filter]
 
-  # GET /executives
-  # GET /executives.json
+  # GET /messages
+  # GET /messages.json
   def index
     common_nav_header_menus
     @back_to_top = true
@@ -365,39 +365,17 @@ class MessagesController < ApplicationController
   end
 
   def common_nav_header_menus
-    if current_user.director?
+    if current_user.executive?
       @nav_header_menus = [
-                            {:href => desktop_directors_path, :label => t("nav_header.desktop"), :arrowBack => true}
-                          ]
-    elsif current_user.executive?
-      @nav_header_menus = [
-                            {:href => desktop_executives_path, :label => t("nav_header.desktop"), :arrowBack => true}
-                          ]
-    else
-      @nav_header_menus = [
-                            {:href => desktop_agents_path, :label => t("nav_header.desktop"), :arrowBack => true}
+                            {:href => desktop_users_path, :label => t("nav_header.desktop"), :arrowBack => true}
                           ]
     end    
   end
 
   def common_nav_header_menus_for_other_actions
-    if current_user.director?
+    if current_user.executive?
       @nav_header_menus = [
-                            {:href => desktop_directors_path, :label => t("nav_header.desktop"), :arrowBack => false},
-                            {:href => center_messages_path, :label => t("nav_header.message_center_choose_group"), :arrowBack => true }
-                          ]
-    elsif current_user.executive?
-      @nav_header_menus = [
-                            {:href => desktop_executives_path, :label => t("nav_header.desktop"), :arrowBack => false},
-                            {:href => center_messages_path, :label => t("nav_header.message_center_choose_group"), :arrowBack => true }
-                          ]
-    elsif current_user.customer?
-      @nav_header_menus = [
-                            {:href => desktop_executives_path, :label => t("nav_header.desktop"), :arrowBack => true}
-                          ]
-    else
-      @nav_header_menus = [
-                            {:href => desktop_agents_path, :label => t("nav_header.desktop"), :arrowBack => false},
+                            {:href => desktop_users_path, :label => t("nav_header.desktop"), :arrowBack => false},
                             {:href => center_messages_path, :label => t("nav_header.message_center_choose_group"), :arrowBack => true }
                           ]
     end

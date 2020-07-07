@@ -1,0 +1,19 @@
+.scroll.row.row-10
+  .col-xs-12.col-sm-6.col-md-4.col-10
+    %a.rxBox.addNew{:href => new_office_path}
+      .rxImage
+        = image_tag "register_new_office.png"
+      .rxBottom
+        .rxAddNewBtn
+          %i.fa.fa-plus-circle
+          = t("office.register_new")
+  - if @offices.present?
+    - @offices.each do |office|
+      = render :partial => 'office', :locals => {office: office}
+    - if @offices.count > Settings.system.per_page
+      = link_to next_offices_path(2), :remote => true, :class => "loadMore jscroll-next" do
+        %i.downArrow
+        = t("general.next")
+  - else
+    .col-xs-12.col-sm-6.col-md-4.col-10.alert.alert-warning
+      %span= t('general.no_record_found')

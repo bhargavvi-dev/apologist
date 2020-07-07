@@ -12,6 +12,9 @@ class Brand < ApplicationRecord
   end
 
   has_many :messages, inverse_of: :brand
+
+  has_many :offices, inverse_of: :brand
+
   has_many :message_associations, :through => :messages
   has_many :feedbacks, inverse_of: :brand
   has_many :settings, :class_name => "Setting", :foreign_key => "brand_id" do

@@ -1,0 +1,20 @@
+.filterTop
+  .row
+    = form_for '', :url => user_filter_users_path, :method => 'post', :html => {:id => "filterFormId"}, :remote => true do
+      = hidden_field_tag 'role', role
+      .col-xs-12.col-sm-6.col-md-4.col-lg-3
+        = text_field_tag :search,session[:user_search],:class => "form-control",placeholder: t("general.search_name_or_city")
+      / .col-xs-12.col-sm-6.col-md-4.col-lg-3
+      /   - special_skills = [['', t('general.search_special_skill')]]
+      /   - special_skills += @current_brand.special_skills.map { |special_skill| [special_skill.id,special_skill.admin_localize.try(:name)] }
+      /   = select_tag "special_skill", options_from_collection_for_select(special_skills, :first, :last, session[:user_special_skill]),:class => "form-control"
+      / .col-xs-12.col-sm-6.col-md-4.col-lg-3
+      /   - language_skills = [['', t('general.search_language_skill')]]
+      /   - language_skills += @current_brand.language_skills.map { |language_skill| [language_skill.id,language_skill.admin_localize.try(:name)] }       
+      /   = select_tag "language_skill", options_from_collection_for_select(language_skills, :first, :last, session[:user_language_skill]),:class => "form-control"
+      / .col-xs-12.col-sm-6.col-md-4.col-lg-3
+      /   - business_degrees = [['', t('general.search_business_degree')]]
+      /   - business_degrees += @current_brand.business_degrees.map { |business_degree| [business_degree.id ,business_degree.admin_localize.try(:name)] }
+      /   = select_tag "business_degree", options_from_collection_for_select(business_degrees, :first, :last, session[:user_business_degree]),:class => "form-control"
+    %div{id: 'loader-image', class: 'loader'}
+      = image_tag 'loader-small.gif'            

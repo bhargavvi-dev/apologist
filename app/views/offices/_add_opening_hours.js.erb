@@ -1,0 +1,7 @@
+<% if @success %>
+  $("#openingHours").modal('hide');
+<% else %>
+  $("#openingHoursNotice").html("<div class='alert alert-dismissible alert-danger'><button class='close' data-dismiss='alert' type='button'>×</button>Something went wrong !</div>")
+  $('#openingHours').animate({ scrollTop: 0 }, 'slow');
+<% end %>
+$("#opening-hours-loader").hide();

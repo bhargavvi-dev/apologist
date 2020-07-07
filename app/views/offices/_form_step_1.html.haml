@@ -1,0 +1,139 @@
+= form_for(@office, :url => (@office.new_record? ? offices_path : office_path(@office)), :method => (@office.new_record? ? "POST" : "PUT"), :html => {:multipart => true, :id => 'office-form'}) do |f|
+  = hidden_field_tag 'step', @step
+  = f.hidden_field :brand_id, :value => @current_brand.id
+  = hidden_field_tag 'open_card', params[:open_card]
+  %table.tableForm{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+    %tbody
+      %tr
+        %td#stepBtnHeight.leftCol{:width => "80%"}
+          .formBox
+            .formHeader.clearfix
+              %h1
+                - if !@office.registered?
+                  = t("office.register_head_office")
+                  %span= t("office.form_step_1")
+                -else
+                  = @office.name
+                  %span= t("office.form_step_1_without_number")
+            .row
+              .col-xs-12
+                .form-group.bold.f17
+                  = t("office.basic_information")
+              .col-xs-12.col-sm-6
+                - if @office.errors.any?
+                  - message = @office.errors.full_messages.first
+                  .row.row7.text-error.text-message.form-group
+                    = message
+                #office_name.form-group
+                  = f.text_field :office_name, :class => "form-control",:placeholder => t("office.office_name")
+                #company_name.form-group
+                  = f.text_field :company_name, :class => "form-control",:placeholder => t("office.company_name")
+                #address.form-group
+                  = f.text_field :address, :class => "form-control", :placeholder => t("office.address"),:cols => 6, :rows => 1      
+                #post_number.form-group
+                  = f.text_field :post_number, :class => "form-control", :placeholder => t("office.post_number")
+                #city.form-group
+                  = f.text_field :city, :class => "form-control", :placeholder => t("office.city")
+                - show_visiting_address = (@office.visiting_address.present? || @office.visiting_post_number.present? || @office.visiting_city.present?)
+
+              .col-xs-12.col-sm-6             
+                #phone_number.form-group
+                  = f.text_field :phone_number, :class => "virtualKeyboard form-control", :placeholder => t("office.phone_number")
+                #email.form-group
+                  = f.text_field :email, :class => "form-control", :placeholder => t("office.email")
+                  - if @office.errors[:email].any?
+                    %span.text-error.text-message
+                      = @office.errors[:email].first
+                #website.form-group
+                  = f.text_field :website, :class => "form-control", :placeholder => t("office.website")
+                #company_id.form-group
+                  = f.text_field :company_id, :class => "form-control",:placeholder => t("office.company_id")
+                .row
+                  .col-xs-12.col-sm-6
+                    #brand_provided_id.form-group
+                      = f.text_field :cost_place_number, :class => "form-control", :placeholder => t("office.cost_place_number")
+                  .col-xs-12.col-sm-6
+                    #brand_provided_id.form-group
+                      = f.text_field :brand_provided_id, :class => "form-control", :placeholder => t("office.brand_provided_id", brand_name: @current_brand.name.upcase)
+            .row.pt10
+              .col-xs-12
+                .form-group.bold.f17
+                  = t("office.other_contact_information")
+            .row.pt5
+              .col-xs-12.col-sm-6
+                .form-group
+                  = t("office.office_has_separate_visiting_address")
+              .col-xs-12.col-sm-2
+                %label.radioBox.radioInline
+                  = f.radio_button :has_visiting_address, 'YES', :id => "separate_visiting_address"
+                  %span.lbl=t('office.type_yes')
+              .col-xs-12.col-sm-2
+                %label.radioBox.radioInline
+                  = f.radio_button :has_visiting_address, 'NO', :id => "separate_visiting_address"
+                  %span.lbl=t('office.type_no')
+            .row.hide.visiting_address_info
+              .col-xs-12.col-sm-6
+                #visiting_address.form-group
+                  = f.text_field :visiting_address, :class => "form-control", :placeholder => t("office.visiting_address"),:cols => 6, :rows => 1
+              .col-xs-12.col-sm-6
+                #visiting_post_number.form-group
+                  = f.text_field :visiting_post_number, :class => "virtualKeyboard form-control", :placeholder => t("office.visiting_post_number")
+              .col-xs-12.col-sm-6
+                #visiting_city.form-group
+                  = f.text_field :visiting_city, :class => "form-control", :placeholder => t("office.visiting_city")
+
+            .row
+              .col-xs-12.col-sm-6
+                .form-group
+                  = t("office.office_has_email_invoice_address")
+              .col-xs-12.col-sm-2
+                %label.radioBox.radioInline
+                  = f.radio_button :has_invoice_address, 'YES', :id => "email_invoice_address"
+                  %span.lbl=t('office.type_yes')
+              .col-xs-12.col-sm-2
+                %label.radioBox.radioInline
+                  = f.radio_button :has_invoice_address, 'NO', :id => "email_invoice_address"
+                  %span.lbl=t('office.type_no')
+            .row.hide.invoice_address_info
+              .col-xs-12.col-sm-6
+                #invoice_address.form-group
+                  = f.text_field :invoice_address, :class => "form-control", :placeholder => t("office.email_address_for_invoices"),:cols => 6, :rows => 1
+            .row
+              .col-xs-12.col-sm-6
+                .form-group
+                  = t("office.office_has_electronic_billing_address")
+              .col-xs-12.col-sm-2
+                %label.radioBox.radioInline
+                  = f.radio_button :has_billing_address, 'YES', :id => "electronic_billing_address"
+                  %span.lbl=t('office.type_yes')
+              .col-xs-12.col-sm-2
+                %label.radioBox.radioInline
+                  = f.radio_button :has_billing_address, 'NO', :id => "electronic_billing_address"
+                  %span.lbl=t('office.type_no')
+            .row.hide.billing_address_info
+              .col-xs-12.col-sm-6
+                #billing_address.form-group
+                  = f.text_field :billing_address, :class => "form-control", :placeholder => t("office.billing_address"),:cols => 6, :rows => 1
+              .col-xs-12.col-sm-6
+                #billing_post_number.form-group
+                  = f.text_field :billing_post_number, :class => "virtualKeyboard form-control", :placeholder => t("office.billing_post_number")
+              .col-xs-12.col-sm-6
+                #billing_city.form-group
+                  = f.text_field :billing_city, :class => "form-control", :placeholder => t("office.billing_city")
+
+        %td.stepBtnGroup{:width => "20%"}
+          - back_btn_href = params[:open_card] == "true" ? office_path(@office.id) : offices_path
+          %a.stepBtn.backBtn{:href => back_btn_href, :class => btn_height_class}
+            %span
+              =t("form_action_button.return_button")
+            = image_tag "remax_back_btn.png"
+          %button.stepBtn.nextBtn{:name => "save", :type => "submit", :class => btn_height_class}
+            %span
+              =t("form_action_button.save_button")
+            = image_tag "remax_save_btn.png"
+          - unless params[:open_card] == "true"
+            %button.h50.stepBtn.nextBtn{:name => "proceed_next", :type => "submit"}
+              %span
+                = t("form_action_button.save_and_next_button")
+              = image_tag "remax_save_and_next_btn.png"
+

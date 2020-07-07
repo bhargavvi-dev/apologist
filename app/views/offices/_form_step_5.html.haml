@@ -1,0 +1,28 @@
+= form_for(@office, :url => office_path(@office), :method => "PUT") do |f|
+  = hidden_field_tag 'step', @step
+  = hidden_field_tag 'type', "office"
+  %table.tableForm{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+    %tbody
+      %tr
+        %td#stepBtnHeight.leftCol{:width => "80%"}
+          .formBox.view-details
+            .formHeader.clearfix
+              %h1
+                - if !@office.registered?
+                  = t("office.register")
+                  %span= t("form.office.form_step_5")
+                -else
+                  = @office.name
+                  %span= t("form.office.form_step_5_without_number")
+            = render  :partial => 'open_card', :locals => {:object => @office}
+        %td.stepBtnGroup{:width => "20%"}
+          - back_btn_href = params[:open_card] == "true" ? office_path(@office.id) : edit_office_path(@office, :step => (@step.to_i - 1))
+          %a.h50.stepBtn.backBtn{:href => back_btn_href, :class => btn_height_class}
+            %span
+              =t("form_action_button.return_button")
+            = image_tag "remax_back_btn.png"
+          - unless params[:open_card] == "true"
+            %button.h50.stepBtn.nextBtn{:name => "proceed_next", :type => "submit", :class => btn_height_class}
+              %span
+                = @office.registered? ? t("form_action_button.office.save_office_registration") : t("form_action_button.office.finish_office_registration")
+              = image_tag "remax_save_and_next_btn.png"

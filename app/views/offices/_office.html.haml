@@ -1,0 +1,52 @@
+.col-xs-12.col-sm-6.col-md-4.col-10
+  .rxBox
+    .rxHeader
+      .rxTitle
+        .rxValue
+          = set_proper_name(office.office_name, 22)
+        .rxSubName
+          .rxValue
+            = office.company_name
+      .rxLogo
+        - if office.logo_text.present?
+          - logo_resource = office.resources["IMAGE::OFFICE_TEXT_LOGO"]
+          - if logo_resource.present? and logo_resource.media.present?
+            = image_tag logo_resource.media.url(:medium)
+        - else
+          = image_tag @current_brand.logo.url
+    .rxContent
+      .row.row5
+        .col-xs-12.col-sm-6
+          .rxDesc
+            %span
+              = t('office.city')
+            .rxValue
+              = office.city
+        .col-xs-12.col-sm-6
+          .rxDesc
+            %span
+              = t('office.website')
+            .rxValue
+              = office.website
+        .col-xs-12.col-sm-6
+          .rxDesc
+            %span
+              = t('office.contact_person')
+            .rxValue
+              = office.responsible_persons.first.try(:name)
+        .col-xs-12.col-sm-6
+          .rxDesc
+            %span
+              = t('office.phone_number')
+            .rxValue
+              = office.phone_number
+        .col-xs-12
+          .rxDesc
+            %span
+              = t('office.email')
+            .rxValue
+              = office.email
+    .rxBottom
+      %a.rxNextBtn{:href => office_path(office.id) }
+        = t("office.open_card")
+        %i.fa.fa-angle-double-right

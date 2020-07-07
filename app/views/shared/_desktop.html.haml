@@ -48,7 +48,7 @@
           .toolTitle
             = t("desktop.message_center").html_safe  
       .col-xs-12.col-sm-4.col-md-3
-        %a.toolBox{:href => resource_variable_executives_path}
+        %a.toolBox{:href => resource_variable_users_path}
           .toolImage
             = image_tag "icon_business_intelligence.png"
           .toolTitle
@@ -80,18 +80,6 @@
               = image_tag "icon_certificate.png"
             .toolTitle
               = t("desktop.document_registers").html_safe
-    
-      / .col-xs-12.col-sm-4.col-md-3.hide
-      /   #feedbackModal.modal.fade{"aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
-      /     .modal-dialog.modal-lg{:role => "document"}
-      /       .modal-content
-      /         .modal-body
-      /           = render :partial => "emails/form_feedback"
-      /   #feedbackSuccessModal.modal.fade{"aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
-      /     .modal-dialog.modal-lg{:role => "document"}
-      /       .modal-content
-      /         .modal-body
-      /           = render :partial => "emails/feedback_success"
     .col-xs-12.col-sm-4.col-md-3
       %a.toolBox{:href => personal_settings_path}
         .toolImage

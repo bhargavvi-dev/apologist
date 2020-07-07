@@ -1,0 +1,10 @@
+- if @offices.present?
+  - @offices.each do |office|
+    = render :partial => 'office', :locals => {office: office}
+  - if @offices.count > Settings.system.per_page
+    - count = params[:page].to_i + 1
+    = link_to next_offices_path(count), :remote => true, :class => "loadMore jscroll-next" do
+      %i.downArrow
+      = t("general.next")
+:javascript
+  modify_next_elements()

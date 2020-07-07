@@ -1,0 +1,22 @@
+.nested-fields.row.row5
+  .col-xs-12.col-sm-8.col-md-9.form-group
+    = f.text_field :first_name, :class => "form-control", :placeholder => t('office.owner_name'), :autofocus => true
+  .col-xs-12.col-sm-4.col-md-3.form-group
+    = f.text_field :share, :class => "virtualKeyboard form-control", :placeholder => t('office.share')
+  .col-xs-12
+    .fieldRemove.fieldRadio
+      %label.radioBox.radioInline
+        = f.radio_button :owner_role, 'PRINCIPAL'
+        %span.lbl=t('office.owner_role_principal')
+      %label.radioBox.radioInline
+        = f.radio_button :owner_role, 'BROKER_OWNER'
+        %span.lbl=t('office.owner_role_broker_owner')
+      %label.radioBox.radioInline
+        = f.radio_button :owner_role, 'PARTNER'
+        %span.lbl=t('office.owner_role_partner')
+      %label.radioBox.radioInline.pr0
+        = f.radio_button :owner_role, 'SILENT_PARTNER'
+        %span.lbl=t('office.owner_role_silent_partner')
+      = link_to_remove_association f, :class => 'addLink' do
+        %i.removeIcon
+        = t('office.remove')

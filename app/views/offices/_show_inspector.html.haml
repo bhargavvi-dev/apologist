@@ -1,0 +1,42 @@
+- assigned_inspectors.each do |inspector|
+  .col-xs-12.col-md-8
+    .rxBox
+      .rxHeader
+        .rxTitle
+          = inspector.name
+        .rxSubName
+          = '&nbsp'.html_safe
+        .rxLogo
+          - resource = inspector.resources['IMAGE::USER_PHOTO']
+          = image_tag src="#{resource.media.url(:small)}" if resource.present?
+      .rxContent
+        .row.row5
+          .col-xs-12
+            .rxDesc
+              %span
+                = t('inspector.email')
+              .rxValue
+                = inspector.try(:email)
+          .col-xs-12
+            .rxDesc
+              %span
+                = t('inspector.phone_number')
+              .rxValue
+                = inspector.try(:phone_number)
+          .col-xs-12.col-sm-6
+            .rxDesc
+              %span
+                = t('inspector.city')
+              .rxValue
+                = inspector.try(:city)
+          .col-xs-12.col-sm-6
+            .rxDesc
+              %span
+                = t('general.change')
+              .rxValue
+                %a.rxIconText{:href => user_edit_password_path(inspector.id) }
+                  = t('general.password')
+      .rxBottom
+        %a.rxNextBtn{:href => inspector_path(inspector) }
+          = t("inspector.open_card")
+          %i.fa.fa-angle-double-right

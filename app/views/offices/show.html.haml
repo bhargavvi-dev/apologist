@@ -1,0 +1,37 @@
+.container
+  .row
+    .col-xs-12#registration-form
+      %table.tableForm{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+        %tbody
+          %tr
+            %td#stepBtnHeight.leftCol{:width => "80%"}
+              .formBox.view-details
+                .formHeader.clearfix
+                  %h1
+                    = t("office.office_card", :name => @office.office_name)
+                = render  :partial => 'open_card', :locals => {:object => @office}
+            %td.stepBtnGroup{:width => "20%"}
+              %a.h16.stepBtn.backBtn{:href => offices_path}
+                %span
+                  =t("form_action_button.return_button")
+                = image_tag "remax_back_btn.png"  
+              %a.h16.stepBtn.nextBtn{:href => edit_office_path(@office, :step => 1, :open_card => true)}
+                %span
+                  =t("form_action_button.office.card.basic_information")
+                = image_tag "remax_save_and_next_btn.png"
+              %a.h16.stepBtn.nextBtn{:href => edit_office_path(@office, :step => 2, :open_card => true)}
+                %span
+                  =t("form_action_button.office.card.profile_information")
+                = image_tag "remax_save_and_next_btn.png"  
+              %a.h16.stepBtn.nextBtn{:href => edit_office_path(@office, :step => 3, :open_card => true)}
+                %span
+                  =t("form_action_button.office.card.teams_responsible_persons")
+                = image_tag "remax_save_and_next_btn.png"  
+              %a.h16.stepBtn.nextBtn{:href => edit_office_path(@office, :step => 4, :open_card => true)}
+                %span
+                  =t("form_action_button.office.card.payment_info_and_share")
+                = image_tag "remax_save_and_next_btn.png"
+              %a.h16.stepBtn.nextBtn{:href => more_options_settings_path("Office", @office)}
+                %span
+                  =t("form_action_button.office.card.more_options")
+                = image_tag "remax_save_and_next_btn.png"

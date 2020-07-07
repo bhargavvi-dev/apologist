@@ -1,0 +1,60 @@
+= form_for @office, :url => office_path(@office), :method => "PUT" do |f|
+  = hidden_field_tag 'step', @step
+  = hidden_field_tag 'open_card', params[:open_card]
+  %table.tableForm{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+    %tbody
+      %tr
+        %td#stepBtnHeight.leftCol{:width => "80%"}
+          .formBox
+            .formHeader.clearfix
+              %h1
+                - if !@office.registered?
+                  = t("office.register")
+                  %span= t("form.office.form_step_4")
+                -else
+                  = @office.name
+                  %span= t("form.office.form_step_4_without_number")
+
+            .row
+              .col-xs-12
+                .hr.hr25
+              .col-xs-12
+                .form-group
+                  =t('office.please_save_office_agreements')
+            #contract_group_notice
+            .formBox
+              .row
+                - if current_user.executive?
+                  .col-xs-12
+                    .form-group
+                      %label
+                        = link_to new_contract_group_path, :class => "addLink pre-icon-load", method: 'GET', remote: true do
+                          %i.addIcon
+                          = t('document_group.add_new_contract_group')
+              .row
+                .col-xs-12#new_contract_groups
+                .col-xs-12#contract_groups.scroll
+                  - @contract_groups.each do |contract_group|
+                    = render :partial => 'contract_group', :locals => {contract_group: contract_group}
+                  - if @contract_groups.count > Settings.system.per_page
+                    .text-center
+                      %label
+                        = link_to next_contract_groups_path(2), :remote => true, :class => "loadMore jscroll-next" do
+                          %i.downArrow
+                          = t("general.next")
+
+        %td.stepBtnGroup{:width => "20%"}
+          - back_btn_href = params[:open_card] == "true" ? office_path(@office.id) : edit_office_path(@office, :step => (@step.to_i - 1))
+          %a.stepBtn.backBtn{:href => back_btn_href, :class => btn_height_class }
+            %span
+              =t("form_action_button.return_button")
+            = image_tag "remax_back_btn.png", :class => "mt15"
+          %button.stepBtn.nextBtn#saveMedia{:name => "save", :type => "submit", :class => btn_height_class }
+            %span
+              =t("form_action_button.save_button")
+            = image_tag "remax_save_btn.png", :class => "mt15"
+          - unless params[:open_card] == "true"
+            %button.h50.stepBtn.nextBtn#saveMediaNext{:name => "proceed_next", :type => "submit"}
+              %span
+                = t("form_action_button.save_and_next_button")
+              = image_tag "remax_save_and_next_btn.png", :class => "mt15"

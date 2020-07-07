@@ -7,11 +7,11 @@ class SettingsController < ApplicationController
   # GET settings/:type
   def index
     @nav_header_menus = [
-                          {:href => desktop_executives_path, :label => t("nav_header.desktop"), :arrowBack => false},
-                          {:href => resource_variable_executives_path, :label => t("nav_header.resource_and_variable") , :arrowBack => true}
+                          {:href => desktop_users_path, :label => t("nav_header.desktop"), :arrowBack => false},
+                          {:href => resource_variable_users_path, :label => t("nav_header.resource_and_variable") , :arrowBack => true}
                         ]
     unless params[:type] == "background_variables" or params[:type] == "notification_values"
-      redirect_to resource_variable_executives_path
+      redirect_to resource_variable_users_path
     end
   end
 
@@ -52,7 +52,7 @@ class SettingsController < ApplicationController
     # params[:setting][:commission_reward] = convert_to_number(params[:setting][:commission_reward])
 
     if @current_brand.update(brand_params)
-      redirect_url = params[:customer] ? brand_messages_executives_path : resource_variable_executives_path#default_settings_path(:type => params[:type])
+      redirect_url = params[:customer] ? brand_messages_users_path : resource_variable_users_path#default_settings_path(:type => params[:type])
       redirect_to redirect_url
     else
       render 'index'
@@ -62,19 +62,7 @@ class SettingsController < ApplicationController
   def my_settings
     if current_user.executive?
       @nav_header_menus = [
-                            {:href => desktop_executives_path, :label => t("nav_header.desktop"), :arrowBack => true}
-                          ]
-    elsif current_user.director?
-      @nav_header_menus = [
-                            {:href => desktop_directors_path, :label => t("nav_header.desktop"), :arrowBack => true}
-                          ]
-    elsif current_user.office_manager?
-      @nav_header_menus = [
-                            {:href => desktop_office_managers_path, :label => t("nav_header.desktop"), :arrowBack => true}
-                          ]
-    else
-      @nav_header_menus = [
-                            {:href => desktop_agents_path, :label => t("nav_header.desktop"), :arrowBack => true}
+                            {:href => desktop_users_path, :label => t("nav_header.desktop"), :arrowBack => true}
                           ]
     end
     if params[:user].present?
@@ -96,8 +84,8 @@ class SettingsController < ApplicationController
       @office = @current_brand.offices.find(params[:object_id])
       @back_path = office_path(@office)
       @nav_header_menus = [
-                            {:href => desktop_executives_path, :label => t("nav_header.desktop"), :arrowBack => false},
-                            {:href => resource_variable_executives_path, :label => t("nav_header.resource_and_variable"), :arrowBack => false},
+                            {:href => desktop_users_path, :label => t("nav_header.desktop"), :arrowBack => false},
+                            {:href => resource_variable_users_path, :label => t("nav_header.resource_and_variable"), :arrowBack => false},
                             {:href => offices_path, :label => t("nav_header.offices") , :arrowBack => true}
                           ]
     elsif params[:object_type] == "Customer"
@@ -105,49 +93,19 @@ class SettingsController < ApplicationController
       @back_path = customer_path(@customer)
       if current_user.executive?
         @nav_header_menus = [
-                              {:href => desktop_executives_path, :label => t("nav_header.desktop"), :arrowBack => false},
-                              {:href => resource_variable_executives_path, :label => t("nav_header.resource_and_variable"), :arrowBack => true}
+                              {:href => desktop_userss_path, :label => t("nav_header.desktop"), :arrowBack => false},
+                              {:href => resource_variable_userss_path, :label => t("nav_header.resource_and_variable"), :arrowBack => true}
                             ]
-      elsif current_user.director?
-        @nav_header_menus = [
-                              {:href => desktop_directors_path, :label => t("nav_header.desktop"), :arrowBack => false},
-                              {:href => document_registers_directors_path, :label => t("nav_header.document_registers"), :arrowBack => true}
-                            ]
-      elsif current_user.office_manager?
-        @nav_header_menus = [
-                              {:href => desktop_office_managers_path, :label => t("nav_header.desktop"), :arrowBack => false},
-                              {:href => document_registers_office_managers_path, :label => t("nav_header.document_registers"), :arrowBack => true}
-                            ]
-      else
-        @nav_header_menus = [
-                            {:href => desktop_agents_path, :label => t("nav_header.desktop"), :arrowBack => false},
-                            {:href => document_registers_agents_path, :label => t("nav_header.document_registers"), :arrowBack => true}
-                          ]
       end
     else
       @user = @current_brand.users.find(params[:object_id])
       common_user_back_path(@user)
       if current_user.executive?
         @nav_header_menus = [
-                              {:href => desktop_executives_path, :label => t("nav_header.desktop"), :arrowBack => false},
-                              {:href => resource_variable_executives_path, :label => t("nav_header.resource_and_variable"), :arrowBack => false},
-                              {:href => user_register_executives_path, :label => t("nav_header.user_register"), :arrowBack => true}
+                              {:href => desktop_users_path, :label => t("nav_header.desktop"), :arrowBack => false},
+                              {:href => resource_variable_users_path, :label => t("nav_header.resource_and_variable"), :arrowBack => false},
+                              {:href => user_register_users_path, :label => t("nav_header.user_register"), :arrowBack => true}
                             ]
-      elsif current_user.director?
-        @nav_header_menus = [
-                              {:href => desktop_directors_path, :label => t("nav_header.desktop"), :arrowBack => false},
-                              {:href => document_registers_directors_path, :label => t("nav_header.document_registers"), :arrowBack => true}
-                            ]
-      elsif current_user.office_manager?
-        @nav_header_menus = [
-                              {:href => desktop_office_managers_path, :label => t("nav_header.desktop"), :arrowBack => false},
-                              {:href => document_registers_office_managers_path, :label => t("nav_header.document_registers"), :arrowBack => true}
-                            ]
-      else
-        @nav_header_menus = [
-                            {:href => desktop_agents_path, :label => t("nav_header.desktop"), :arrowBack => false},
-                            {:href => document_registers_agents_path, :label => t("nav_header.document_registers"), :arrowBack => true}
-                          ]
       end
     end
   end
@@ -181,20 +139,8 @@ class SettingsController < ApplicationController
         elsif params[:object_type] == "Customer"
           redirect_to customers_path
         else
-          if object.role == "AGENT"
-            redirect_to agents_path
-          elsif object.role == "DIRECTOR"
-            redirect_to directors_path
-          elsif object.role == "OFFICE_MANAGER"
-            redirect_to office_managers_path
-          elsif object.role == "EXECUTIVE"
-            redirect_to executives_path
-          elsif object.role == "INTERNAL" or object.role == "EXTERNAL"
-            redirect_to responsible_persons_path
-          elsif object.role == "NETWORK_PARTNER"
-            redirect_to network_partners_path
-          elsif object.role == "INSPECTOR"
-            redirect_to inspectors_path
+          if object.role == "EXECUTIVE"
+            redirect_to users_path
           else  
             redirect_to root_path
           end
@@ -209,7 +155,7 @@ class SettingsController < ApplicationController
 
   def remove_user_data
     @nav_header_menus = [
-                          {:href => desktop_executives_path, :label => t("nav_header.desktop"), :arrowBack => true}
+                          {:href => desktop_users_path, :label => t("nav_header.desktop"), :arrowBack => true}
                         ]
     if params[:object_id].present?
       @user = @current_brand.users.find(params[:object_id])
@@ -225,20 +171,8 @@ class SettingsController < ApplicationController
 
   def common_user_back_path(user)
     @user = user
-    if @user.role == "AGENT"
-      @back_path = agent_path(@user)
-    elsif @user.role == "DIRECTOR"
-      @back_path = director_path(@user)
-    elsif @user.role == "OFFICE_MANAGER"
-      @back_path = office_manager_path(@user)
-    elsif @user.role == "INTERNAL" or @user.role == "EXTERNAL"
-      @back_path = responsible_person_path(@user.id)
-    elsif @user.role == "NETWORK_PARTNER"
-      @back_path = network_partner_path(@user.id)
-    elsif @user.role == "INSPECTOR"
-      @back_path = inspector_path(@user.id)
-    else
-      @back_path = executive_path(@user)
+    if @user.role == "EXECUTIVE"
+      @back_path = user_path(@user)
     end
   end
 

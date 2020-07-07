@@ -1,0 +1,11 @@
+.nested-fields.row.row7
+  .col-xs-12
+    .fieldRemove
+      .row.row7
+        .col-xs-12.col-sm-6.form-group
+          = f.text_field :bank_name, :class => "form-control", :placeholder => t('office.customer_fund_bank_name_placeholder'), :autofocus => true
+        .col-xs-12.col-sm-6.form-group
+          = f.text_field :account_number, :class => "form-control", :placeholder => t('office.customer_fund_bank_account_number_placeholder')
+      = link_to_remove_association f, :class => 'addLink' do
+        %i.removeIcon
+        = t('office.remove')

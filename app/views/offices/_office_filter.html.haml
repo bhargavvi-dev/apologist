@@ -1,0 +1,12 @@
+.filterTop
+  .row
+    = form_for '', :url => filter_offices_path, :method => 'post', :html => {:id => "filterFormId"}, :remote => true do
+      .col-xs-12.col-sm-4
+        = text_field_tag :search, "", :class => "form-control", placeholder: t("general.search_name_or_city")
+      .col-xs-12.col-sm-4
+        - profile_brand_types = Office.profile_brand_types.map{|profile_brand_type| [I18n.t("activerecord.attributes.profile_brand_types.#{profile_brand_type.downcase}"), profile_brand_type]}
+        = select_tag "profile_brand_type", options_for_select(profile_brand_types), prompt: @current_brand.name, :class => "form-control"
+      .col-xs-12.col-sm-4
+        = select_tag "order", options_for_select([t('general.ascending'), t('general.descending')]), prompt: t('general.order'), :class => "form-control"
+    %div{id: 'loader-image', class: 'loader'}
+      = image_tag 'loader-small.gif'            

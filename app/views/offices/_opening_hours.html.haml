@@ -1,0 +1,64 @@
+.addOpeningHours
+  .formField
+    .row
+      .col-xs-12
+        = form_for(@office, url:  add_opening_hours_office_path(@office.id), :html => {:class => "", :method => "post", :id => "add_opening_hours_form"}, remote: true) do |f|
+          %table.tableForm{:border => "0", :cellpadding => "0", :cellspacing => "0", :width => "100%"}
+            %tbody
+              %tr
+                %td#stepBtnModalHeight.leftCol{:width => "80%"}
+                  .formBox
+                    .formHeader.clearfix
+                      %h1
+                        = t("office.opening_hours")
+                        %span
+                    .form-group.fb18blue
+                      = t("office.opening_hours_sub_title")
+                    #openingHoursNotice
+                    %div{id: 'opening-hours-loader', class: 'loader'}
+                      = image_tag 'loader-small.gif'
+
+                    - opening_hours = (eval @office.office_hours.to_s)
+                    - unless opening_hours.present?
+                      #new_opening_hours.hide
+                        True
+                    - ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"].each do |day|
+                      - if opening_hours.present? and opening_hours[day].present?
+                        - start_hour = opening_hours[day][:start_hour]
+                        - start_minute = opening_hours[day][:start_minute]
+                        - end_hour = opening_hours[day][:end_hour]
+                        - end_minute = opening_hours[day][:end_minute]
+                        - closed = opening_hours[day][:closed]
+                      - else
+                        - start_hour = start_minute = end_hour = end_minute = nil
+                        - closed = false
+                      - unless day == "saturday" or day == "sunday"
+                        - start_hour_class = "start_hour"
+                        - start_minute_class = "start_minute"
+                        - end_hour_class = "end_hour"
+                        - end_minute_class = "end_minute"
+                      .row.row7.form-group
+                        .col-xs-12.col-sm-12.col-md-2.pt12
+                          %label= t("general.#{day}")
+                        .col-xs-6.col-sm-3.col-md-2
+                          = number_field_tag "#{day}[start_hour]", start_hour, :class => "form-control #{start_hour_class} opening_time", :id => "#{day}_start_hour"
+                        .col-xs-6.col-sm-3.col-md-2
+                          = number_field_tag "#{day}[start_minute]", start_minute,:class => "form-control #{start_minute_class} opening_time", :id => "#{day}_start_minute"
+                        .col-xs-6.col-sm-3.col-md-2
+                          = number_field_tag "#{day}[end_hour]", end_hour,:class => "form-control #{end_hour_class} opening_time", :id => "#{day}_end_hour"
+                        .col-xs-6.col-sm-3.col-md-2
+                          = number_field_tag "#{day}[end_minute]", end_minute,:class => "form-control #{end_minute_class} opening_time", :id => "#{day}_end_minute"
+                        .col-xs-12.col-sm-12.col-md-2.pt12
+                          %label.checkBox
+                            = check_box_tag "#{day}[closed]", true, closed
+                            %span.lbl
+                              = t('office.closed')
+                %td.stepBtnGroup{:width => "20%"}
+                  %button.h50.stepBtn.backBtn{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+                    %span
+                      =t("form_action_button.office.add_opening_hours.close")
+                    = image_tag "remax_back_btn.png"  
+                  %button.h50.stepBtn.nextBtn#openingHoursBtn{:name => "next", :type => "submit"}
+                    %span
+                      =t("form_action_button.office.add_opening_hours.save")
+                    = image_tag "remax_save_btn.png"  

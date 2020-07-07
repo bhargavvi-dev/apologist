@@ -2,6 +2,33 @@ class Office < ApplicationRecord
 
   belongs_to :brand, inverse_of: :offices
 
+  has_many :office_owners, inverse_of: :office, dependent: :destroy
+  accepts_nested_attributes_for :office_owners, allow_destroy: true
+
+  has_many :share_owners, -> { where(:owner_type => OfficeOwner.owner_types["OWNER"]) }, :class_name => "OfficeOwner", inverse_of: :office
+  accepts_nested_attributes_for :share_owners, allow_destroy: true
+  validates_associated :share_owners
+
+  has_many :members, -> { where(:owner_type => OfficeOwner.owner_types['MEMBER']) }, :class_name => "OfficeOwner", inverse_of: :office
+  accepts_nested_attributes_for :members, allow_destroy: true
+  validates_associated :members
+
+  has_one :ceo, -> { where(:owner_type => OfficeOwner.owner_types['CEO']) }, :class_name => "OfficeOwner", inverse_of: :office
+  accepts_nested_attributes_for :ceo, allow_destroy: true
+  validates_associated :ceo
+
+  has_many :office_banks, inverse_of: :office, dependent: :destroy
+  accepts_nested_attributes_for :office_banks, allow_destroy: true
+
+  has_many :reward_bank_accounts, -> { where(:account_type => OfficeBank.account_types['REWARD']) }, :class_name => "OfficeBank", inverse_of: :office
+  accepts_nested_attributes_for :reward_bank_accounts, allow_destroy: true
+  validates_associated :reward_bank_accounts
+
+  has_many :customer_fund_bank_accounts, -> { where(:account_type => OfficeBank.account_types['CUSTOMER_FUND']) }, :class_name => "OfficeBank", inverse_of: :office
+  accepts_nested_attributes_for :customer_fund_bank_accounts, allow_destroy: true
+
+  validates_associated :customer_fund_bank_accounts
+
   default_scope {where(is_deleted: false)}
 
   validates :brand, :presence => true
@@ -17,16 +44,14 @@ class Office < ApplicationRecord
   validates :visiting_city, :length => {:maximum => 50, :allow_blank => true}
   validates :billing_address, :length => {:maximum => 500, :allow_blank => true}
   validates :billing_city, :length => {:maximum => 50, :allow_blank => true}
-  validates :profile_brand_types, :length => {:maximum => 255, :allow_blank => true}
   validates :office_hours, :length => {:maximum => 65535, :allow_blank => true}
   validates :logo_text, :length => {:maximum => 100, :allow_blank => true}
-  validates :introduction, :length => {:maximum => 65535, :allow_blank => true}
+  validates :presentation_text, :length => {:maximum => 65535, :allow_blank => true}
   validates :linkedin_url, :length => {:maximum => 255, :allow_blank => true}
   validates :facebook_url, :length => {:maximum => 255, :allow_blank => true}
   validates :twitter_url, :length => {:maximum => 255, :allow_blank => true}
   validates :whatsapp_number, :length => {:maximum => 50, :allow_blank => true}
   validates :skype_id, :length => {:maximum => 50, :allow_blank => true}
-  validates :working_areas, :length => {:maximum => 65535, :allow_blank => true}
 
   validates_uniqueness_of :office_name, :scope => [:brand_id]
 
@@ -34,35 +59,19 @@ class Office < ApplicationRecord
     self.office_name.to_s
   end
 
-  def persons
-    self.users.where(:role => [User.roles["EXTERNAL"], User.roles["EXECUTIVE"], User.roles["DIRECTOR"], User.roles["AGENT"], User.roles["OFFICE_MANAGER"]])
-  end
-
-  def responsible_persons
-    self.users.where(:role => User.roles["EXTERNAL"])
-  end
-
-  def internal_responsible_persons
-    self.users.where(:role => [User.roles["EXECUTIVE"], User.roles["DIRECTOR"], User.roles["AGENT"], User.roles["OFFICE_MANAGER"]])
-  end
-
-  def inspectors
-    self.users.where(:role => User.roles["INSPECTOR"])
-  end
-
   def self.profile_brand_types
     ["BASIC",'COLLECTION','COMMERCIAL']
   end
 
-  def search_property_address
+  def search_office_address
     [self.address, self.post_number, self.city].select{|s| s.present?}.join(',')
   end
 
-  def property_search_post_city_address
+  def office_search_post_city_address
     [self.post_number, self.city].select{|s| s.present?}.join(',')
   end
 
-  def property_search_default_address
+  def office_search_default_address
     "00100, Helsinki"
   end
 

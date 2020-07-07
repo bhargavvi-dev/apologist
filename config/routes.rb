@@ -5,8 +5,8 @@ Rails.application.routes.draw do
   devise_for :users
   get '/users/sign_out' => 'devise/sessions#destroy'
 
-  # executives
-  resources :executives do
+  # users
+  resources :users do
     collection do
       get 'desktop'
       get 'brand_materials'
@@ -19,25 +19,14 @@ Rails.application.routes.draw do
       get 'brand_resources'
       get 'new_brand_resource'
       get 'brand_messages'
-      post 'save_brand_resources' => "executives#save_brand_resources"
-      post 'save_brand_messages' => "executives#save_brand_messages"
-      post 'choose_offices_filter' => "executives#choose_offices_filter"
-      put 'update_brand_resources/:resource_id' => "executives#update_brand_resources", :as => 'update_brand_resources'
-      get 'get_brand_resource/:resource_id' => "executives#get_brand_resource", :as => 'get_brand_resource'
-      delete 'delete_brand_resource/:resource_id' => "executives#delete_brand_resource", :as => 'delete_brand_resource'
-      post "/search/user_filter" => "executives#user_filter", :as => :user_filter
-      get 'next_users/:page', to: 'executives#next_users', as: 'next_users'
-    end
-  end
-
-  # directors
-  resources :directors do
-    collection do
-      get 'desktop'
-      get 'document_registers'
-      get 'network_partners'
-      post "/search/user_filter" => "directors#user_filter", :as => :user_filter
-      get 'next_users/:page', to: 'directors#next_users', as: 'next_users'
+      post 'save_brand_resources' => "users#save_brand_resources"
+      post 'save_brand_messages' => "users#save_brand_messages"
+      post 'choose_offices_filter' => "users#choose_offices_filter"
+      put 'update_brand_resources/:resource_id' => "users#update_brand_resources", :as => 'update_brand_resources'
+      get 'get_brand_resource/:resource_id' => "users#get_brand_resource", :as => 'get_brand_resource'
+      delete 'delete_brand_resource/:resource_id' => "users#delete_brand_resource", :as => 'delete_brand_resource'
+      post "/search/user_filter" => "users#user_filter", :as => :user_filter
+      get 'next_users/:page', to: 'users#next_users', as: 'next_users'
     end
   end
 
@@ -65,8 +54,6 @@ Rails.application.routes.draw do
       post '/message_associations/:message_association_id/update_read_status', to: "messages#update_read_status", :as => :update_read_status
       get 'center', to: 'messages#message_center', as: 'center'
       post 'select_your_agent' => "messages#select_your_agent", :as => "select_your_agent"
-      post 'send_questions_regarding_invoice', to: 'messages#send_questions_regarding_invoice', as: 'send_questions_regarding_invoice'
-      get 'invoice_attachment', to: 'messages#invoice_attachment', as: 'invoice_attachment'
     end
   end
 
@@ -75,6 +62,17 @@ Rails.application.routes.draw do
       post '/order_remax_email', to: 'emails#order_remax_email', as: 'order_remax_email'
       post '/:id/send_login_info_email', to: 'emails#send_login_info_email', as: 'send_login_info_email'
       post '/send_feedback_email', to: 'emails#send_feedback_email', as: 'send_feedback_email'
+    end
+  end
+
+  # offices
+  resources :offices do
+    collection do
+      post "/search/filter" => "offices#filter", :as => :filter
+      get 'next/:page', to: 'offices#next_offices', as: 'next'
+    end
+    member do
+      post 'add_opening_hours', to: 'offices#add_opening_hours'
     end
   end
 

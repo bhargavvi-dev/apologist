@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_07_112944) do
+ActiveRecord::Schema.define(version: 2020_07_07_135655) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
@@ -176,6 +176,49 @@ ActiveRecord::Schema.define(version: 2020_07_07_112944) do
     t.boolean "registered", default: false, null: false
     t.boolean "is_active", default: true, null: false
     t.boolean "is_deleted", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "resource_specs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "name", limit: 100, null: false
+    t.boolean "limited", default: false, null: false
+    t.boolean "is_active", default: true, null: false
+    t.boolean "is_deleted", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_resource_specs_on_name", unique: true
+  end
+
+  create_table "resource_types", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "name", limit: 100, null: false
+    t.boolean "is_active", default: true, null: false
+    t.boolean "is_deleted", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_resource_types_on_name", unique: true
+  end
+
+  create_table "resources", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.integer "resource_holder_id", null: false
+    t.string "resource_holder_type", null: false
+    t.integer "resource_spec_id", null: false
+    t.integer "resource_type_id", null: false
+    t.string "media_attachment_name"
+    t.boolean "limited", default: false, null: false
+    t.boolean "confirmed", default: true, null: false
+    t.boolean "is_active", default: true, null: false
+    t.boolean "is_deleted", default: false, null: false
+    t.string "media_file_name"
+    t.string "media_content_type"
+    t.integer "media_file_size"
+    t.datetime "media_updated_at"
+    t.string "associate_type"
+    t.integer "associate_id"
+    t.string "ancestry"
+    t.integer "creator_id"
+    t.integer "updater_id"
+    t.datetime "signing_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

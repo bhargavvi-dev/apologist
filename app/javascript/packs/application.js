@@ -12,10 +12,8 @@ require('website/acommon')
 require('website/user')
 require('website/jquery-ui-1.10.1.custom.min')
 require('website/jquery.jscroll')
-require('virtual-keyboard')
 require('website/jquery.timepicker.min')
-require('bootstrap-datepicker')
-
+// require('bootstrap-datepicker')
 
 // Uncomment to copy all static images under ../images to the output folder and reference
 // them with the image_pack_tag helper in views (e.g <%= image_pack_tag 'rails.png' %>)

@@ -1,23 +1,11 @@
 system:
-  domain: 'stage.max.fenux.fi'
+  domain: 'stage.advocat.fenux.fi'
 database:
   username: 'root'
   password: 'gOyzhR'
-  master_office:
-    name: "max_office_staging"
   
 feedback:
   recipient_emails:
     - 'nitinvi.dev@gmail.com'
     - 'juri.oshujev@fenux.fi'
     - 'ari.heiskanen@fenux.fi'
-    - 'mikko.sandelin@fenux.fi'
-
-price_navigator:
-  google_map:
-    key: "AIzaSyB1CdTOiXnEj1uGwCpbkPGA8qhzxcVmymA"
-  kvkl:
-    base_url: "https://staging.hintaseurantapalvelu.fi/api/v1/transactions"
-    account: "remax-fenux"
-    key: "BmyKpWadRNSBLaUw5Mr3sjMUEjFckZceFtcR47Ed"
-    features_times_span: 5    

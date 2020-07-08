@@ -1,24 +1,38 @@
-# README
+# Max
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Instructions
 
-Things you may want to cover:
+### Rails environment -- Production
 
-* Ruby version
+    ## PRE REQUIRE
+        rvm use 2.6.5
+        bundle install
+        npm install
 
-* System dependencies
+1. Precompile assets
 
-* Configuration
+		RAILS_ENV=production bundle exec rake assets:precompile
 
-* Database creation
+2. Stop and start unicorn
 
-* Database initialization
+		kill pid - vi /tmp/unicorn_advocate.pid
 
-* How to run the test suite
+		bundle exec unicorn_rails -c config/unicorn_advocate.rb -E production -D
 
-* Services (job queues, cache servers, search engines, etc.)
+3. Start sidekiq
 
-* Deployment instructions
+		kill pid - ps ux
+	
+		bundle exec sidekiq -d -L log/sidekiq_advocate.log -C config/sidekiq.yml -e production
 
-* ...
+4. Reset database
+
+		rake db:drop db:create db:migrate db:seed RAILS_ENV=production
+
+5. Translation tool
+
+		rake tolk:sync RAILS_ENV=production
+
+		rake tolk:import RAILS_ENV=production
+
+		http://advocat.fenux.fi/translation_tool (admin/password)        

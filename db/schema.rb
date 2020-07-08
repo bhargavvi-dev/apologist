@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 2020_07_08_065659) do
 
-  create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
     t.bigint "record_id", null: false
@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 2020_07_08_065659) do
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "active_storage_blobs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "active_storage_blobs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "key", null: false
     t.string "filename", null: false
     t.string "content_type"
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 2020_07_08_065659) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "brands", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "brands", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", limit: 100, null: false
     t.string "slug", limit: 100
     t.string "custom_domain", limit: 100
@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 2020_07_08_065659) do
     t.index ["prefix"], name: "index_brands_on_prefix", unique: true
   end
 
-  create_table "business_degrees", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "business_degrees", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "brand_id", null: false
     t.boolean "is_active", default: true, null: false
     t.boolean "is_deleted", default: false, null: false
@@ -62,7 +62,7 @@ ActiveRecord::Schema.define(version: 2020_07_08_065659) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "contract_groups", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "contract_groups", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "office_id", null: false
     t.string "name", null: false
     t.boolean "is_active", default: true, null: false
@@ -74,7 +74,7 @@ ActiveRecord::Schema.define(version: 2020_07_08_065659) do
     t.index ["office_id", "name"], name: "index_contract_groups_on_office_id_and_name", unique: true
   end
 
-  create_table "contracts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "contracts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "contract_group_id", null: false
     t.string "contract_name", null: false
     t.date "validity_start"
@@ -88,7 +88,7 @@ ActiveRecord::Schema.define(version: 2020_07_08_065659) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "feedbacks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "feedbacks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "brand_id", null: false
     t.integer "sender_id", null: false
     t.integer "subject", default: 0, null: false
@@ -99,7 +99,7 @@ ActiveRecord::Schema.define(version: 2020_07_08_065659) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "language_skills", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "language_skills", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "brand_id", null: false
     t.boolean "is_active", default: true, null: false
     t.boolean "is_deleted", default: false, null: false
@@ -107,7 +107,7 @@ ActiveRecord::Schema.define(version: 2020_07_08_065659) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "message_associations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "message_associations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "message_id", null: false
     t.integer "recipient_id", null: false
     t.boolean "read", default: false, null: false
@@ -119,7 +119,7 @@ ActiveRecord::Schema.define(version: 2020_07_08_065659) do
     t.index ["recipient_id"], name: "index_message_associations_on_recipient_id"
   end
 
-  create_table "messages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "messages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "brand_id", null: false
     t.string "subject"
     t.text "body"
@@ -136,7 +136,7 @@ ActiveRecord::Schema.define(version: 2020_07_08_065659) do
     t.index ["sender_id"], name: "index_messages_on_sender_id"
   end
 
-  create_table "office_banks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "office_banks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "office_id", null: false
     t.string "bank_name"
     t.string "account_number"
@@ -148,7 +148,7 @@ ActiveRecord::Schema.define(version: 2020_07_08_065659) do
     t.index ["office_id", "bank_name", "account_number", "account_type"], name: "idx_office_banks_office_account_details", unique: true
   end
 
-  create_table "office_owners", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "office_owners", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "office_id", null: false
     t.integer "owner_type", default: 0, null: false
     t.integer "owner_role", default: 0, null: false
@@ -163,7 +163,7 @@ ActiveRecord::Schema.define(version: 2020_07_08_065659) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "offices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "offices", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "brand_id", null: false
     t.string "office_name", limit: 50, null: false
     t.string "company_name", limit: 50, null: false
@@ -206,7 +206,7 @@ ActiveRecord::Schema.define(version: 2020_07_08_065659) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "resource_specs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "resource_specs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", limit: 100, null: false
     t.boolean "limited", default: false, null: false
     t.boolean "is_active", default: true, null: false
@@ -216,7 +216,7 @@ ActiveRecord::Schema.define(version: 2020_07_08_065659) do
     t.index ["name"], name: "index_resource_specs_on_name", unique: true
   end
 
-  create_table "resource_types", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "resource_types", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", limit: 100, null: false
     t.boolean "is_active", default: true, null: false
     t.boolean "is_deleted", default: false, null: false
@@ -225,7 +225,7 @@ ActiveRecord::Schema.define(version: 2020_07_08_065659) do
     t.index ["name"], name: "index_resource_types_on_name", unique: true
   end
 
-  create_table "resources", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "resources", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "resource_holder_id", null: false
     t.string "resource_holder_type", null: false
     t.integer "resource_spec_id", null: false
@@ -249,12 +249,12 @@ ActiveRecord::Schema.define(version: 2020_07_08_065659) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "settings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "settings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "special_skills", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "special_skills", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "brand_id", null: false
     t.boolean "is_active", default: true, null: false
     t.boolean "is_deleted", default: false, null: false
@@ -262,7 +262,7 @@ ActiveRecord::Schema.define(version: 2020_07_08_065659) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "user_skills", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "user_skills", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "skill_type", null: false
     t.integer "skill_id", null: false
@@ -273,7 +273,7 @@ ActiveRecord::Schema.define(version: 2020_07_08_065659) do
     t.index ["user_id", "skill_type", "skill_id"], name: "index_user_skills_on_user_id_and_skill_type_and_skill_id", unique: true
   end
 
-  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "brand_id", null: false
     t.integer "role", default: 0, null: false
     t.integer "creator_id"
@@ -330,11 +330,8 @@ ActiveRecord::Schema.define(version: 2020_07_08_065659) do
     t.string "average_profit"
     t.string "token"
     t.integer "language", default: 0
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "brand_provided_id"
-    t.boolean "is_kivi", default: false, null: false
-    t.string "agency_code"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["email", "brand_id"], name: "index_users_on_email_and_brand_id", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token"
   end

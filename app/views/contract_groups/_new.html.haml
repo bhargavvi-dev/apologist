@@ -1,0 +1,11 @@
+- random_id = SecureRandom.hex(10)
+.row.form-group{:id => random_id}
+  = form_for contract_group, url: contract_groups_path, method: 'POST', remote: true, :html => {:class => 'pre-load-form'} do |f|
+    = hidden_field_tag :element_id, random_id
+    .col-xs-12.col-sm-8.pb5
+      = f.text_field :name, :class => "form-control", :placeholder => t('document_group.placeholder.group_name')
+    .col-xs-6.col-sm-2.pl0-sm.mt10
+      = f.submit t('document_group.create_group'), :class => "btn btn-primary btn-block"
+    .col-xs-6.col-sm-2.pl0-sm.mt10
+      %a.btn.btn-primary.btn-block.contract_group_new_remove{:href => "javascript:void(0)", :id => "document_group_new_remove_#{random_id}"}
+        =t("document_group.cancel")

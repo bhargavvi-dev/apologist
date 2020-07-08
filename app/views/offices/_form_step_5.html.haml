@@ -9,11 +9,13 @@
             .formHeader.clearfix
               %h1
                 - if !@office.registered?
-                  = t("office.register")
-                  %span= t("form.office.form_step_5")
-                -else
                   = @office.name
+                  %span= t("office.form_step_5")
+                -else
                   %span= t("form.office.form_step_5_without_number")
+              .rowHeaderInfo
+                = t("office.head_office")
+
             = render  :partial => 'open_card', :locals => {:object => @office}
         %td.stepBtnGroup{:width => "20%"}
           - back_btn_href = params[:open_card] == "true" ? office_path(@office.id) : edit_office_path(@office, :step => (@step.to_i - 1))
@@ -24,5 +26,5 @@
           - unless params[:open_card] == "true"
             %button.h50.stepBtn.nextBtn{:name => "proceed_next", :type => "submit", :class => btn_height_class}
               %span
-                = @office.registered? ? t("form_action_button.office.save_office_registration") : t("form_action_button.office.finish_office_registration")
+                = @office.registered? ? t("form_action_button.office.save_office_registration") : t("office.register_the_office")
               = image_tag "remax_save_and_next_btn.png"

@@ -1,4 +1,8 @@
 .container
-  = render :partial => 'office_filter'      
+  .page-title
+    %h1
+      .title-logo
+        = image_tag "logo.png", :class => "mr15", :width => "160"
+      =t('office.branch_register')
   #filter_offices
     = render :partial => "fetchAll"

@@ -1,0 +1,38 @@
+%div.groupBox{:id => "contract_group_#{contract_group.id}"}
+  .groupHeader
+    .row{:id => "contract_group_lbl_#{contract_group.id}"}
+      .col-xs-8.col-sm-10.pt5
+        .form-group
+          %label.subTitle{:id => "contract_group_name_#{contract_group.id}"}
+            %span.blue
+              = contract_group.name
+      - if current_user.executive?
+        .col-xs-4.col-sm-2.pl0-sm.text-right
+          .form-group
+            %a.btn.btn-primary.btn-block.document_group_edit{:href => "javascript:void(0)", :id => "document_group_edit_#{contract_group.id}"}
+              =t("document_group.edit_group")
+    .row.form-group.hide.document_group_form{:id => "document_group_form_#{contract_group.id}"}
+      = form_for contract_group, url: document_group_path(contract_group), method: 'PUT', remote: true, :html => {:class => 'pre-load-form'} do |f|
+        .col-xs-12.col-sm-6.pr0-md-up
+          = f.text_field :name, :class => "form-control"
+        .col-xs-12.col-sm-2.pl0-sm.mt10.pr0-md-up
+          = f.submit t('document_group.save'), :class => "btn btn-primary btn-blue btn-block"
+        .col-xs-12.col-sm-2.pl0-sm.mt10.pr0-md-up
+          %a.btn.darkGreyBg6.text-white.btn-block.document_group_cancel{:href => "javascript:void(0)", :id => "document_group_cancel_#{contract_group.id}"}
+            = t("document_group.cancel")
+        .col-xs-12.col-sm-2.pl0-sm.mt10
+          = link_to t('document_group.remove_group'), document_group_path(contract_group), method: 'DELETE', remote: true, :class => "btn btn-primary btn-block", data: { confirm: t('document_group.remove_group_confirmation_message', group_name: contract_group.name) }
+  .groupContent
+    .row
+      .col-xs-12{:id => "documents_#{contract_group.id}"}
+        - contract_group.documents.each do |document|
+          %div{:id => "document_#{document.id}"}
+            = render :partial => 'document', :locals => {document: document, contract_group: contract_group}
+      .col-xs-12{:id => "new_documents_#{contract_group.id}"}
+      - if current_user.executive?
+        .col-xs-12
+          .form-group
+            %label.f16
+              = link_to new_document_document_group_path(contract_group.id), :class => "addLink pre-icon-load", method: 'GET', remote: true do
+                %i.addIcon
+                = t('document_group.add_new_attachment', group_name: contract_group.name)

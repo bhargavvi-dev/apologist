@@ -1,11 +1,11 @@
 .row.row10
   .col-xs-12.col-md-6
-    .form-group.formTitle
+    .form-group.medium.f20
       =t("office.office_information")
     .card-row
       %label.label-view
         %span
-          = t('office.office_name')
+          = t('office.official_name')
       %label.label-value
         = object.office_name
     .card-row
@@ -23,27 +23,15 @@
     .card-row
       %label.label-view
         %span
-          = t('office.address_specification')
-      %label.label-value
-        = object.address_specification
-    .card-row
-      %label.label-view
-        %span
           = t('office.company_id')
       %label.label-value
         = object.company_id
     .card-row
       %label.label-view
         %span
-          = t('office.brand_provided_id', brand_name: object.brand.name)
+          = t('office.brand_provided_id', brand_name: object.brand.name.upcase)
       %label.label-value
         = object.brand_provided_id
-    .card-row
-      %label.label-view
-        %span
-          = t('office.profile_brand_types', brand_name: object.brand.name)
-      %label.label-value
-        = object.profile_brand_types.to_s.split(',').map{|profile_brand_type| I18n.t("activerecord.attributes.profile_brand_types.#{profile_brand_type.downcase}")}.join(',')
     .card-row
       %label.label-view
         %span
@@ -63,8 +51,10 @@
       %label.label-value
         = object.website    
   .col-xs-12.col-md-6
-    .form-group.fb18blue
+    .form-group.medium.f20
       =t("office.payment_info_and_admin")
+    .form-group.bold
+      =t("office.bank_account_for_reward")
     .card-row
       %label.label-view
         %span
@@ -77,6 +67,8 @@
           = t('office.account_number')
       %label.label-value
         = object.reward_bank_accounts.first.try(:account_number)
+    .form-group.bold.pt5
+      =t("office.bank_account_for_customer_fund")
     .card-row
       %label.label-view
         %span
@@ -92,48 +84,92 @@
 .row.row10
   .col-xs-12
     .hr.hr25
-  .col-xs-12.col-md-6.text-center
-    .form-group
-      - if object.logo_text.present?
-        - logo_resource = object.resources["IMAGE::OFFICE_TEXT_LOGO"]
-        - if logo_resource.present?
-          = image_tag logo_resource.media.url(:medium), :width => "150"
-        - else
-          = image_tag @current_brand.logo.url, :width => "150"
-  .col-xs-12.col-md-6.text-center
-    .form-group
-      %label.fb18blue
-        = t('office.presentation_text')
-      %div
+  .col-xs-12.col-md-3
+    .form-group.medium.f20
+      = t('office.office_logo')
+    .form-group.text-center
+      / - if object.logo_text.present?
+      /   - logo_resource = object.resources["IMAGE::OFFICE_TEXT_LOGO"]
+      /   - if logo_resource.present?
+      /     = image_tag logo_resource.media.url(:medium), :width => "150"
+      /   - else
+      /     = image_tag @current_brand.logo.url, :width => "150"
+      = image_tag "logo.png", :width => "180"
+  .col-xs-12.col-md-9
+    .form-group.medium.f20
+      = t('office.presentation_text')
+      %div.pt10
         = object.presentation_text
+        = text_field_tag :presentation_text, object.presentation_text, :class => "form-control"
 
-.row.row10
+.row.row5.pt20
   .col-xs-12
-    .form-group.formTitle
-      =t("office.social_media_profile")
-  .col-xs-12.col-md-6
-    .card-row
-      %label.label-view
-        = image_tag "linkedin.png"
-      %label.label-value
-        %a{:href => "javascript:void(0);"}
-          = object.linkedin_url
-    .card-row
-      %label.label-view
-        = image_tag "youtube.png"
-      %label.label-value
-        %a{:href => "javascript:void(0);"}
-          = object.youtube_url
-  .col-xs-12.col-md-6
-    .card-row
-      %label.label-view
-        = image_tag "facebook.png"
-      %label.label-value
-        %a{:href => "javascript:void(0);"}
-          = object.facebook_url
-    .card-row
-      %label.label-view
-        = image_tag "skype.png"
-      %label.label-value
-        %a{:href => "javascript:void(0);"}
-          = object.skype_id
+    .form-group.medium.f20
+      = t('office.social_media_profiles')
+  .col-xs-6.col-sm-4.col-md-3.col-lg-2
+    %a{ :href => "javascript:void(0)", :class => "icon-social linkedin-icon"}
+      = image_tag "linkedin.png"
+  .col-xs-6.col-sm-4.col-md-3.col-lg-2
+    %a{ :href => "javascript:void(0)", :class => "icon-social facebook-icon"}
+      = image_tag "facebook.png"
+  .col-xs-6.col-sm-4.col-md-3.col-lg-2
+    %a{ :href => "javascript:void(0)", :class => "icon-social twitter-icon"}
+      = image_tag "twitter.png"
+  .col-xs-6.col-sm-4.col-md-3.col-lg-2
+    %a{ :href => "javascript:void(0)", :class => "icon-social youtube-icon"}
+      = image_tag "youtube.png"
+  .col-xs-6.col-sm-4.col-md-3.col-lg-2
+    %a{ :href => "javascript:void(0)", :class => "icon-social whatsapp-icon"}
+      = image_tag "whatsapp.png"
+  .col-xs-6.col-sm-4.col-md-3.col-lg-2
+    %a{ :href => "javascript:void(0)", :class => "icon-social skype-icon"}
+      = image_tag "skype.png"
+.row
+  .col-xs-12
+    #linkedin-form.hide.row.row5.pt12
+      .col-xs-12.col-sm-3.col-md-2.mt10.pb10
+        .icon-social
+          = image_tag "linkedin.png"
+          = t('general.linkedin')
+      .col-xs-12.col-sm-9.col-md-10
+        = text_field_tag :linkedin_url, object.linkedin_url, :class => "form-control"
+
+    #facebook-form.hide.row.row5.pt12
+      .col-xs-12.col-sm-3.col-md-2.mt10.pb10
+        .icon-social
+          = image_tag "facebook.png"
+          = t('general.facebook')
+      .col-xs-12.col-sm-9.col-md-10
+        = text_field_tag :facebook_url, object.facebook_url, :class => "form-control"
+
+    #twitter-form.hide.row.row5.pt12
+      .col-xs-12.col-sm-3.col-md-2.mt10.pb10
+        .icon-social
+          = image_tag "twitter.png"
+          = t('general.twitter')
+      .col-xs-12.col-sm-9.col-md-10
+        = text_field_tag :twitter_url, object.twitter_url, :class => "form-control"
+
+    #youtube-form.hide.row.row5.pt12
+      .col-xs-12.col-sm-3.col-md-2.mt10.pb10
+        .icon-social
+          = image_tag "youtube.png"
+          = t('general.youtube')
+      .col-xs-12.col-sm-9.col-md-10
+        = text_field_tag :youtube_url, object.youtube_url, :class => "form-control"
+
+    #whatsapp-form.hide.row.row5.pt12
+      .col-xs-12.col-sm-3.col-md-2.mt10.pb10
+        .icon-social
+          = image_tag "whatsapp.png"
+          = t('general.whatsapp')
+      .col-xs-12.col-sm-9.col-md-10
+        = text_field_tag :whatsapp_number, object.whatsapp_number, :class => "form-control"
+
+    #skype-form.hide.row.row5.pt12
+      .col-xs-12.col-sm-3.col-md-2.mt10.pb10
+        .icon-social
+          = image_tag "skype.png"
+          = t('general.skype')
+      .col-xs-12.col-sm-9.col-md-10
+        = text_field_tag :skype_id, object.skype_id, :class => "form-control"

@@ -9,18 +9,17 @@
             .formHeader.clearfix
               %h1
                 - if !@office.registered?
-                  = t("office.register")
-                  %span= t("form.office.form_step_4")
-                -else
                   = @office.name
+                  %span= t("office.form_step_4")
+                -else
                   %span= t("form.office.form_step_4_without_number")
+              .rowHeaderInfo
+                = t("office.head_office")
 
-            .row
-              .col-xs-12
-                .hr.hr25
+            .row.pt10
               .col-xs-12
                 .form-group
-                  =t('office.please_save_office_agreements')
+                  =t('office.please_save_office_agreements').html_safe
             #contract_group_notice
             .formBox
               .row
@@ -30,18 +29,19 @@
                       %label
                         = link_to new_contract_group_path, :class => "addLink pre-icon-load", method: 'GET', remote: true do
                           %i.addIcon
-                          = t('document_group.add_new_contract_group')
+                          = t('office.add_new_contract_group')
               .row
                 .col-xs-12#new_contract_groups
                 .col-xs-12#contract_groups.scroll
-                  - @contract_groups.each do |contract_group|
-                    = render :partial => 'contract_group', :locals => {contract_group: contract_group}
-                  - if @contract_groups.count > Settings.system.per_page
-                    .text-center
-                      %label
-                        = link_to next_contract_groups_path(2), :remote => true, :class => "loadMore jscroll-next" do
-                          %i.downArrow
-                          = t("general.next")
+                  - if @contract_groups.present?
+                    - @contract_groups.each do |contract_group|
+                      = render :partial => 'contract_group', :locals => {contract_group: contract_group}
+                    - if @contract_groups.count > Settings.system.per_page
+                      .text-center
+                        %label
+                          = link_to next_contract_groups_path(2), :remote => true, :class => "loadMore jscroll-next" do
+                            %i.downArrow
+                            = t("general.next")
 
         %td.stepBtnGroup{:width => "20%"}
           - back_btn_href = params[:open_card] == "true" ? office_path(@office.id) : edit_office_path(@office, :step => (@step.to_i - 1))

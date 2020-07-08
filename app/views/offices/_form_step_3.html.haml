@@ -9,11 +9,12 @@
             .formHeader.clearfix
               %h1
                 - if !@office.registered?
-                  = t("office.register")
-                  %span= t("form.office.form_step_4")
-                -else
                   = @office.name
-                  %span= t("form.office.form_step_4_without_number")
+                  %span= t("office.form_step_3")
+                -else
+                  %span= t("form.office.form_step_3_without_number")
+              .rowHeaderInfo
+                = t("office.head_office")
             .row
               .col-xs-12
                 .formTitle.form-group
@@ -77,7 +78,7 @@
                 = f.fields_for :members do |member|
                   = render 'member_fields', f: member
                 .form-group
-                  = link_to_add_association f, :member, :class => "addLink" do
+                  = link_to_add_association f, :members, :class => "addLink" do
                     %i.addIcon
                     = t('office.add_member')
             .row
@@ -93,17 +94,18 @@
                   .row.row5
                     .col-xs-12.col-sm-6.form-group
                       = ceo.text_field :first_name, :class => "form-control", :placeholder => t('office.ceo_first_name')
-                    .col-xs-12.col-sm-6.form-group
-                      = ceo.text_field :last_name, :class => "form-control", :placeholder => t('office.ceo_last_name')
-                  #birthdate.row
-                    %label.col-xs-12
-                      = t('general.date_of_birth')
+                    .col-xs-12.col-sm-6
+                      .form-group.text-right
+                        %div.selectBox.verTop.form-group.dib
+                          = ceo.date_select :birthdate, :start_year => 1900, :end_year => Time.now.year, :class => "form-control", :order => [:day, :month, :year]
+                          = " - "
+                          #social_security_number.dib.verTop
+                            = ceo.text_field :ssn, :class => "form-control w85", :size => "4", :placeholder => t('office.ceo_ssn')
                     .col-xs-12
-                      %div.selectBox.verTop.form-group.dib
-                        = ceo.date_select :birthdate, :start_year => 1900, :end_year => Time.now.year, :class => "form-control", :order => [:day, :month, :year]
-                        = " - "
-                        #social_security_number.dib.verTop
-                          = ceo.text_field :ssn, :class => "form-control w85", :size => "4", :placeholder => t('office.ceo_ssn')
+                      .text-right    
+                        = link_to_remove_association f, :class => 'addLink' do
+                          %i.removeIcon
+                          = t('office.remove')
               
         %td.stepBtnGroup{:width => "20%"}
           - back_btn_href = params[:open_card] == "true" ? office_path(@office.id) : edit_office_path(@office, :step => (@step.to_i - 1))

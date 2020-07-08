@@ -1,20 +1,16 @@
 .nested-fields
   .row.row5
     .col-xs-12.col-sm-6.form-group
-      = f.text_field :first_name, :class => "form-control", :placeholder => t('office.director_first_name')
-    .col-xs-12.col-sm-6.form-group
-      = f.text_field :last_name, :class => "form-control", :placeholder => t('office.director_last_name')
-  #birthdate.row.row5
-    %label.col-xs-12
-      = t('general.date_of_birth')
+      = f.text_field :first_name, :class => "form-control", :placeholder => t('office.member_first_name')
+    .col-xs-12.col-sm-6
+      .form-group.text-right
+        %div.selectBox.verTop.dib
+          = f.date_select :birthdate, :start_year => 1900, :end_year => Time.now.year, :class => "form-control", :order => [:day, :month, :year]
+          = " - "
+          #social_security_number.dib.verTop
+            = f.text_field :ssn, :class => "form-control w85", :size => "4", :placeholder => t('office.member_ssn')
     .col-xs-12
-      .fieldRemove.clearfix
-        .form-group
-          %div.selectBox.verTop.dib
-            = f.date_select :birthdate, :start_year => 1900, :end_year => Time.now.year, :class => "form-control", :order => [:day, :month, :year]
-            = " - "
-            #social_security_number.dib.verTop
-              = f.text_field :ssn, :class => "form-control w85", :size => "4", :placeholder => t('office.director_ssn')       
+      .text-right
         = link_to_remove_association f, :class => 'addLink' do
           %i.removeIcon
           = t('office.remove')

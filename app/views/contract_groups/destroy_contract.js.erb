@@ -1,0 +1,7 @@
+<% if (@contract and @contract.errors.any?) or @error.present? %>
+  <% error_msg = @error.present? ? t('general.something_went_wrong') : @contract.errors.full_messages.first%>
+  setFlashMessage("contract_group_notice", "contract_group_flash_msg", "<%= error_msg %>");
+<% else %>
+  $("#contract_<%= @contract.id %>").remove();
+<% end %>
+$(".pre-icon").hide();

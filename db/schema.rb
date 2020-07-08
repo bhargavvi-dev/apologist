@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_07_135655) do
+ActiveRecord::Schema.define(version: 2020_07_08_065659) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
@@ -58,6 +58,32 @@ ActiveRecord::Schema.define(version: 2020_07_07_135655) do
     t.integer "brand_id", null: false
     t.boolean "is_active", default: true, null: false
     t.boolean "is_deleted", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "contract_groups", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.integer "office_id", null: false
+    t.string "name", null: false
+    t.boolean "is_active", default: true, null: false
+    t.boolean "is_deleted", default: false, null: false
+    t.integer "creator_id"
+    t.integer "updater_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["office_id", "name"], name: "index_contract_groups_on_office_id_and_name", unique: true
+  end
+
+  create_table "contracts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.integer "contract_group_id", null: false
+    t.string "contract_name", null: false
+    t.date "validity_start"
+    t.date "validity_end"
+    t.date "alarm_date"
+    t.boolean "is_active", default: true, null: false
+    t.boolean "is_deleted", default: false, null: false
+    t.integer "creator_id"
+    t.integer "updater_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

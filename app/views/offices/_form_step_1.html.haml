@@ -38,7 +38,7 @@
 
               .col-xs-12.col-sm-6             
                 #phone_number.form-group
-                  = f.text_field :phone_number, :class => "virtualKeyboard form-control", :placeholder => t("office.phone_number")
+                  = f.text_field :phone_number, :class => "form-control", :placeholder => t("office.phone_number")
                 #email.form-group
                   = f.text_field :email, :class => "form-control", :placeholder => t("office.email")
                   - if @office.errors[:email].any?

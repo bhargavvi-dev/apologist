@@ -1,0 +1,10 @@
+- if @contract_groups.present?
+  - @contract_groups.each do |contract_group|
+    = render :partial => 'contract_group', :locals => {contract_group: contract_group}
+  - if @contract_groups.count > Settings.system.per_page
+    .text-center
+      - count = params[:page].to_i + 1
+      %label
+        = link_to next_contract_groups_path(count), :remote => true, :class => "loadMore jscroll-next" do
+          %i.downArrow
+          = t("general.next")

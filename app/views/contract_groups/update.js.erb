@@ -1,0 +1,8 @@
+<% if (@contract_group and @contract_group.errors.any?) or @error.present? %>
+  <% error_msg = @error.present? ? t('general.something_went_wrong') : @contract_group.errors.full_messages.first%>
+  setFlashMessage("contract_group_notice", "contract_group_flash_msg", "<%= error_msg %>");
+<% else %>
+  $("#contract_group_name_<%= @contract_group.id %>").text("<%= @contract_group.name %>");
+  hideContractGroupForm("<%= @contract_group.id %>");
+<% end %>
+<%= render :partial => "shared/ajax_js" %>

@@ -1,0 +1,18 @@
+- random_id = SecureRandom.hex(10)
+%div{:id => "contract_#{random_id}_notice"}
+%div.row.form-group{:id => random_id}
+  = form_for contract, url: create_contract_contract_group_path(contract.resource_holder.id), method: 'POST', remote: true, :html => {:class => 'pre-load-form'} do |f|
+    = hidden_field_tag :element_id, random_id
+    = f.hidden_field :resource_type_id, :value => ResourceType.find_by(name: "CONTRACT").id
+    = f.hidden_field :resource_spec_id, :value => ResourceSpec.find_by(name: "ATTACHMENT").id
+    .col-xs-12.col-md-6.pb5.pr0-md-up
+      = f.text_field :media_attachment_name, :class => "form-control", :placeholder => t('document_group.placeholder.document_name'), :id => "groupContractMediaFileName_#{random_id}"
+    .col-xs-12.col-sm-3.col-md-2.mt10.pr0-sm-up
+      %a.btn.btn-primary.btn-blue.btn-block.btn-upload
+        = t('document_group.upload_file')
+        = f.file_field :media, :class => "file-control groupContractMedia", :id => "groupContractMedia_#{random_id}"
+    .col-xs-12.col-sm-3.col-md-2.mt10.pr0-sm-up
+      = f.button t('document_group.save'), :class => "btn btn-primary btn-blue btn-block"
+    .col-xs-12.col-sm-3.col-md-2.mt10.pr0-sm
+      %a.btn.btn-primary.btn-blue.btn-block.contract_new_remove{:href => "javascript:void(0)", :id => "contract_new_remove_#{random_id}"}
+        =t("document_group.cancel")

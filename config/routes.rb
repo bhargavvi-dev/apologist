@@ -76,6 +76,21 @@ Rails.application.routes.draw do
     end
   end
 
+  # contract_groups
+  resources :contract_groups do
+    member do
+      get 'contracts/new', to: 'contract_groups#new_contract', :as => :new_contract
+      post 'contracts', to: 'contract_groups#create_contract', :as => :create_contract
+      put 'contracts/:contract_id', to: 'contract_groups#update_contract', :as => :update_contract
+      delete 'contracts/:contract_id', to: 'contract_groups#destroy_contract', :as => :delete_contract
+      get 'contracts/:contract_id', to: 'contract_groups#get_contract', :as => :get_contract
+    end
+
+    collection do
+      get 'next/:page', to: 'contract_groups#next_contract_groups', as: 'next'
+    end
+  end
+
   post 'send_feedback_developers_form', to: 'home#send_feedback_developers', as: 'send_feedback_developers_form'
 
   root 'pages#home'

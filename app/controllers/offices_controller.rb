@@ -236,8 +236,8 @@ class OfficesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def office_params
-    params.require(:office).permit(:brand_id, :office_name, :company_name, :company_id, :address, :post_number, :city, :phone_number, :email, :website, :brand_provided_id, :visiting_address, :visiting_post_number, :visiting_city, :billing_address, :billing_post_number, :billing_city,
-                                    :logo_text, :linkedin_url, :facebook_url, :youtube_url, :twitter_url, :whatsapp_number, :skype_id, :presentation_text,
+    params.require(:office).permit(:brand_id, :office_name, :company_name, :company_id, :address, :post_number, :city, :phone_number, :email, :website, :cost_place_number, :brand_provided_id, :visiting_address, :visiting_post_number, :visiting_city, :billing_address, :billing_post_number, :billing_city,
+                                    :invoice_address, :office_hours, :logo_text, :linkedin_url, :facebook_url, :youtube_url, :twitter_url, :whatsapp_number, :skype_id, :presentation_text,
                                     reward_bank_accounts_attributes: [:id, :bank_name, :account_number, :_destroy],
                                     customer_fund_bank_accounts_attributes: [:id, :bank_name, :account_number, :_destroy],
                                     share_owners_attributes: [:id, :first_name, :share, :owner_role, :_destroy],

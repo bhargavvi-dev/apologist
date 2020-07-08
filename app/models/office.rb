@@ -1,6 +1,10 @@
 class Office < ApplicationRecord
 
+  include HasResources
+
   belongs_to :brand, inverse_of: :offices
+
+  has_many :contract_groups, :class_name => "ContractGroup", :foreign_key => "office_id", inverse_of: :office
 
   has_many :office_owners, inverse_of: :office, dependent: :destroy
   accepts_nested_attributes_for :office_owners, allow_destroy: true

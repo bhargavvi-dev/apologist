@@ -1,0 +1,9 @@
+<% if (@contract and @contract.errors.any?) or @error.present? %>
+  <% error_msg = @error.present? ? t('general.something_went_wrong') : @contract.errors.full_messages.first%>
+  setFlashMessage("contract_<%= @contract.id %>_notice", "contract_<%= @contract.id %>_flash_msg", "<%= error_msg %>", true, false)
+<% else %>
+  $("#contract_<%= @contract.id%>").html("<%= escape_javascript(render :partial => 'contract', :locals => { :contract => @contract, :contract_group => @contract_group }) %>");
+  hideContractForm("<%= @contract.id%>");
+  setFlashMessage("contract_<%= @contract.id %>_notice", "contract_<%= @contract.id %>_flash_msg", "<%= t('document_group.successfully_uploaded') %>", true, false)
+<% end %>
+<%= render :partial => "shared/ajax_js" %>

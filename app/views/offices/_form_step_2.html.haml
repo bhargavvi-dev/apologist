@@ -10,40 +10,45 @@
             .formHeader.clearfix
               %h1
                 - if !@office.registered?
-                  = t("office.register")
-                  %span= t("form.office.form_step_2")
+                  = @office.name
+                  %span= t("office.form_step_2")
                 -else
                   = @office.name
                   %span= t("form.office.form_step_2_without_number")
+              .rowHeaderInfo
+                = t("office.head_office")
+
             .row
-              .col-xs-12
-                .hr
-              .col-xs-12.col-sm-3
+              .col-xs-12.col-sm-6
                 .form-group
                   %label
                     =t('office.office_logo')
-                  = f.text_field :logo_text, :class => "form-control", :placeholder => t("office.logo_text_placeholder")
-              .col-xs-12.col-sm-3.text-right
-                .form-group.officeLogoText
-                  / - if @office.logo_text.present?
-                  /   - logo_resource = @office.resources["IMAGE::OFFICE_TEXT_LOGO"]
-                  /   - if logo_resource.present? and logo_resource.media.present?
-                  /     = image_tag logo_resource.media.url(:medium), :id => "image_display", :width => "140"
-                  /     = hidden_field_tag 'office_logo_url', logo_resource.media.url(:medium)
-                  /   - else
-                  /     = image_tag  @current_brand.logo.url, :id => "image_display", :width => "140"
-                  / - else
-                  /   = image_tag  @current_brand.logo.url, :id => "image_display", :width => "140"
-                  / %label#display_office_logo_text
-                  / = hidden_field_tag 'brand_logo_url', @current_brand.logo.url
+                .grayBorder2.pt10
+                  .form-group
+                    = f.text_field :logo_text, :class => "form-control", :placeholder => t("office.logo_text_placeholder")
+              / .col-xs-12.col-sm-3.text-right
+              /   .form-group.officeLogoText
+              /     - if @office.logo_text.present?
+              /       - logo_resource = @office.resources["IMAGE::OFFICE_TEXT_LOGO"]
+              /       - if logo_resource.present? and logo_resource.media.present?
+              /         = image_tag logo_resource.media.url(:medium), :id => "image_display", :width => "140"
+              /         = hidden_field_tag 'office_logo_url', logo_resource.media.url(:medium)
+              /       - else
+              /         = image_tag  @current_brand.logo.url, :id => "image_display", :width => "140"
+              /     - else
+              /       = image_tag  @current_brand.logo.url, :id => "image_display", :width => "140"
+              /     %label#display_office_logo_text
+              /     = hidden_field_tag 'brand_logo_url', @current_brand.logo.url
               .col-xs-12.col-sm-6
-                .iconLeft25.form-group
-                  = t('office.opening_hours')
                 .form-group
-                  %a{"data-target" => "#openingHours", "data-toggle" => "modal", :type => "button", :class => "addLink modalLink"}
-                    %i.addIcon
-                    = t('office.add_opening_hours')
-            .row  
+                  %label
+                    = t('office.opening_hours')
+                .grayBorder2.pt15
+                  .form-group
+                    %a.iconLgLeft{"data-target" => "#openingHours", "data-toggle" => "modal", :type => "button", :class => "addLink modalLink"}
+                      = image_tag "icon_reload_dark.png", :class => "icon"
+                      = t('office.set_opening_hours')
+            .row.pt40
               .col-xs-12
                 .form-group
                   %label
@@ -64,7 +69,7 @@
                       %i.addIcon
                       = t('office.add_photos')
                   #office_photos.hide
-                    = render :partial => "shared/upload_photo", :locals => {:object => @office, :type => 'Office', :resource_type => 'IMAGE', :resource_spec => 'OFFICE_PHOTO', :user => "office", :associate_type => ""}
+                    / = render :partial => "shared/upload_photo", :locals => {:object => @office, :type => 'Office', :resource_type => 'IMAGE', :resource_spec => 'OFFICE_PHOTO', :user => "office", :associate_type => ""}
 
               .col-xs-12
                 .form-group

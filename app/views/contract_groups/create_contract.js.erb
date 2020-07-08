@@ -1,0 +1,13 @@
+<% if (@contract and @contract.errors.any?) or @error.present? %>
+  <% if @media_require.present? %>
+  	setFlashMessage("contract_<%= @element_id %>_notice", "contract_<%= @element_id %>_flash_msg", "<%= t('general.error_upload_some_file') %>", true, false)
+  <% else %>
+    <% error_msg = @error.present? ? t('general.something_went_wrong') : @contract.errors.full_messages.first%>  
+    setFlashMessage("contract_<%= @contract.id %>_notice", "contract_<%= @contract.id %>_flash_msg", "<%= error_msg %>", true, false)
+   <% end %>
+<% else %>
+  $("#<%= @element_id %>").remove();
+  $("#contracts_<%= @contract.resource_holder.id%>").append("<div id=contract_<%= @contract.id%>><%= escape_javascript(render :partial => 'contract', :locals => { :contract => @contract, :contract_group => @contract_group }) %></div>");
+  setFlashMessage("contract_<%= @contract.id %>_notice", "contract_<%= @contract.id %>_flash_msg", "<%= t('document_group.successfully_uploaded') %>", true, false)
+<% end %>
+<%= render :partial => "shared/ajax_js" %>

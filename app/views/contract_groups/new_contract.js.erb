@@ -1,0 +1,2 @@
+$("#new_contracts_<%= @contract.resource_holder.id%>").append("<%= escape_javascript(render :partial => 'new_contract', :locals => { :contract => @contract }) %>");
+<%= render :partial => "shared/ajax_js" %>

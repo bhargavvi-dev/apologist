@@ -91,7 +91,7 @@ gem 'resque'
 
 gem 'resque-scheduler'
 
-gem 'image_processing', '~> 1.2'
+gem 'image_processing', '~> 1.12'
 
 
 group :development, :test do
